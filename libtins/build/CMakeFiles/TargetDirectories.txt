@@ -1,0 +1,2 @@
+/home/elizabeth/Desktop/cs244b_final_project/libtins/build/CMakeFiles/docs.dir
+/home/elizabeth/Desktop/cs244b_final_project/libtins/build/src/CMakeFiles/tins.dir

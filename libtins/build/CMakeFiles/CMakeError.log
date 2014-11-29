@@ -1,0 +1,73 @@
+Determining if the function pcap_get_pfring_id exists failed with the following output:
+Change Dir: /home/elizabeth/Desktop/cs244b_final_project/libtins/build/CMakeFiles/CMakeTmp
+
+Run Build Command:/usr/bin/make "cmTryCompileExec2503429499/fast"
+/usr/bin/make -f CMakeFiles/cmTryCompileExec2503429499.dir/build.make CMakeFiles/cmTryCompileExec2503429499.dir/build
+make[1]: Entering directory `/home/elizabeth/Desktop/cs244b_final_project/libtins/build/CMakeFiles/CMakeTmp'
+/usr/bin/cmake -E cmake_progress_report /home/elizabeth/Desktop/cs244b_final_project/libtins/build/CMakeFiles/CMakeTmp/CMakeFiles 1
+Building C object CMakeFiles/cmTryCompileExec2503429499.dir/CheckFunctionExists.c.o
+/usr/bin/cc   -DCHECK_FUNCTION_EXISTS=pcap_get_pfring_id   -o CMakeFiles/cmTryCompileExec2503429499.dir/CheckFunctionExists.c.o   -c /usr/share/cmake-2.8/Modules/CheckFunctionExists.c
+Linking C executable cmTryCompileExec2503429499
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTryCompileExec2503429499.dir/link.txt --verbose=1
+/usr/bin/cc   -DCHECK_FUNCTION_EXISTS=pcap_get_pfring_id    CMakeFiles/cmTryCompileExec2503429499.dir/CheckFunctionExists.c.o  -o cmTryCompileExec2503429499 -rdynamic -lpcap 
+CMakeFiles/cmTryCompileExec2503429499.dir/CheckFunctionExists.c.o: In function `main':
+CheckFunctionExists.c:(.text+0x15): undefined reference to `pcap_get_pfring_id'
+collect2: error: ld returned 1 exit status
+make[1]: Leaving directory `/home/elizabeth/Desktop/cs244b_final_project/libtins/build/CMakeFiles/CMakeTmp'
+make[1]: *** [cmTryCompileExec2503429499] Error 1
+make: *** [cmTryCompileExec2503429499/fast] Error 2
+
+
+Determining if the pthread_create exist failed with the following output:
+Change Dir: /home/elizabeth/Desktop/cs244b_final_project/libtins/build/CMakeFiles/CMakeTmp
+
+Run Build Command:/usr/bin/make "cmTryCompileExec1866293901/fast"
+/usr/bin/make -f CMakeFiles/cmTryCompileExec1866293901.dir/build.make CMakeFiles/cmTryCompileExec1866293901.dir/build
+make[1]: Entering directory `/home/elizabeth/Desktop/cs244b_final_project/libtins/build/CMakeFiles/CMakeTmp'
+/usr/bin/cmake -E cmake_progress_report /home/elizabeth/Desktop/cs244b_final_project/libtins/build/CMakeFiles/CMakeTmp/CMakeFiles 1
+Building C object CMakeFiles/cmTryCompileExec1866293901.dir/CheckSymbolExists.c.o
+/usr/bin/cc    -o CMakeFiles/cmTryCompileExec1866293901.dir/CheckSymbolExists.c.o   -c /home/elizabeth/Desktop/cs244b_final_project/libtins/build/CMakeFiles/CMakeTmp/CheckSymbolExists.c
+Linking C executable cmTryCompileExec1866293901
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTryCompileExec1866293901.dir/link.txt --verbose=1
+/usr/bin/cc       CMakeFiles/cmTryCompileExec1866293901.dir/CheckSymbolExists.c.o  -o cmTryCompileExec1866293901 -rdynamic 
+CMakeFiles/cmTryCompileExec1866293901.dir/CheckSymbolExists.c.o: In function `main':
+CheckSymbolExists.c:(.text+0x16): undefined reference to `pthread_create'
+make[1]: Leaving directory `/home/elizabeth/Desktop/cs244b_final_project/libtins/build/CMakeFiles/CMakeTmp'
+collect2: error: ld returned 1 exit status
+make[1]: *** [cmTryCompileExec1866293901] Error 1
+make: *** [cmTryCompileExec1866293901/fast] Error 2
+
+File /home/elizabeth/Desktop/cs244b_final_project/libtins/build/CMakeFiles/CMakeTmp/CheckSymbolExists.c:
+/* */
+#include <pthread.h>
+
+int main(int argc, char** argv)
+{
+  (void)argv;
+#ifndef pthread_create
+  return ((int*)(&pthread_create))[argc];
+#else
+  (void)argc;
+  return 0;
+#endif
+}
+
+Determining if the function pthread_create exists in the pthreads failed with the following output:
+Change Dir: /home/elizabeth/Desktop/cs244b_final_project/libtins/build/CMakeFiles/CMakeTmp
+
+Run Build Command:/usr/bin/make "cmTryCompileExec1236558133/fast"
+/usr/bin/make -f CMakeFiles/cmTryCompileExec1236558133.dir/build.make CMakeFiles/cmTryCompileExec1236558133.dir/build
+make[1]: Entering directory `/home/elizabeth/Desktop/cs244b_final_project/libtins/build/CMakeFiles/CMakeTmp'
+/usr/bin/cmake -E cmake_progress_report /home/elizabeth/Desktop/cs244b_final_project/libtins/build/CMakeFiles/CMakeTmp/CMakeFiles 1
+Building C object CMakeFiles/cmTryCompileExec1236558133.dir/CheckFunctionExists.c.o
+/usr/bin/cc   -DCHECK_FUNCTION_EXISTS=pthread_create   -o CMakeFiles/cmTryCompileExec1236558133.dir/CheckFunctionExists.c.o   -c /usr/share/cmake-2.8/Modules/CheckFunctionExists.c
+Linking C executable cmTryCompileExec1236558133
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTryCompileExec1236558133.dir/link.txt --verbose=1
+/usr/bin/cc   -DCHECK_FUNCTION_EXISTS=pthread_create    CMakeFiles/cmTryCompileExec1236558133.dir/CheckFunctionExists.c.o  -o cmTryCompileExec1236558133 -rdynamic -lpthreads 
+/usr/bin/ld: cannot find -lpthreads
+collect2: error: ld returned 1 exit status
+make[1]: Leaving directory `/home/elizabeth/Desktop/cs244b_final_project/libtins/build/CMakeFiles/CMakeTmp'
+make[1]: *** [cmTryCompileExec1236558133] Error 1
+make: *** [cmTryCompileExec1236558133/fast] Error 2
+
+

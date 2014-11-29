@@ -1,0 +1,25 @@
+var searchData=
+[
+  ['raft',['raft',['../classLogCabin_1_1Server_1_1Globals.html#aa8c8b22b5152dbbb894d34ac040f17b2',1,'LogCabin::Server::Globals']]],
+  ['raftservice',['raftService',['../classLogCabin_1_1Server_1_1Globals.html#a93b3db0fbb6b40c579560de4c289e81e',1,'LogCabin::Server::Globals']]],
+  ['randbuf',['randbuf',['../namespaceLogCabin_1_1Core_1_1Random_1_1anonymous__namespace_02Random_8cc_03.html#a806ec438a2812a4b2b2e3cabda3656e1',1,'LogCabin::Core::Random::anonymous_namespace{Random.cc}']]],
+  ['ready',['ready',['../structLogCabin_1_1RPC_1_1ClientSession_1_1Response.html#ad0cc04b964092736ee0836b301c07c28',1,'LogCabin::RPC::ClientSession::Response::ready()'],['../classLogCabin_1_1RPC_1_1OpaqueClientRPC.html#a11844e7cba1d5232975115aefc6d1949',1,'LogCabin::RPC::OpaqueClientRPC::ready()']]],
+  ['receivesocket',['receiveSocket',['../classLogCabin_1_1RPC_1_1MessageSocket.html#a39c126c94d65df0a306e7ce4c15d1cf7',1,'LogCabin::RPC::MessageSocket']]],
+  ['reply',['reply',['../structLogCabin_1_1RPC_1_1ClientSession_1_1Response.html#ab1a83ec18e3d53352a26df091b8dd252',1,'LogCabin::RPC::ClientSession::Response::reply()'],['../classLogCabin_1_1RPC_1_1OpaqueClientRPC.html#a9acd58a66c40a0137b9e01701158a337',1,'LogCabin::RPC::OpaqueClientRPC::reply()']]],
+  ['request',['request',['../classLogCabin_1_1RPC_1_1OpaqueServerRPC.html#a5b18a1cf14affa0ad9af1221ad77fbec',1,'LogCabin::RPC::OpaqueServerRPC::request()'],['../structLogCabin_1_1RPC_1_1ServiceMock_1_1Expected.html#a268cf7851168967712dc6e47e4ab1b74',1,'LogCabin::RPC::ServiceMock::Expected::request()']]],
+  ['requestlog',['requestLog',['../classLogCabin_1_1Client_1_1LeaderRPCMock.html#a76e9e55b1f9a3ee70a9c84117eadbb97',1,'LogCabin::Client::LeaderRPCMock']]],
+  ['requestvotedone',['requestVoteDone',['../classLogCabin_1_1Server_1_1RaftConsensusInternal_1_1Peer.html#ac4a82cf70a21989f2f59505281647c3f',1,'LogCabin::Server::RaftConsensusInternal::Peer']]],
+  ['response',['response',['../classLogCabin_1_1RPC_1_1OpaqueServerRPC.html#a0b40fbd408d2b326dd97a4cef02aa12f',1,'LogCabin::RPC::OpaqueServerRPC::response()'],['../classLogCabin_1_1RPC_1_1ServiceMock_1_1Reply.html#a340248e4687abd00d6c59bd228457d8e',1,'LogCabin::RPC::ServiceMock::Reply::response()'],['../classLogCabin_1_1RPC_1_1ServiceMock_1_1ServiceSpecificError.html#a1c2222b9b0d495c081ec3e41fbcfa264',1,'LogCabin::RPC::ServiceMock::ServiceSpecificError::response()'],['../structLogCabin_1_1RPC_1_1ServiceMock_1_1Expected.html#a3e117845d04489a3b7b6d6d7c291990b',1,'LogCabin::RPC::ServiceMock::Expected::response()']]],
+  ['responsequeue',['responseQueue',['../classLogCabin_1_1Client_1_1LeaderRPCMock.html#a4dce9b2a27addcd84775d9ec9c341ff7',1,'LogCabin::Client::LeaderRPCMock::responseQueue()'],['../classLogCabin_1_1RPC_1_1ServiceMock.html#a029080d6225f13008db76f99268e5b38',1,'LogCabin::RPC::ServiceMock::responseQueue()']]],
+  ['responses',['responses',['../classLogCabin_1_1RPC_1_1ClientSession.html#af029ae33505540702a34d25d71dca2ac',1,'LogCabin::RPC::ClientSession::responses()'],['../structLogCabin_1_1Server_1_1StateMachine_1_1Session.html#a73701dad4007877f232cea466e96d90d',1,'LogCabin::Server::StateMachine::Session::responses()']]],
+  ['responsetarget',['responseTarget',['../classLogCabin_1_1RPC_1_1OpaqueServerRPC.html#a75ceaa986c122f3ee2885900abf6050b',1,'LogCabin::RPC::OpaqueServerRPC']]],
+  ['responsetoken',['responseToken',['../classLogCabin_1_1RPC_1_1OpaqueClientRPC.html#ab01913266583c9aced29e75609ec1064',1,'LogCabin::RPC::OpaqueClientRPC']]],
+  ['result',['result',['../classLogCabin_1_1Tree_1_1Internal_1_1Path.html#a45b458a812263f7855a099f831693121',1,'LogCabin::Tree::Internal::Path']]],
+  ['rpc',['rpc',['../classLogCabin_1_1Server_1_1RaftConsensusInternal_1_1Peer.html#a6152a1441ad8d36900beae23b8adb231',1,'LogCabin::Server::RaftConsensusInternal::Peer']]],
+  ['rpc_5ffailure_5fbackoff_5fms',['RPC_FAILURE_BACKOFF_MS',['../classLogCabin_1_1Server_1_1RaftConsensusInternal_1_1RaftConsensus.html#aebdeb95bd64ec627e7e6b6833f2bbe35',1,'LogCabin::Server::RaftConsensusInternal::RaftConsensus']]],
+  ['rpcfailuressincelastwarning',['rpcFailuresSinceLastWarning',['../classLogCabin_1_1Server_1_1RaftConsensusInternal_1_1Peer.html#af384128771f7e60f485b837114f56788',1,'LogCabin::Server::RaftConsensusInternal::Peer']]],
+  ['rpcprotocolversion',['rpcProtocolVersion',['../classLogCabin_1_1Client_1_1ClientImpl.html#adb4ad6145d875b81cd94cff9bb1d74dc',1,'LogCabin::Client::ClientImpl']]],
+  ['rpcqueue',['rpcQueue',['../classLogCabin_1_1RPC_1_1ThreadDispatchService.html#abb72ac16deb083c8124f3fbc29cba0e5',1,'LogCabin::RPC::ThreadDispatchService']]],
+  ['rpcserver',['rpcServer',['../classLogCabin_1_1Server_1_1Globals.html#aa5ca9e0cf49a42c74813f2614fea84d7',1,'LogCabin::Server::Globals']]],
+  ['runningthread',['runningThread',['../classLogCabin_1_1Event_1_1Loop.html#a3665d236c88d9c8a0de5da4f09a51b74',1,'LogCabin::Event::Loop']]]
+];

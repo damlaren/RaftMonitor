@@ -1,0 +1,10 @@
+prefix=/usr/local
+exec_prefix=/usr/local
+libdir=/usr/local/lib
+includedir=${prefix}/include
+
+Name: libtins
+Description: C++ packet crafting, sniffing and interpretation library.
+Version: 3.2
+Libs: -L${libdir} -ltins
+Cflags: -I${includedir}/tins

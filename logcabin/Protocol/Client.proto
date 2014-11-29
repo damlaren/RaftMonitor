@@ -1,0 +1,314 @@
+// Copyright (c) 2011-2012 Stanford University
+//
+// Permission to use, copy, modify, and distribute this software for any
+// purpose with or without fee is hereby granted, provided that the above
+// copyright notice and this permission notice appear in all copies.
+//
+// THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR(S) DISCLAIM ALL WARRANTIES
+// WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF
+// MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL AUTHORS BE LIABLE FOR
+// ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES
+// WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN
+// ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
+// OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
+
+package LogCabin.Protocol.Client;
+
+/**
+ * \file
+ * This file contains the formats for RPCs between clients and servers.
+ */
+
+/**
+ * Identifies which RPC is being executed.
+ */
+enum OpCode {
+    // Keep these numbers dense.
+    GET_SUPPORTED_RPC_VERSIONS = 0;
+    OPEN_SESSION = 1;
+    GET_CONFIGURATION = 2;
+    SET_CONFIGURATION = 3;
+    READ_ONLY_TREE = 4;
+    READ_WRITE_TREE = 5;
+};
+
+/**
+ * The type of "service-specific error" replies that this service returns.
+ */
+message Error {
+    enum Code {
+        /**
+         * The server is not the current cluster leader. The client should look
+         * elsewhere for the cluster leader. The server MAY provide a hint as
+         * to who the leader is (see leader_hint field).
+         */
+        NOT_LEADER = 1;
+        /**
+         * This session is no longer valid. Its state has been discarded on the
+         * server. The client should treat this as a fatal error.
+         */
+        SESSION_EXPIRED = 2;
+    };
+    required Code error_code = 1;
+    /**
+     * If error_code is NOT_LEADER and this field is set, the client should try
+     * the server found at this address, which is likely to be the current
+     * leader.
+     */
+    optional string leader_hint = 2;
+}
+
+/**
+ * This is included in some RPCs to prevent processing of duplicated RPCs.
+ */
+message ExactlyOnceRPCInfo {
+    /**
+     * A session ID returned from the OpenSession RPC.
+     */
+    required uint64 client_id = 1;
+    /**
+     * The lowest numbered RPC for which the client has not yet received a
+     * response. The server may discard all copies of responses for RPCs with
+     * smaller numbers.
+     */
+    required uint64 first_outstanding_rpc = 2;
+    /**
+     * A strictly increasing sequence number for the RPC.
+     */
+    required uint64 rpc_number = 3;
+}
+
+/**
+ * GetSupportedRPCVersions RPC: Find out the range of RPC protocol versions the
+ * cluster supports. This should be the first RPC sent by the client.
+ */
+message GetSupportedRPCVersions {
+    message Request {
+    }
+    message Response {
+        /**
+         * The minimum RPC protocol version this cluster will accept.
+         */
+        required uint32 min_version = 1;
+        /**
+         * The maximum RPC protocol version this cluster will accept.
+         */
+        required uint32 max_version = 2;
+    }
+}
+
+/**
+ * OpenSession RPC: Open a new session with the cluster. Sessions are necessary
+ * for some RPCs to provide exactly-once semantics.
+ */
+message OpenSession {
+    message Request {
+    }
+    message Response {
+        /**
+         * The ID assigned to the client.
+         */
+        required uint64 client_id = 1;
+    }
+}
+
+/**
+ * A server in a configuration. Used in the GetConfiguration and
+ * SetConfiguration RPCs.
+ */
+message Server {
+    /**
+     * The ID of the server.
+     */
+    required uint64 server_id = 1;
+    /**
+     * The network address of the server.
+     */
+    required string address = 2;
+}
+
+/**
+ * GetConfiguration RPC: Get the current cluster configuration.
+ * This will only return stable configurations; the client will be asked to
+ * retry otherwise.
+ */
+message GetConfiguration {
+    message Request {
+    }
+    message Response {
+        /**
+         * Identifies the configuration. Pass this to SetConfiguration later.
+         */
+        required uint64 id = 1;
+        /**
+         * The list of servers in the configuration.
+         */
+        repeated Server servers = 2;
+    }
+}
+
+/**
+ * SetConfiguration RPC: Change the cluster's configuration.
+ */
+message SetConfiguration {
+    message Request {
+        /**
+         * The ID of the cluster's current configuration.
+         */
+        required uint64 old_id = 1;
+        /**
+         * The list of servers in the new configuration.
+         */
+        repeated Server new_servers = 2;
+    }
+    message Response {
+        // The following are mutually exclusive.
+        message OK {
+        }
+        message ConfigurationChanged {
+        }
+        message ConfigurationBad {
+            /**
+             * The servers that were unavailable to join the cluster.
+             */
+            repeated Server bad_servers = 1;
+        }
+        /**
+         * Set if the operation succeeded.
+         */
+        optional OK ok = 1;
+        /**
+         * Set if the supplied 'old_id' is no longer current.
+         * Call GetConfiguration, re-apply your changes, and try again.
+         */
+        optional ConfigurationChanged configuration_changed = 2;
+        /**
+         * Set if the reconfiguration was aborted because some servers are
+         * unavailable.
+         */
+        optional ConfigurationBad configuration_bad = 3;
+    }
+}
+
+/**
+ * The status code returned from Tree operations.
+ * For now, this should be the exact same as Client::Status and Tree::Status.
+ */
+enum Status {
+    OK = 0;
+    INVALID_ARGUMENT = 1;
+    LOOKUP_ERROR = 2;
+    TYPE_ERROR = 3;
+    CONDITION_NOT_MET = 4;
+};
+
+/**
+ * A predicate on Tree operations.
+ * If set, operations will return CONDITION_NOT_MET and have no effect unless
+ * the file at 'path' has the contents 'contents'.
+ */
+message TreeCondition {
+    /**
+     * The absolute path to the file that must have the contents specified in
+     * 'contents'.
+     */
+    required string path = 1;
+    /**
+     * The contents that the file specified by 'path' must have for the
+     * operation to succeed.
+     */
+    required bytes contents = 2;
+};
+
+/**
+ * Read-only Tree RPC: An RPC to query the hierarchical key-value store.
+ */
+message ReadOnlyTree {
+    message Request {
+        optional TreeCondition condition = 11;
+        // The following are mutually exclusive.
+        message ListDirectory {
+            required string path = 1;
+        }
+        optional ListDirectory list_directory = 2;
+        message Read {
+            required string path = 1;
+        }
+        optional Read read = 5;
+    }
+    message Response {
+        required Status status = 1;
+        // The following are mutually exclusive.
+        optional string error = 2;
+        message ListDirectory {
+            repeated string child = 1;
+        }
+        optional ListDirectory list_directory = 3;
+        message Read {
+            required bytes contents = 1;
+        }
+        optional Read read = 4;
+    }
+}
+
+/**
+ * Read-write Tree RPC: An RPC that may modify the hierarchical key-value store.
+ */
+message ReadWriteTree {
+    message Request {
+        /// See ExactlyOnceRPCInfo.
+        required ExactlyOnceRPCInfo exactly_once = 10;
+        optional TreeCondition condition = 11;
+        // The following are mutually exclusive.
+        message MakeDirectory {
+            required string path = 1;
+        }
+        optional MakeDirectory make_directory = 1;
+        message RemoveDirectory {
+            required string path = 1;
+        }
+        optional RemoveDirectory remove_directory = 3;
+        message Write {
+            required string path = 1;
+            required bytes contents = 2;
+        }
+        optional Write write = 4;
+        message RemoveFile {
+            required string path = 1;
+        }
+        optional RemoveFile remove_file = 6;
+
+    }
+    message Response {
+        required Status status = 1;
+        // The following are mutually exclusive.
+        optional string error = 2;
+    }
+}
+
+
+/**
+ * This is what the state machine takes in from the replicated log.
+ */
+message Command {
+    /**
+     * The leader's time when it received the command, measured in nanoseconds
+     * since the Unix epoch. Useful for cleaning up client sessions. Note that
+     * this may occasionally go backwards due to leader changes or time
+     * synchronization.
+     */
+    optional uint64 nanoseconds_since_epoch = 1;
+
+    // The following are mutually exclusive.
+    optional OpenSession.Request open_session = 4;
+    optional ReadWriteTree.Request tree = 5;
+}
+
+/**
+ * This is what the state machine outputs.
+ */
+message CommandResponse {
+    // The following are mutually exclusive.
+    optional OpenSession.Response open_session = 4;
+    optional ReadWriteTree.Response tree = 5;
+}

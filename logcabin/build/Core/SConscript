@@ -1,0 +1,13 @@
+Import('env', 'object_files')
+
+src = [
+    "Checksum.cc",
+    "Config.cc",
+    "Debug.cc",
+    "ProtoBuf.cc",
+    "Random.cc",
+    "ThreadId.cc",
+    "StringUtil.cc",
+]
+object_files['Core'] = (env.StaticObject(src) +
+                        env.Protobuf("ProtoBufTest.proto"))

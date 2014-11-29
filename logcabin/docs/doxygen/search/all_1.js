@@ -1,0 +1,25 @@
+var searchData=
+[
+  ['backoffuntil',['backoffUntil',['../classLogCabin_1_1Server_1_1RaftConsensusInternal_1_1Peer.html#a8b6511933a555747a4edf9e4cb9f385c',1,'LogCabin::Server::RaftConsensusInternal::Peer']]],
+  ['bad',['BAD',['../structLogCabin_1_1Client_1_1ConfigurationResult.html#a997b7222fc75f394453ecb7b303a58aaa989284bc23bf7359711274159e74330a',1,'LogCabin::Client::ConfigurationResult']]],
+  ['badservers',['badServers',['../structLogCabin_1_1Client_1_1ConfigurationResult.html#a5b2c4d3eec9932176188567f47af1ac7',1,'LogCabin::Client::ConfigurationResult']]],
+  ['becomeleader',['becomeLeader',['../classLogCabin_1_1Server_1_1RaftConsensusInternal_1_1RaftConsensus.html#a99c3e4320ad96dc929a25c0fae70bd63',1,'LogCabin::Server::RaftConsensusInternal::RaftConsensus']]],
+  ['beginleadership',['beginLeadership',['../classLogCabin_1_1Server_1_1RaftConsensusInternal_1_1Server.html#ad03f113b797b25406325dde9bcf78fb2',1,'LogCabin::Server::RaftConsensusInternal::Server::beginLeadership()'],['../classLogCabin_1_1Server_1_1RaftConsensusInternal_1_1LocalServer.html#a59663bf7fc26786c1ef25c90ece3bfa5',1,'LogCabin::Server::RaftConsensusInternal::LocalServer::beginLeadership()'],['../classLogCabin_1_1Server_1_1RaftConsensusInternal_1_1Peer.html#ad5ba27d28751c0c5c12e3670f7055afd',1,'LogCabin::Server::RaftConsensusInternal::Peer::beginLeadership()']]],
+  ['beginrequestvote',['beginRequestVote',['../classLogCabin_1_1Server_1_1RaftConsensusInternal_1_1Server.html#aab43402fe28b4fac77a2a53da7f7c779',1,'LogCabin::Server::RaftConsensusInternal::Server::beginRequestVote()'],['../classLogCabin_1_1Server_1_1RaftConsensusInternal_1_1LocalServer.html#ac3e344c14b56bde9c89ce29b8d4ae4f9',1,'LogCabin::Server::RaftConsensusInternal::LocalServer::beginRequestVote()'],['../classLogCabin_1_1Server_1_1RaftConsensusInternal_1_1Peer.html#aa7a24ef9188194eefe118684d66a2ec5',1,'LogCabin::Server::RaftConsensusInternal::Peer::beginRequestVote()']]],
+  ['beginsnapshot',['beginSnapshot',['../classLogCabin_1_1Server_1_1Consensus.html#a791c4e3a12014586483b847be4d097bb',1,'LogCabin::Server::Consensus::beginSnapshot()'],['../classLogCabin_1_1Server_1_1RaftConsensusInternal_1_1RaftConsensus.html#ad972a7ee3e07e19205a56b435ca02515',1,'LogCabin::Server::RaftConsensusInternal::RaftConsensus::beginSnapshot()']]],
+  ['benchmark_2ecc',['Benchmark.cc',['../Benchmark_8cc.html',1,'']]],
+  ['bind',['bind',['../classLogCabin_1_1RPC_1_1OpaqueServer.html#ae8b06de44eef3df7e5f0091ebcc4984e',1,'LogCabin::RPC::OpaqueServer::bind()'],['../classLogCabin_1_1RPC_1_1TCPListener.html#af928cc7d97ee2a168eb98824b513c79e',1,'LogCabin::RPC::TCPListener::bind()']]],
+  ['blank',['BLANK',['../classLogCabin_1_1Server_1_1RaftConsensusInternal_1_1Configuration.html#a602e7e486778ba0fda4c2ffceeeeb5caa56f031dd03707d695f76c63ddbf40bd7',1,'LogCabin::Server::RaftConsensusInternal::Configuration']]],
+  ['bootstrap',['bootstrap',['../classanonymous__namespace_02Main_8cc_03_1_1OptionParser.html#aabc1dd2c57d0572ece3abdb9ca30a25c',1,'anonymous_namespace{Main.cc}::OptionParser']]],
+  ['bootstrapconfiguration',['bootstrapConfiguration',['../classLogCabin_1_1Server_1_1RaftConsensusInternal_1_1RaftConsensus.html#a4b0562bafbc421881ba2b946215f3d12',1,'LogCabin::Server::RaftConsensusInternal::RaftConsensus']]],
+  ['boundlistener',['BoundListener',['../classLogCabin_1_1RPC_1_1TCPListener_1_1BoundListener.html#a0f924196124c18e1b772f112c7fac3e8',1,'LogCabin::RPC::TCPListener::BoundListener']]],
+  ['boundlistener',['BoundListener',['../classLogCabin_1_1RPC_1_1TCPListener_1_1BoundListener.html',1,'LogCabin::RPC::TCPListener']]],
+  ['boundlisteners',['boundListeners',['../classLogCabin_1_1RPC_1_1TCPListener.html#a6a9d1cadc74f82eac737b864123c1071',1,'LogCabin::RPC::TCPListener']]],
+  ['breaktimer',['breakTimer',['../classLogCabin_1_1Event_1_1Loop.html#a5d2453961e390dd21206ff93666f28c1',1,'LogCabin::Event::Loop']]],
+  ['buffer',['Buffer',['../classLogCabin_1_1RPC_1_1Buffer.html',1,'LogCabin::RPC']]],
+  ['buffer',['Buffer',['../classLogCabin_1_1RPC_1_1Buffer.html#a70b809aef5e4b68454faba8792a77f75',1,'LogCabin::RPC::Buffer::Buffer()'],['../classLogCabin_1_1RPC_1_1Buffer.html#a57842bb84233cb8db6f13b34a1175f86',1,'LogCabin::RPC::Buffer::Buffer(void *data, uint32_t length, Deleter deleter)'],['../classLogCabin_1_1RPC_1_1Buffer.html#a4f2dcab62acbc022ca6a00cf3f75d9a7',1,'LogCabin::RPC::Buffer::Buffer(Buffer &amp;&amp;other)'],['../classLogCabin_1_1RPC_1_1Buffer.html#aeaaa81269ecdcf01e3ae1bd918ca031e',1,'LogCabin::RPC::Buffer::Buffer(const Buffer &amp;)=delete']]],
+  ['buffer_2ecc',['Buffer.cc',['../Buffer_8cc.html',1,'']]],
+  ['buffer_2eh',['Buffer.h',['../Buffer_8h.html',1,'']]],
+  ['bytesread',['bytesRead',['../structLogCabin_1_1RPC_1_1MessageSocket_1_1Inbound.html#ad49d1e61c76635948dd9117a41aaa7ce',1,'LogCabin::RPC::MessageSocket::Inbound']]],
+  ['bytessent',['bytesSent',['../structLogCabin_1_1RPC_1_1MessageSocket_1_1Outbound.html#aea15b927af79f6aef509496096c85d4c',1,'LogCabin::RPC::MessageSocket::Outbound']]]
+];
