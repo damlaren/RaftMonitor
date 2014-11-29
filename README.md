@@ -25,3 +25,4 @@ Built on Ubuntu 14.04.
 
 1. Setup loopback interface as on LogCabin
 2. 'source setup_monitor.sh' to set up path for running RaftMonitor
+3. sudo LD_LIBRARY_PATH=$LD_LIBRARY_PATH ./RaftMonitor
