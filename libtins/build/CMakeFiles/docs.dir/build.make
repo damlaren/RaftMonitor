@@ -35,10 +35,10 @@ RM = /usr/bin/cmake -E remove -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/elizabeth/Desktop/cs244b_final_project/libtins
+CMAKE_SOURCE_DIR = /home/dmclaren/project/cs244b_final_project/libtins
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/elizabeth/Desktop/cs244b_final_project/libtins/build
+CMAKE_BINARY_DIR = /home/dmclaren/project/cs244b_final_project/libtins/build
 
 # Utility rule file for docs.
 
@@ -46,9 +46,9 @@ CMAKE_BINARY_DIR = /home/elizabeth/Desktop/cs244b_final_project/libtins/build
 include CMakeFiles/docs.dir/progress.make
 
 CMakeFiles/docs:
-	$(CMAKE_COMMAND) -E cmake_progress_report /home/elizabeth/Desktop/cs244b_final_project/libtins/build/CMakeFiles $(CMAKE_PROGRESS_1)
+	$(CMAKE_COMMAND) -E cmake_progress_report /home/dmclaren/project/cs244b_final_project/libtins/build/CMakeFiles $(CMAKE_PROGRESS_1)
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --blue --bold "Generating API documentation with Doxygen"
-	/usr/bin/doxygen /home/elizabeth/Desktop/cs244b_final_project/libtins/build/Doxyfile
+	/usr/bin/doxygen /home/dmclaren/project/cs244b_final_project/libtins/build/Doxyfile
 
 docs: CMakeFiles/docs
 docs: CMakeFiles/docs.dir/build.make
@@ -63,6 +63,6 @@ CMakeFiles/docs.dir/clean:
 .PHONY : CMakeFiles/docs.dir/clean
 
 CMakeFiles/docs.dir/depend:
-	cd /home/elizabeth/Desktop/cs244b_final_project/libtins/build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/elizabeth/Desktop/cs244b_final_project/libtins /home/elizabeth/Desktop/cs244b_final_project/libtins /home/elizabeth/Desktop/cs244b_final_project/libtins/build /home/elizabeth/Desktop/cs244b_final_project/libtins/build /home/elizabeth/Desktop/cs244b_final_project/libtins/build/CMakeFiles/docs.dir/DependInfo.cmake --color=$(COLOR)
+	cd /home/dmclaren/project/cs244b_final_project/libtins/build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/dmclaren/project/cs244b_final_project/libtins /home/dmclaren/project/cs244b_final_project/libtins /home/dmclaren/project/cs244b_final_project/libtins/build /home/dmclaren/project/cs244b_final_project/libtins/build /home/dmclaren/project/cs244b_final_project/libtins/build/CMakeFiles/docs.dir/DependInfo.cmake --color=$(COLOR)
 .PHONY : CMakeFiles/docs.dir/depend
 

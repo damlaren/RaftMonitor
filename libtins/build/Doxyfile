@@ -38,7 +38,7 @@ PROJECT_NUMBER         = 3.2
 # If a relative path is entered, it will be relative to the location
 # where doxygen was started. If left blank the current directory will be used.
 
-OUTPUT_DIRECTORY       = /home/elizabeth/Desktop/cs244b_final_project/libtins/build/docs/
+OUTPUT_DIRECTORY       = /home/dmclaren/project/cs244b_final_project/libtins/build/docs/
 
 # If the CREATE_SUBDIRS tag is set to YES, then doxygen will create
 # 4096 sub-directories (in 2 levels) under the output directory of each output
@@ -581,7 +581,7 @@ WARN_LOGFILE           =
 # directories like "/usr/src/myproject". Separate the files or directories
 # with spaces.
 
-INPUT                  = /home/elizabeth/Desktop/cs244b_final_project/libtins/include /home/elizabeth/Desktop/cs244b_final_project/libtins/src /home/elizabeth/Desktop/cs244b_final_project/libtins/docs/mainpage.dox
+INPUT                  = /home/dmclaren/project/cs244b_final_project/libtins/include /home/dmclaren/project/cs244b_final_project/libtins/src /home/dmclaren/project/cs244b_final_project/libtins/docs/mainpage.dox
 
 # This tag can be used to specify the character encoding of the source files
 # that doxygen parses. Internally doxygen uses the UTF-8 encoding, which is

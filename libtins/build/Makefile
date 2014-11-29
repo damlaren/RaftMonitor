@@ -39,10 +39,10 @@ RM = /usr/bin/cmake -E remove -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/elizabeth/Desktop/cs244b_final_project/libtins
+CMAKE_SOURCE_DIR = /home/dmclaren/project/cs244b_final_project/libtins
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/elizabeth/Desktop/cs244b_final_project/libtins/build
+CMAKE_BINARY_DIR = /home/dmclaren/project/cs244b_final_project/libtins/build
 
 #=============================================================================
 # Targets provided globally by CMake.
@@ -120,9 +120,9 @@ test/fast: test
 
 # The main all target
 all: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/elizabeth/Desktop/cs244b_final_project/libtins/build/CMakeFiles /home/elizabeth/Desktop/cs244b_final_project/libtins/build/CMakeFiles/progress.marks
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/dmclaren/project/cs244b_final_project/libtins/build/CMakeFiles /home/dmclaren/project/cs244b_final_project/libtins/build/CMakeFiles/progress.marks
 	$(MAKE) -f CMakeFiles/Makefile2 all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/elizabeth/Desktop/cs244b_final_project/libtins/build/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/dmclaren/project/cs244b_final_project/libtins/build/CMakeFiles 0
 .PHONY : all
 
 # The main clean target
@@ -175,6 +175,136 @@ tins/fast:
 	$(MAKE) -f src/CMakeFiles/tins.dir/build.make src/CMakeFiles/tins.dir/build
 .PHONY : tins/fast
 
+#=============================================================================
+# Target rules for targets named arpmonitor
+
+# Build rule for target.
+arpmonitor: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 arpmonitor
+.PHONY : arpmonitor
+
+# fast build rule for target.
+arpmonitor/fast:
+	$(MAKE) -f examples/CMakeFiles/arpmonitor.dir/build.make examples/CMakeFiles/arpmonitor.dir/build
+.PHONY : arpmonitor/fast
+
+#=============================================================================
+# Target rules for targets named arpspoofing
+
+# Build rule for target.
+arpspoofing: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 arpspoofing
+.PHONY : arpspoofing
+
+# fast build rule for target.
+arpspoofing/fast:
+	$(MAKE) -f examples/CMakeFiles/arpspoofing.dir/build.make examples/CMakeFiles/arpspoofing.dir/build
+.PHONY : arpspoofing/fast
+
+#=============================================================================
+# Target rules for targets named beacon_display
+
+# Build rule for target.
+beacon_display: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 beacon_display
+.PHONY : beacon_display
+
+# fast build rule for target.
+beacon_display/fast:
+	$(MAKE) -f examples/CMakeFiles/beacon_display.dir/build.make examples/CMakeFiles/beacon_display.dir/build
+.PHONY : beacon_display/fast
+
+#=============================================================================
+# Target rules for targets named dns_queries
+
+# Build rule for target.
+dns_queries: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 dns_queries
+.PHONY : dns_queries
+
+# fast build rule for target.
+dns_queries/fast:
+	$(MAKE) -f examples/CMakeFiles/dns_queries.dir/build.make examples/CMakeFiles/dns_queries.dir/build
+.PHONY : dns_queries/fast
+
+#=============================================================================
+# Target rules for targets named dns_spoof
+
+# Build rule for target.
+dns_spoof: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 dns_spoof
+.PHONY : dns_spoof
+
+# fast build rule for target.
+dns_spoof/fast:
+	$(MAKE) -f examples/CMakeFiles/dns_spoof.dir/build.make examples/CMakeFiles/dns_spoof.dir/build
+.PHONY : dns_spoof/fast
+
+#=============================================================================
+# Target rules for targets named dns_stats
+
+# Build rule for target.
+dns_stats: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 dns_stats
+.PHONY : dns_stats
+
+# fast build rule for target.
+dns_stats/fast:
+	$(MAKE) -f examples/CMakeFiles/dns_stats.dir/build.make examples/CMakeFiles/dns_stats.dir/build
+.PHONY : dns_stats/fast
+
+#=============================================================================
+# Target rules for targets named examples
+
+# Build rule for target.
+examples: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 examples
+.PHONY : examples
+
+# fast build rule for target.
+examples/fast:
+	$(MAKE) -f examples/CMakeFiles/examples.dir/build.make examples/CMakeFiles/examples.dir/build
+.PHONY : examples/fast
+
+#=============================================================================
+# Target rules for targets named portscan
+
+# Build rule for target.
+portscan: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 portscan
+.PHONY : portscan
+
+# fast build rule for target.
+portscan/fast:
+	$(MAKE) -f examples/CMakeFiles/portscan.dir/build.make examples/CMakeFiles/portscan.dir/build
+.PHONY : portscan/fast
+
+#=============================================================================
+# Target rules for targets named traceroute
+
+# Build rule for target.
+traceroute: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 traceroute
+.PHONY : traceroute
+
+# fast build rule for target.
+traceroute/fast:
+	$(MAKE) -f examples/CMakeFiles/traceroute.dir/build.make examples/CMakeFiles/traceroute.dir/build
+.PHONY : traceroute/fast
+
+#=============================================================================
+# Target rules for targets named wps_detect
+
+# Build rule for target.
+wps_detect: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 wps_detect
+.PHONY : wps_detect
+
+# fast build rule for target.
+wps_detect/fast:
+	$(MAKE) -f examples/CMakeFiles/wps_detect.dir/build.make examples/CMakeFiles/wps_detect.dir/build
+.PHONY : wps_detect/fast
+
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -190,6 +320,16 @@ help:
 	@echo "... rebuild_cache"
 	@echo "... test"
 	@echo "... tins"
+	@echo "... arpmonitor"
+	@echo "... arpspoofing"
+	@echo "... beacon_display"
+	@echo "... dns_queries"
+	@echo "... dns_spoof"
+	@echo "... dns_stats"
+	@echo "... examples"
+	@echo "... portscan"
+	@echo "... traceroute"
+	@echo "... wps_detect"
 .PHONY : help
 
 

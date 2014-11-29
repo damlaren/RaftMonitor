@@ -1,4 +1,4 @@
-# Install script for directory: /home/elizabeth/Desktop/cs244b_final_project/libtins/src
+# Install script for directory: /home/dmclaren/project/cs244b_final_project/libtins/src
 
 # Set the install prefix
 IF(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -45,8 +45,8 @@ IF(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspeci
     ENDIF()
   ENDFOREACH()
   FILE(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib" TYPE SHARED_LIBRARY FILES
-    "/home/elizabeth/Desktop/cs244b_final_project/libtins/build/lib/libtins.so.3.2"
-    "/home/elizabeth/Desktop/cs244b_final_project/libtins/build/lib/libtins.so"
+    "/home/dmclaren/project/cs244b_final_project/libtins/build/lib/libtins.so.3.2"
+    "/home/dmclaren/project/cs244b_final_project/libtins/build/lib/libtins.so"
     )
   FOREACH(file
       "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/lib/libtins.so.3.2"

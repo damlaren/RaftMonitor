@@ -47,10 +47,10 @@ RM = /usr/bin/cmake -E remove -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/elizabeth/Desktop/cs244b_final_project/libtins
+CMAKE_SOURCE_DIR = /home/dmclaren/project/cs244b_final_project/libtins
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/elizabeth/Desktop/cs244b_final_project/libtins/build
+CMAKE_BINARY_DIR = /home/dmclaren/project/cs244b_final_project/libtins/build
 
 #=============================================================================
 # Target rules for target CMakeFiles/docs.dir
@@ -59,15 +59,15 @@ CMAKE_BINARY_DIR = /home/elizabeth/Desktop/cs244b_final_project/libtins/build
 CMakeFiles/docs.dir/all:
 	$(MAKE) -f CMakeFiles/docs.dir/build.make CMakeFiles/docs.dir/depend
 	$(MAKE) -f CMakeFiles/docs.dir/build.make CMakeFiles/docs.dir/build
-	$(CMAKE_COMMAND) -E cmake_progress_report /home/elizabeth/Desktop/cs244b_final_project/libtins/build/CMakeFiles  1
+	$(CMAKE_COMMAND) -E cmake_progress_report /home/dmclaren/project/cs244b_final_project/libtins/build/CMakeFiles  7
 	@echo "Built target docs"
 .PHONY : CMakeFiles/docs.dir/all
 
 # Build rule for subdir invocation for target.
 CMakeFiles/docs.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/elizabeth/Desktop/cs244b_final_project/libtins/build/CMakeFiles 1
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/dmclaren/project/cs244b_final_project/libtins/build/CMakeFiles 1
 	$(MAKE) -f CMakeFiles/Makefile2 CMakeFiles/docs.dir/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/elizabeth/Desktop/cs244b_final_project/libtins/build/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/dmclaren/project/cs244b_final_project/libtins/build/CMakeFiles 0
 .PHONY : CMakeFiles/docs.dir/rule
 
 # Convenience name for target.
@@ -150,7 +150,7 @@ src/preinstall:
 src/CMakeFiles/tins.dir/all:
 	$(MAKE) -f src/CMakeFiles/tins.dir/build.make src/CMakeFiles/tins.dir/depend
 	$(MAKE) -f src/CMakeFiles/tins.dir/build.make src/CMakeFiles/tins.dir/build
-	$(CMAKE_COMMAND) -E cmake_progress_report /home/elizabeth/Desktop/cs244b_final_project/libtins/build/CMakeFiles  2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38 39 40 41 42 43 44 45 46 47 48 49 50
+	$(CMAKE_COMMAND) -E cmake_progress_report /home/dmclaren/project/cs244b_final_project/libtins/build/CMakeFiles  9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38 39 40 41 42 43 44 45 46 47 48 49 50 51 52 53 54 55 56 57
 	@echo "Built target tins"
 .PHONY : src/CMakeFiles/tins.dir/all
 
@@ -160,9 +160,9 @@ all: src/CMakeFiles/tins.dir/all
 
 # Build rule for subdir invocation for target.
 src/CMakeFiles/tins.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/elizabeth/Desktop/cs244b_final_project/libtins/build/CMakeFiles 49
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/dmclaren/project/cs244b_final_project/libtins/build/CMakeFiles 49
 	$(MAKE) -f CMakeFiles/Makefile2 src/CMakeFiles/tins.dir/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/elizabeth/Desktop/cs244b_final_project/libtins/build/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/dmclaren/project/cs244b_final_project/libtins/build/CMakeFiles 0
 .PHONY : src/CMakeFiles/tins.dir/rule
 
 # Convenience name for target.
@@ -201,12 +201,339 @@ examples/all:
 .PHONY : examples/all
 
 # Convenience name for "clean" pass in the directory.
-examples/clean:
+examples/clean: examples/CMakeFiles/arpmonitor.dir/clean
+examples/clean: examples/CMakeFiles/arpspoofing.dir/clean
+examples/clean: examples/CMakeFiles/beacon_display.dir/clean
+examples/clean: examples/CMakeFiles/dns_queries.dir/clean
+examples/clean: examples/CMakeFiles/dns_spoof.dir/clean
+examples/clean: examples/CMakeFiles/dns_stats.dir/clean
+examples/clean: examples/CMakeFiles/examples.dir/clean
+examples/clean: examples/CMakeFiles/portscan.dir/clean
+examples/clean: examples/CMakeFiles/traceroute.dir/clean
+examples/clean: examples/CMakeFiles/wps_detect.dir/clean
 .PHONY : examples/clean
 
 # Convenience name for "preinstall" pass in the directory.
 examples/preinstall:
 .PHONY : examples/preinstall
+
+#=============================================================================
+# Target rules for target examples/CMakeFiles/arpmonitor.dir
+
+# All Build rule for target.
+examples/CMakeFiles/arpmonitor.dir/all: src/CMakeFiles/tins.dir/all
+	$(MAKE) -f examples/CMakeFiles/arpmonitor.dir/build.make examples/CMakeFiles/arpmonitor.dir/depend
+	$(MAKE) -f examples/CMakeFiles/arpmonitor.dir/build.make examples/CMakeFiles/arpmonitor.dir/build
+	$(CMAKE_COMMAND) -E cmake_progress_report /home/dmclaren/project/cs244b_final_project/libtins/build/CMakeFiles  1
+	@echo "Built target arpmonitor"
+.PHONY : examples/CMakeFiles/arpmonitor.dir/all
+
+# Build rule for subdir invocation for target.
+examples/CMakeFiles/arpmonitor.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/dmclaren/project/cs244b_final_project/libtins/build/CMakeFiles 50
+	$(MAKE) -f CMakeFiles/Makefile2 examples/CMakeFiles/arpmonitor.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/dmclaren/project/cs244b_final_project/libtins/build/CMakeFiles 0
+.PHONY : examples/CMakeFiles/arpmonitor.dir/rule
+
+# Convenience name for target.
+arpmonitor: examples/CMakeFiles/arpmonitor.dir/rule
+.PHONY : arpmonitor
+
+# clean rule for target.
+examples/CMakeFiles/arpmonitor.dir/clean:
+	$(MAKE) -f examples/CMakeFiles/arpmonitor.dir/build.make examples/CMakeFiles/arpmonitor.dir/clean
+.PHONY : examples/CMakeFiles/arpmonitor.dir/clean
+
+# clean rule for target.
+clean: examples/CMakeFiles/arpmonitor.dir/clean
+.PHONY : clean
+
+#=============================================================================
+# Target rules for target examples/CMakeFiles/arpspoofing.dir
+
+# All Build rule for target.
+examples/CMakeFiles/arpspoofing.dir/all: src/CMakeFiles/tins.dir/all
+	$(MAKE) -f examples/CMakeFiles/arpspoofing.dir/build.make examples/CMakeFiles/arpspoofing.dir/depend
+	$(MAKE) -f examples/CMakeFiles/arpspoofing.dir/build.make examples/CMakeFiles/arpspoofing.dir/build
+	$(CMAKE_COMMAND) -E cmake_progress_report /home/dmclaren/project/cs244b_final_project/libtins/build/CMakeFiles  2
+	@echo "Built target arpspoofing"
+.PHONY : examples/CMakeFiles/arpspoofing.dir/all
+
+# Build rule for subdir invocation for target.
+examples/CMakeFiles/arpspoofing.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/dmclaren/project/cs244b_final_project/libtins/build/CMakeFiles 50
+	$(MAKE) -f CMakeFiles/Makefile2 examples/CMakeFiles/arpspoofing.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/dmclaren/project/cs244b_final_project/libtins/build/CMakeFiles 0
+.PHONY : examples/CMakeFiles/arpspoofing.dir/rule
+
+# Convenience name for target.
+arpspoofing: examples/CMakeFiles/arpspoofing.dir/rule
+.PHONY : arpspoofing
+
+# clean rule for target.
+examples/CMakeFiles/arpspoofing.dir/clean:
+	$(MAKE) -f examples/CMakeFiles/arpspoofing.dir/build.make examples/CMakeFiles/arpspoofing.dir/clean
+.PHONY : examples/CMakeFiles/arpspoofing.dir/clean
+
+# clean rule for target.
+clean: examples/CMakeFiles/arpspoofing.dir/clean
+.PHONY : clean
+
+#=============================================================================
+# Target rules for target examples/CMakeFiles/beacon_display.dir
+
+# All Build rule for target.
+examples/CMakeFiles/beacon_display.dir/all: src/CMakeFiles/tins.dir/all
+	$(MAKE) -f examples/CMakeFiles/beacon_display.dir/build.make examples/CMakeFiles/beacon_display.dir/depend
+	$(MAKE) -f examples/CMakeFiles/beacon_display.dir/build.make examples/CMakeFiles/beacon_display.dir/build
+	$(CMAKE_COMMAND) -E cmake_progress_report /home/dmclaren/project/cs244b_final_project/libtins/build/CMakeFiles  3
+	@echo "Built target beacon_display"
+.PHONY : examples/CMakeFiles/beacon_display.dir/all
+
+# Build rule for subdir invocation for target.
+examples/CMakeFiles/beacon_display.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/dmclaren/project/cs244b_final_project/libtins/build/CMakeFiles 50
+	$(MAKE) -f CMakeFiles/Makefile2 examples/CMakeFiles/beacon_display.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/dmclaren/project/cs244b_final_project/libtins/build/CMakeFiles 0
+.PHONY : examples/CMakeFiles/beacon_display.dir/rule
+
+# Convenience name for target.
+beacon_display: examples/CMakeFiles/beacon_display.dir/rule
+.PHONY : beacon_display
+
+# clean rule for target.
+examples/CMakeFiles/beacon_display.dir/clean:
+	$(MAKE) -f examples/CMakeFiles/beacon_display.dir/build.make examples/CMakeFiles/beacon_display.dir/clean
+.PHONY : examples/CMakeFiles/beacon_display.dir/clean
+
+# clean rule for target.
+clean: examples/CMakeFiles/beacon_display.dir/clean
+.PHONY : clean
+
+#=============================================================================
+# Target rules for target examples/CMakeFiles/dns_queries.dir
+
+# All Build rule for target.
+examples/CMakeFiles/dns_queries.dir/all: src/CMakeFiles/tins.dir/all
+	$(MAKE) -f examples/CMakeFiles/dns_queries.dir/build.make examples/CMakeFiles/dns_queries.dir/depend
+	$(MAKE) -f examples/CMakeFiles/dns_queries.dir/build.make examples/CMakeFiles/dns_queries.dir/build
+	$(CMAKE_COMMAND) -E cmake_progress_report /home/dmclaren/project/cs244b_final_project/libtins/build/CMakeFiles  4
+	@echo "Built target dns_queries"
+.PHONY : examples/CMakeFiles/dns_queries.dir/all
+
+# Build rule for subdir invocation for target.
+examples/CMakeFiles/dns_queries.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/dmclaren/project/cs244b_final_project/libtins/build/CMakeFiles 50
+	$(MAKE) -f CMakeFiles/Makefile2 examples/CMakeFiles/dns_queries.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/dmclaren/project/cs244b_final_project/libtins/build/CMakeFiles 0
+.PHONY : examples/CMakeFiles/dns_queries.dir/rule
+
+# Convenience name for target.
+dns_queries: examples/CMakeFiles/dns_queries.dir/rule
+.PHONY : dns_queries
+
+# clean rule for target.
+examples/CMakeFiles/dns_queries.dir/clean:
+	$(MAKE) -f examples/CMakeFiles/dns_queries.dir/build.make examples/CMakeFiles/dns_queries.dir/clean
+.PHONY : examples/CMakeFiles/dns_queries.dir/clean
+
+# clean rule for target.
+clean: examples/CMakeFiles/dns_queries.dir/clean
+.PHONY : clean
+
+#=============================================================================
+# Target rules for target examples/CMakeFiles/dns_spoof.dir
+
+# All Build rule for target.
+examples/CMakeFiles/dns_spoof.dir/all: src/CMakeFiles/tins.dir/all
+	$(MAKE) -f examples/CMakeFiles/dns_spoof.dir/build.make examples/CMakeFiles/dns_spoof.dir/depend
+	$(MAKE) -f examples/CMakeFiles/dns_spoof.dir/build.make examples/CMakeFiles/dns_spoof.dir/build
+	$(CMAKE_COMMAND) -E cmake_progress_report /home/dmclaren/project/cs244b_final_project/libtins/build/CMakeFiles  5
+	@echo "Built target dns_spoof"
+.PHONY : examples/CMakeFiles/dns_spoof.dir/all
+
+# Build rule for subdir invocation for target.
+examples/CMakeFiles/dns_spoof.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/dmclaren/project/cs244b_final_project/libtins/build/CMakeFiles 50
+	$(MAKE) -f CMakeFiles/Makefile2 examples/CMakeFiles/dns_spoof.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/dmclaren/project/cs244b_final_project/libtins/build/CMakeFiles 0
+.PHONY : examples/CMakeFiles/dns_spoof.dir/rule
+
+# Convenience name for target.
+dns_spoof: examples/CMakeFiles/dns_spoof.dir/rule
+.PHONY : dns_spoof
+
+# clean rule for target.
+examples/CMakeFiles/dns_spoof.dir/clean:
+	$(MAKE) -f examples/CMakeFiles/dns_spoof.dir/build.make examples/CMakeFiles/dns_spoof.dir/clean
+.PHONY : examples/CMakeFiles/dns_spoof.dir/clean
+
+# clean rule for target.
+clean: examples/CMakeFiles/dns_spoof.dir/clean
+.PHONY : clean
+
+#=============================================================================
+# Target rules for target examples/CMakeFiles/dns_stats.dir
+
+# All Build rule for target.
+examples/CMakeFiles/dns_stats.dir/all: src/CMakeFiles/tins.dir/all
+	$(MAKE) -f examples/CMakeFiles/dns_stats.dir/build.make examples/CMakeFiles/dns_stats.dir/depend
+	$(MAKE) -f examples/CMakeFiles/dns_stats.dir/build.make examples/CMakeFiles/dns_stats.dir/build
+	$(CMAKE_COMMAND) -E cmake_progress_report /home/dmclaren/project/cs244b_final_project/libtins/build/CMakeFiles  6
+	@echo "Built target dns_stats"
+.PHONY : examples/CMakeFiles/dns_stats.dir/all
+
+# Build rule for subdir invocation for target.
+examples/CMakeFiles/dns_stats.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/dmclaren/project/cs244b_final_project/libtins/build/CMakeFiles 50
+	$(MAKE) -f CMakeFiles/Makefile2 examples/CMakeFiles/dns_stats.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/dmclaren/project/cs244b_final_project/libtins/build/CMakeFiles 0
+.PHONY : examples/CMakeFiles/dns_stats.dir/rule
+
+# Convenience name for target.
+dns_stats: examples/CMakeFiles/dns_stats.dir/rule
+.PHONY : dns_stats
+
+# clean rule for target.
+examples/CMakeFiles/dns_stats.dir/clean:
+	$(MAKE) -f examples/CMakeFiles/dns_stats.dir/build.make examples/CMakeFiles/dns_stats.dir/clean
+.PHONY : examples/CMakeFiles/dns_stats.dir/clean
+
+# clean rule for target.
+clean: examples/CMakeFiles/dns_stats.dir/clean
+.PHONY : clean
+
+#=============================================================================
+# Target rules for target examples/CMakeFiles/examples.dir
+
+# All Build rule for target.
+examples/CMakeFiles/examples.dir/all: examples/CMakeFiles/arpspoofing.dir/all
+examples/CMakeFiles/examples.dir/all: examples/CMakeFiles/dns_spoof.dir/all
+examples/CMakeFiles/examples.dir/all: examples/CMakeFiles/wps_detect.dir/all
+examples/CMakeFiles/examples.dir/all: examples/CMakeFiles/arpmonitor.dir/all
+examples/CMakeFiles/examples.dir/all: examples/CMakeFiles/beacon_display.dir/all
+examples/CMakeFiles/examples.dir/all: examples/CMakeFiles/portscan.dir/all
+examples/CMakeFiles/examples.dir/all: examples/CMakeFiles/dns_stats.dir/all
+examples/CMakeFiles/examples.dir/all: examples/CMakeFiles/dns_queries.dir/all
+examples/CMakeFiles/examples.dir/all: examples/CMakeFiles/traceroute.dir/all
+	$(MAKE) -f examples/CMakeFiles/examples.dir/build.make examples/CMakeFiles/examples.dir/depend
+	$(MAKE) -f examples/CMakeFiles/examples.dir/build.make examples/CMakeFiles/examples.dir/build
+	$(CMAKE_COMMAND) -E cmake_progress_report /home/dmclaren/project/cs244b_final_project/libtins/build/CMakeFiles 
+	@echo "Built target examples"
+.PHONY : examples/CMakeFiles/examples.dir/all
+
+# Build rule for subdir invocation for target.
+examples/CMakeFiles/examples.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/dmclaren/project/cs244b_final_project/libtins/build/CMakeFiles 58
+	$(MAKE) -f CMakeFiles/Makefile2 examples/CMakeFiles/examples.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/dmclaren/project/cs244b_final_project/libtins/build/CMakeFiles 0
+.PHONY : examples/CMakeFiles/examples.dir/rule
+
+# Convenience name for target.
+examples: examples/CMakeFiles/examples.dir/rule
+.PHONY : examples
+
+# clean rule for target.
+examples/CMakeFiles/examples.dir/clean:
+	$(MAKE) -f examples/CMakeFiles/examples.dir/build.make examples/CMakeFiles/examples.dir/clean
+.PHONY : examples/CMakeFiles/examples.dir/clean
+
+# clean rule for target.
+clean: examples/CMakeFiles/examples.dir/clean
+.PHONY : clean
+
+#=============================================================================
+# Target rules for target examples/CMakeFiles/portscan.dir
+
+# All Build rule for target.
+examples/CMakeFiles/portscan.dir/all: src/CMakeFiles/tins.dir/all
+	$(MAKE) -f examples/CMakeFiles/portscan.dir/build.make examples/CMakeFiles/portscan.dir/depend
+	$(MAKE) -f examples/CMakeFiles/portscan.dir/build.make examples/CMakeFiles/portscan.dir/build
+	$(CMAKE_COMMAND) -E cmake_progress_report /home/dmclaren/project/cs244b_final_project/libtins/build/CMakeFiles  8
+	@echo "Built target portscan"
+.PHONY : examples/CMakeFiles/portscan.dir/all
+
+# Build rule for subdir invocation for target.
+examples/CMakeFiles/portscan.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/dmclaren/project/cs244b_final_project/libtins/build/CMakeFiles 50
+	$(MAKE) -f CMakeFiles/Makefile2 examples/CMakeFiles/portscan.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/dmclaren/project/cs244b_final_project/libtins/build/CMakeFiles 0
+.PHONY : examples/CMakeFiles/portscan.dir/rule
+
+# Convenience name for target.
+portscan: examples/CMakeFiles/portscan.dir/rule
+.PHONY : portscan
+
+# clean rule for target.
+examples/CMakeFiles/portscan.dir/clean:
+	$(MAKE) -f examples/CMakeFiles/portscan.dir/build.make examples/CMakeFiles/portscan.dir/clean
+.PHONY : examples/CMakeFiles/portscan.dir/clean
+
+# clean rule for target.
+clean: examples/CMakeFiles/portscan.dir/clean
+.PHONY : clean
+
+#=============================================================================
+# Target rules for target examples/CMakeFiles/traceroute.dir
+
+# All Build rule for target.
+examples/CMakeFiles/traceroute.dir/all: src/CMakeFiles/tins.dir/all
+	$(MAKE) -f examples/CMakeFiles/traceroute.dir/build.make examples/CMakeFiles/traceroute.dir/depend
+	$(MAKE) -f examples/CMakeFiles/traceroute.dir/build.make examples/CMakeFiles/traceroute.dir/build
+	$(CMAKE_COMMAND) -E cmake_progress_report /home/dmclaren/project/cs244b_final_project/libtins/build/CMakeFiles  58
+	@echo "Built target traceroute"
+.PHONY : examples/CMakeFiles/traceroute.dir/all
+
+# Build rule for subdir invocation for target.
+examples/CMakeFiles/traceroute.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/dmclaren/project/cs244b_final_project/libtins/build/CMakeFiles 50
+	$(MAKE) -f CMakeFiles/Makefile2 examples/CMakeFiles/traceroute.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/dmclaren/project/cs244b_final_project/libtins/build/CMakeFiles 0
+.PHONY : examples/CMakeFiles/traceroute.dir/rule
+
+# Convenience name for target.
+traceroute: examples/CMakeFiles/traceroute.dir/rule
+.PHONY : traceroute
+
+# clean rule for target.
+examples/CMakeFiles/traceroute.dir/clean:
+	$(MAKE) -f examples/CMakeFiles/traceroute.dir/build.make examples/CMakeFiles/traceroute.dir/clean
+.PHONY : examples/CMakeFiles/traceroute.dir/clean
+
+# clean rule for target.
+clean: examples/CMakeFiles/traceroute.dir/clean
+.PHONY : clean
+
+#=============================================================================
+# Target rules for target examples/CMakeFiles/wps_detect.dir
+
+# All Build rule for target.
+examples/CMakeFiles/wps_detect.dir/all: src/CMakeFiles/tins.dir/all
+	$(MAKE) -f examples/CMakeFiles/wps_detect.dir/build.make examples/CMakeFiles/wps_detect.dir/depend
+	$(MAKE) -f examples/CMakeFiles/wps_detect.dir/build.make examples/CMakeFiles/wps_detect.dir/build
+	$(CMAKE_COMMAND) -E cmake_progress_report /home/dmclaren/project/cs244b_final_project/libtins/build/CMakeFiles  59
+	@echo "Built target wps_detect"
+.PHONY : examples/CMakeFiles/wps_detect.dir/all
+
+# Build rule for subdir invocation for target.
+examples/CMakeFiles/wps_detect.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/dmclaren/project/cs244b_final_project/libtins/build/CMakeFiles 50
+	$(MAKE) -f CMakeFiles/Makefile2 examples/CMakeFiles/wps_detect.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/dmclaren/project/cs244b_final_project/libtins/build/CMakeFiles 0
+.PHONY : examples/CMakeFiles/wps_detect.dir/rule
+
+# Convenience name for target.
+wps_detect: examples/CMakeFiles/wps_detect.dir/rule
+.PHONY : wps_detect
+
+# clean rule for target.
+examples/CMakeFiles/wps_detect.dir/clean:
+	$(MAKE) -f examples/CMakeFiles/wps_detect.dir/build.make examples/CMakeFiles/wps_detect.dir/clean
+.PHONY : examples/CMakeFiles/wps_detect.dir/clean
+
+# clean rule for target.
+clean: examples/CMakeFiles/wps_detect.dir/clean
+.PHONY : clean
 
 #=============================================================================
 # Special targets to cleanup operation of make.

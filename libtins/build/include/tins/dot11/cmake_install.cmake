@@ -1,4 +1,4 @@
-# Install script for directory: /home/elizabeth/Desktop/cs244b_final_project/libtins/include/tins/dot11
+# Install script for directory: /home/dmclaren/project/cs244b_final_project/libtins/include/tins/dot11
 
 # Set the install prefix
 IF(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -34,14 +34,14 @@ ENDIF(NOT DEFINED CMAKE_INSTALL_SO_NO_EXE)
 
 IF(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Headers")
   FILE(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/include/tins/dot11" TYPE FILE FILES
-    "/home/elizabeth/Desktop/cs244b_final_project/libtins/include/tins/dot11/dot11_probe.h"
-    "/home/elizabeth/Desktop/cs244b_final_project/libtins/include/tins/dot11/dot11_control.h"
-    "/home/elizabeth/Desktop/cs244b_final_project/libtins/include/tins/dot11/dot11_mgmt.h"
-    "/home/elizabeth/Desktop/cs244b_final_project/libtins/include/tins/dot11/dot11_data.h"
-    "/home/elizabeth/Desktop/cs244b_final_project/libtins/include/tins/dot11/dot11_auth.h"
-    "/home/elizabeth/Desktop/cs244b_final_project/libtins/include/tins/dot11/dot11_beacon.h"
-    "/home/elizabeth/Desktop/cs244b_final_project/libtins/include/tins/dot11/dot11_base.h"
-    "/home/elizabeth/Desktop/cs244b_final_project/libtins/include/tins/dot11/dot11_assoc.h"
+    "/home/dmclaren/project/cs244b_final_project/libtins/include/tins/dot11/dot11_probe.h"
+    "/home/dmclaren/project/cs244b_final_project/libtins/include/tins/dot11/dot11_data.h"
+    "/home/dmclaren/project/cs244b_final_project/libtins/include/tins/dot11/dot11_beacon.h"
+    "/home/dmclaren/project/cs244b_final_project/libtins/include/tins/dot11/dot11_mgmt.h"
+    "/home/dmclaren/project/cs244b_final_project/libtins/include/tins/dot11/dot11_auth.h"
+    "/home/dmclaren/project/cs244b_final_project/libtins/include/tins/dot11/dot11_base.h"
+    "/home/dmclaren/project/cs244b_final_project/libtins/include/tins/dot11/dot11_assoc.h"
+    "/home/dmclaren/project/cs244b_final_project/libtins/include/tins/dot11/dot11_control.h"
     )
 ENDIF(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Headers")
 

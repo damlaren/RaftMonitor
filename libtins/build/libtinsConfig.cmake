@@ -5,7 +5,7 @@
 
 # Compute paths
 get_filename_component(LIBTINS_CMAKE_DIR "${CMAKE_CURRENT_LIST_FILE}" PATH)
-set(LIBTINS_INCLUDE_DIRS "/home/elizabeth/Desktop/cs244b_final_project/libtins/include")
+set(LIBTINS_INCLUDE_DIRS "/home/dmclaren/project/cs244b_final_project/libtins/include")
 
 # Our library dependencies (contains definitions for IMPORTED targets)
 if(NOT TARGET libtins AND NOT LIBTINS_BINARY_DIR)

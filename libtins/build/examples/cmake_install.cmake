@@ -1,4 +1,4 @@
-# Install script for directory: /home/elizabeth/Desktop/cs244b_final_project/libtins/examples
+# Install script for directory: /home/dmclaren/project/cs244b_final_project/libtins/examples
 
 # Set the install prefix
 IF(NOT DEFINED CMAKE_INSTALL_PREFIX)

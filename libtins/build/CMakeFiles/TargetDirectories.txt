@@ -1,2 +1,12 @@
-/home/elizabeth/Desktop/cs244b_final_project/libtins/build/CMakeFiles/docs.dir
-/home/elizabeth/Desktop/cs244b_final_project/libtins/build/src/CMakeFiles/tins.dir
+/home/dmclaren/project/cs244b_final_project/libtins/build/examples/CMakeFiles/arpmonitor.dir
+/home/dmclaren/project/cs244b_final_project/libtins/build/examples/CMakeFiles/arpspoofing.dir
+/home/dmclaren/project/cs244b_final_project/libtins/build/examples/CMakeFiles/beacon_display.dir
+/home/dmclaren/project/cs244b_final_project/libtins/build/examples/CMakeFiles/dns_queries.dir
+/home/dmclaren/project/cs244b_final_project/libtins/build/examples/CMakeFiles/dns_spoof.dir
+/home/dmclaren/project/cs244b_final_project/libtins/build/examples/CMakeFiles/dns_stats.dir
+/home/dmclaren/project/cs244b_final_project/libtins/build/CMakeFiles/docs.dir
+/home/dmclaren/project/cs244b_final_project/libtins/build/examples/CMakeFiles/examples.dir
+/home/dmclaren/project/cs244b_final_project/libtins/build/examples/CMakeFiles/portscan.dir
+/home/dmclaren/project/cs244b_final_project/libtins/build/src/CMakeFiles/tins.dir
+/home/dmclaren/project/cs244b_final_project/libtins/build/examples/CMakeFiles/traceroute.dir
+/home/dmclaren/project/cs244b_final_project/libtins/build/examples/CMakeFiles/wps_detect.dir

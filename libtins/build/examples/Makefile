@@ -39,10 +39,10 @@ RM = /usr/bin/cmake -E remove -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/elizabeth/Desktop/cs244b_final_project/libtins
+CMAKE_SOURCE_DIR = /home/dmclaren/project/cs244b_final_project/libtins
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/elizabeth/Desktop/cs244b_final_project/libtins/build
+CMAKE_BINARY_DIR = /home/dmclaren/project/cs244b_final_project/libtins/build
 
 #=============================================================================
 # Targets provided globally by CMake.
@@ -120,14 +120,14 @@ test/fast: test
 
 # The main all target
 all: cmake_check_build_system
-	cd /home/elizabeth/Desktop/cs244b_final_project/libtins/build && $(CMAKE_COMMAND) -E cmake_progress_start /home/elizabeth/Desktop/cs244b_final_project/libtins/build/CMakeFiles /home/elizabeth/Desktop/cs244b_final_project/libtins/build/examples/CMakeFiles/progress.marks
-	cd /home/elizabeth/Desktop/cs244b_final_project/libtins/build && $(MAKE) -f CMakeFiles/Makefile2 examples/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/elizabeth/Desktop/cs244b_final_project/libtins/build/CMakeFiles 0
+	cd /home/dmclaren/project/cs244b_final_project/libtins/build && $(CMAKE_COMMAND) -E cmake_progress_start /home/dmclaren/project/cs244b_final_project/libtins/build/CMakeFiles /home/dmclaren/project/cs244b_final_project/libtins/build/examples/CMakeFiles/progress.marks
+	cd /home/dmclaren/project/cs244b_final_project/libtins/build && $(MAKE) -f CMakeFiles/Makefile2 examples/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/dmclaren/project/cs244b_final_project/libtins/build/CMakeFiles 0
 .PHONY : all
 
 # The main clean target
 clean:
-	cd /home/elizabeth/Desktop/cs244b_final_project/libtins/build && $(MAKE) -f CMakeFiles/Makefile2 examples/clean
+	cd /home/dmclaren/project/cs244b_final_project/libtins/build && $(MAKE) -f CMakeFiles/Makefile2 examples/clean
 .PHONY : clean
 
 # The main clean target
@@ -136,18 +136,374 @@ clean/fast: clean
 
 # Prepare targets for installation.
 preinstall: all
-	cd /home/elizabeth/Desktop/cs244b_final_project/libtins/build && $(MAKE) -f CMakeFiles/Makefile2 examples/preinstall
+	cd /home/dmclaren/project/cs244b_final_project/libtins/build && $(MAKE) -f CMakeFiles/Makefile2 examples/preinstall
 .PHONY : preinstall
 
 # Prepare targets for installation.
 preinstall/fast:
-	cd /home/elizabeth/Desktop/cs244b_final_project/libtins/build && $(MAKE) -f CMakeFiles/Makefile2 examples/preinstall
+	cd /home/dmclaren/project/cs244b_final_project/libtins/build && $(MAKE) -f CMakeFiles/Makefile2 examples/preinstall
 .PHONY : preinstall/fast
 
 # clear depends
 depend:
-	cd /home/elizabeth/Desktop/cs244b_final_project/libtins/build && $(CMAKE_COMMAND) -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 1
+	cd /home/dmclaren/project/cs244b_final_project/libtins/build && $(CMAKE_COMMAND) -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 1
 .PHONY : depend
+
+# Convenience name for target.
+examples/CMakeFiles/arpmonitor.dir/rule:
+	cd /home/dmclaren/project/cs244b_final_project/libtins/build && $(MAKE) -f CMakeFiles/Makefile2 examples/CMakeFiles/arpmonitor.dir/rule
+.PHONY : examples/CMakeFiles/arpmonitor.dir/rule
+
+# Convenience name for target.
+arpmonitor: examples/CMakeFiles/arpmonitor.dir/rule
+.PHONY : arpmonitor
+
+# fast build rule for target.
+arpmonitor/fast:
+	cd /home/dmclaren/project/cs244b_final_project/libtins/build && $(MAKE) -f examples/CMakeFiles/arpmonitor.dir/build.make examples/CMakeFiles/arpmonitor.dir/build
+.PHONY : arpmonitor/fast
+
+# Convenience name for target.
+examples/CMakeFiles/arpspoofing.dir/rule:
+	cd /home/dmclaren/project/cs244b_final_project/libtins/build && $(MAKE) -f CMakeFiles/Makefile2 examples/CMakeFiles/arpspoofing.dir/rule
+.PHONY : examples/CMakeFiles/arpspoofing.dir/rule
+
+# Convenience name for target.
+arpspoofing: examples/CMakeFiles/arpspoofing.dir/rule
+.PHONY : arpspoofing
+
+# fast build rule for target.
+arpspoofing/fast:
+	cd /home/dmclaren/project/cs244b_final_project/libtins/build && $(MAKE) -f examples/CMakeFiles/arpspoofing.dir/build.make examples/CMakeFiles/arpspoofing.dir/build
+.PHONY : arpspoofing/fast
+
+# Convenience name for target.
+examples/CMakeFiles/beacon_display.dir/rule:
+	cd /home/dmclaren/project/cs244b_final_project/libtins/build && $(MAKE) -f CMakeFiles/Makefile2 examples/CMakeFiles/beacon_display.dir/rule
+.PHONY : examples/CMakeFiles/beacon_display.dir/rule
+
+# Convenience name for target.
+beacon_display: examples/CMakeFiles/beacon_display.dir/rule
+.PHONY : beacon_display
+
+# fast build rule for target.
+beacon_display/fast:
+	cd /home/dmclaren/project/cs244b_final_project/libtins/build && $(MAKE) -f examples/CMakeFiles/beacon_display.dir/build.make examples/CMakeFiles/beacon_display.dir/build
+.PHONY : beacon_display/fast
+
+# Convenience name for target.
+examples/CMakeFiles/dns_queries.dir/rule:
+	cd /home/dmclaren/project/cs244b_final_project/libtins/build && $(MAKE) -f CMakeFiles/Makefile2 examples/CMakeFiles/dns_queries.dir/rule
+.PHONY : examples/CMakeFiles/dns_queries.dir/rule
+
+# Convenience name for target.
+dns_queries: examples/CMakeFiles/dns_queries.dir/rule
+.PHONY : dns_queries
+
+# fast build rule for target.
+dns_queries/fast:
+	cd /home/dmclaren/project/cs244b_final_project/libtins/build && $(MAKE) -f examples/CMakeFiles/dns_queries.dir/build.make examples/CMakeFiles/dns_queries.dir/build
+.PHONY : dns_queries/fast
+
+# Convenience name for target.
+examples/CMakeFiles/dns_spoof.dir/rule:
+	cd /home/dmclaren/project/cs244b_final_project/libtins/build && $(MAKE) -f CMakeFiles/Makefile2 examples/CMakeFiles/dns_spoof.dir/rule
+.PHONY : examples/CMakeFiles/dns_spoof.dir/rule
+
+# Convenience name for target.
+dns_spoof: examples/CMakeFiles/dns_spoof.dir/rule
+.PHONY : dns_spoof
+
+# fast build rule for target.
+dns_spoof/fast:
+	cd /home/dmclaren/project/cs244b_final_project/libtins/build && $(MAKE) -f examples/CMakeFiles/dns_spoof.dir/build.make examples/CMakeFiles/dns_spoof.dir/build
+.PHONY : dns_spoof/fast
+
+# Convenience name for target.
+examples/CMakeFiles/dns_stats.dir/rule:
+	cd /home/dmclaren/project/cs244b_final_project/libtins/build && $(MAKE) -f CMakeFiles/Makefile2 examples/CMakeFiles/dns_stats.dir/rule
+.PHONY : examples/CMakeFiles/dns_stats.dir/rule
+
+# Convenience name for target.
+dns_stats: examples/CMakeFiles/dns_stats.dir/rule
+.PHONY : dns_stats
+
+# fast build rule for target.
+dns_stats/fast:
+	cd /home/dmclaren/project/cs244b_final_project/libtins/build && $(MAKE) -f examples/CMakeFiles/dns_stats.dir/build.make examples/CMakeFiles/dns_stats.dir/build
+.PHONY : dns_stats/fast
+
+# Convenience name for target.
+examples/CMakeFiles/examples.dir/rule:
+	cd /home/dmclaren/project/cs244b_final_project/libtins/build && $(MAKE) -f CMakeFiles/Makefile2 examples/CMakeFiles/examples.dir/rule
+.PHONY : examples/CMakeFiles/examples.dir/rule
+
+# Convenience name for target.
+examples: examples/CMakeFiles/examples.dir/rule
+.PHONY : examples
+
+# fast build rule for target.
+examples/fast:
+	cd /home/dmclaren/project/cs244b_final_project/libtins/build && $(MAKE) -f examples/CMakeFiles/examples.dir/build.make examples/CMakeFiles/examples.dir/build
+.PHONY : examples/fast
+
+# Convenience name for target.
+examples/CMakeFiles/portscan.dir/rule:
+	cd /home/dmclaren/project/cs244b_final_project/libtins/build && $(MAKE) -f CMakeFiles/Makefile2 examples/CMakeFiles/portscan.dir/rule
+.PHONY : examples/CMakeFiles/portscan.dir/rule
+
+# Convenience name for target.
+portscan: examples/CMakeFiles/portscan.dir/rule
+.PHONY : portscan
+
+# fast build rule for target.
+portscan/fast:
+	cd /home/dmclaren/project/cs244b_final_project/libtins/build && $(MAKE) -f examples/CMakeFiles/portscan.dir/build.make examples/CMakeFiles/portscan.dir/build
+.PHONY : portscan/fast
+
+# Convenience name for target.
+examples/CMakeFiles/traceroute.dir/rule:
+	cd /home/dmclaren/project/cs244b_final_project/libtins/build && $(MAKE) -f CMakeFiles/Makefile2 examples/CMakeFiles/traceroute.dir/rule
+.PHONY : examples/CMakeFiles/traceroute.dir/rule
+
+# Convenience name for target.
+traceroute: examples/CMakeFiles/traceroute.dir/rule
+.PHONY : traceroute
+
+# fast build rule for target.
+traceroute/fast:
+	cd /home/dmclaren/project/cs244b_final_project/libtins/build && $(MAKE) -f examples/CMakeFiles/traceroute.dir/build.make examples/CMakeFiles/traceroute.dir/build
+.PHONY : traceroute/fast
+
+# Convenience name for target.
+examples/CMakeFiles/wps_detect.dir/rule:
+	cd /home/dmclaren/project/cs244b_final_project/libtins/build && $(MAKE) -f CMakeFiles/Makefile2 examples/CMakeFiles/wps_detect.dir/rule
+.PHONY : examples/CMakeFiles/wps_detect.dir/rule
+
+# Convenience name for target.
+wps_detect: examples/CMakeFiles/wps_detect.dir/rule
+.PHONY : wps_detect
+
+# fast build rule for target.
+wps_detect/fast:
+	cd /home/dmclaren/project/cs244b_final_project/libtins/build && $(MAKE) -f examples/CMakeFiles/wps_detect.dir/build.make examples/CMakeFiles/wps_detect.dir/build
+.PHONY : wps_detect/fast
+
+arpmonitor.o: arpmonitor.cpp.o
+.PHONY : arpmonitor.o
+
+# target to build an object file
+arpmonitor.cpp.o:
+	cd /home/dmclaren/project/cs244b_final_project/libtins/build && $(MAKE) -f examples/CMakeFiles/arpmonitor.dir/build.make examples/CMakeFiles/arpmonitor.dir/arpmonitor.cpp.o
+.PHONY : arpmonitor.cpp.o
+
+arpmonitor.i: arpmonitor.cpp.i
+.PHONY : arpmonitor.i
+
+# target to preprocess a source file
+arpmonitor.cpp.i:
+	cd /home/dmclaren/project/cs244b_final_project/libtins/build && $(MAKE) -f examples/CMakeFiles/arpmonitor.dir/build.make examples/CMakeFiles/arpmonitor.dir/arpmonitor.cpp.i
+.PHONY : arpmonitor.cpp.i
+
+arpmonitor.s: arpmonitor.cpp.s
+.PHONY : arpmonitor.s
+
+# target to generate assembly for a file
+arpmonitor.cpp.s:
+	cd /home/dmclaren/project/cs244b_final_project/libtins/build && $(MAKE) -f examples/CMakeFiles/arpmonitor.dir/build.make examples/CMakeFiles/arpmonitor.dir/arpmonitor.cpp.s
+.PHONY : arpmonitor.cpp.s
+
+arpspoofing.o: arpspoofing.cpp.o
+.PHONY : arpspoofing.o
+
+# target to build an object file
+arpspoofing.cpp.o:
+	cd /home/dmclaren/project/cs244b_final_project/libtins/build && $(MAKE) -f examples/CMakeFiles/arpspoofing.dir/build.make examples/CMakeFiles/arpspoofing.dir/arpspoofing.cpp.o
+.PHONY : arpspoofing.cpp.o
+
+arpspoofing.i: arpspoofing.cpp.i
+.PHONY : arpspoofing.i
+
+# target to preprocess a source file
+arpspoofing.cpp.i:
+	cd /home/dmclaren/project/cs244b_final_project/libtins/build && $(MAKE) -f examples/CMakeFiles/arpspoofing.dir/build.make examples/CMakeFiles/arpspoofing.dir/arpspoofing.cpp.i
+.PHONY : arpspoofing.cpp.i
+
+arpspoofing.s: arpspoofing.cpp.s
+.PHONY : arpspoofing.s
+
+# target to generate assembly for a file
+arpspoofing.cpp.s:
+	cd /home/dmclaren/project/cs244b_final_project/libtins/build && $(MAKE) -f examples/CMakeFiles/arpspoofing.dir/build.make examples/CMakeFiles/arpspoofing.dir/arpspoofing.cpp.s
+.PHONY : arpspoofing.cpp.s
+
+beacon_display.o: beacon_display.cpp.o
+.PHONY : beacon_display.o
+
+# target to build an object file
+beacon_display.cpp.o:
+	cd /home/dmclaren/project/cs244b_final_project/libtins/build && $(MAKE) -f examples/CMakeFiles/beacon_display.dir/build.make examples/CMakeFiles/beacon_display.dir/beacon_display.cpp.o
+.PHONY : beacon_display.cpp.o
+
+beacon_display.i: beacon_display.cpp.i
+.PHONY : beacon_display.i
+
+# target to preprocess a source file
+beacon_display.cpp.i:
+	cd /home/dmclaren/project/cs244b_final_project/libtins/build && $(MAKE) -f examples/CMakeFiles/beacon_display.dir/build.make examples/CMakeFiles/beacon_display.dir/beacon_display.cpp.i
+.PHONY : beacon_display.cpp.i
+
+beacon_display.s: beacon_display.cpp.s
+.PHONY : beacon_display.s
+
+# target to generate assembly for a file
+beacon_display.cpp.s:
+	cd /home/dmclaren/project/cs244b_final_project/libtins/build && $(MAKE) -f examples/CMakeFiles/beacon_display.dir/build.make examples/CMakeFiles/beacon_display.dir/beacon_display.cpp.s
+.PHONY : beacon_display.cpp.s
+
+dns_queries.o: dns_queries.cpp.o
+.PHONY : dns_queries.o
+
+# target to build an object file
+dns_queries.cpp.o:
+	cd /home/dmclaren/project/cs244b_final_project/libtins/build && $(MAKE) -f examples/CMakeFiles/dns_queries.dir/build.make examples/CMakeFiles/dns_queries.dir/dns_queries.cpp.o
+.PHONY : dns_queries.cpp.o
+
+dns_queries.i: dns_queries.cpp.i
+.PHONY : dns_queries.i
+
+# target to preprocess a source file
+dns_queries.cpp.i:
+	cd /home/dmclaren/project/cs244b_final_project/libtins/build && $(MAKE) -f examples/CMakeFiles/dns_queries.dir/build.make examples/CMakeFiles/dns_queries.dir/dns_queries.cpp.i
+.PHONY : dns_queries.cpp.i
+
+dns_queries.s: dns_queries.cpp.s
+.PHONY : dns_queries.s
+
+# target to generate assembly for a file
+dns_queries.cpp.s:
+	cd /home/dmclaren/project/cs244b_final_project/libtins/build && $(MAKE) -f examples/CMakeFiles/dns_queries.dir/build.make examples/CMakeFiles/dns_queries.dir/dns_queries.cpp.s
+.PHONY : dns_queries.cpp.s
+
+dns_spoof.o: dns_spoof.cpp.o
+.PHONY : dns_spoof.o
+
+# target to build an object file
+dns_spoof.cpp.o:
+	cd /home/dmclaren/project/cs244b_final_project/libtins/build && $(MAKE) -f examples/CMakeFiles/dns_spoof.dir/build.make examples/CMakeFiles/dns_spoof.dir/dns_spoof.cpp.o
+.PHONY : dns_spoof.cpp.o
+
+dns_spoof.i: dns_spoof.cpp.i
+.PHONY : dns_spoof.i
+
+# target to preprocess a source file
+dns_spoof.cpp.i:
+	cd /home/dmclaren/project/cs244b_final_project/libtins/build && $(MAKE) -f examples/CMakeFiles/dns_spoof.dir/build.make examples/CMakeFiles/dns_spoof.dir/dns_spoof.cpp.i
+.PHONY : dns_spoof.cpp.i
+
+dns_spoof.s: dns_spoof.cpp.s
+.PHONY : dns_spoof.s
+
+# target to generate assembly for a file
+dns_spoof.cpp.s:
+	cd /home/dmclaren/project/cs244b_final_project/libtins/build && $(MAKE) -f examples/CMakeFiles/dns_spoof.dir/build.make examples/CMakeFiles/dns_spoof.dir/dns_spoof.cpp.s
+.PHONY : dns_spoof.cpp.s
+
+dns_stats.o: dns_stats.cpp.o
+.PHONY : dns_stats.o
+
+# target to build an object file
+dns_stats.cpp.o:
+	cd /home/dmclaren/project/cs244b_final_project/libtins/build && $(MAKE) -f examples/CMakeFiles/dns_stats.dir/build.make examples/CMakeFiles/dns_stats.dir/dns_stats.cpp.o
+.PHONY : dns_stats.cpp.o
+
+dns_stats.i: dns_stats.cpp.i
+.PHONY : dns_stats.i
+
+# target to preprocess a source file
+dns_stats.cpp.i:
+	cd /home/dmclaren/project/cs244b_final_project/libtins/build && $(MAKE) -f examples/CMakeFiles/dns_stats.dir/build.make examples/CMakeFiles/dns_stats.dir/dns_stats.cpp.i
+.PHONY : dns_stats.cpp.i
+
+dns_stats.s: dns_stats.cpp.s
+.PHONY : dns_stats.s
+
+# target to generate assembly for a file
+dns_stats.cpp.s:
+	cd /home/dmclaren/project/cs244b_final_project/libtins/build && $(MAKE) -f examples/CMakeFiles/dns_stats.dir/build.make examples/CMakeFiles/dns_stats.dir/dns_stats.cpp.s
+.PHONY : dns_stats.cpp.s
+
+portscan.o: portscan.cpp.o
+.PHONY : portscan.o
+
+# target to build an object file
+portscan.cpp.o:
+	cd /home/dmclaren/project/cs244b_final_project/libtins/build && $(MAKE) -f examples/CMakeFiles/portscan.dir/build.make examples/CMakeFiles/portscan.dir/portscan.cpp.o
+.PHONY : portscan.cpp.o
+
+portscan.i: portscan.cpp.i
+.PHONY : portscan.i
+
+# target to preprocess a source file
+portscan.cpp.i:
+	cd /home/dmclaren/project/cs244b_final_project/libtins/build && $(MAKE) -f examples/CMakeFiles/portscan.dir/build.make examples/CMakeFiles/portscan.dir/portscan.cpp.i
+.PHONY : portscan.cpp.i
+
+portscan.s: portscan.cpp.s
+.PHONY : portscan.s
+
+# target to generate assembly for a file
+portscan.cpp.s:
+	cd /home/dmclaren/project/cs244b_final_project/libtins/build && $(MAKE) -f examples/CMakeFiles/portscan.dir/build.make examples/CMakeFiles/portscan.dir/portscan.cpp.s
+.PHONY : portscan.cpp.s
+
+traceroute.o: traceroute.cpp.o
+.PHONY : traceroute.o
+
+# target to build an object file
+traceroute.cpp.o:
+	cd /home/dmclaren/project/cs244b_final_project/libtins/build && $(MAKE) -f examples/CMakeFiles/traceroute.dir/build.make examples/CMakeFiles/traceroute.dir/traceroute.cpp.o
+.PHONY : traceroute.cpp.o
+
+traceroute.i: traceroute.cpp.i
+.PHONY : traceroute.i
+
+# target to preprocess a source file
+traceroute.cpp.i:
+	cd /home/dmclaren/project/cs244b_final_project/libtins/build && $(MAKE) -f examples/CMakeFiles/traceroute.dir/build.make examples/CMakeFiles/traceroute.dir/traceroute.cpp.i
+.PHONY : traceroute.cpp.i
+
+traceroute.s: traceroute.cpp.s
+.PHONY : traceroute.s
+
+# target to generate assembly for a file
+traceroute.cpp.s:
+	cd /home/dmclaren/project/cs244b_final_project/libtins/build && $(MAKE) -f examples/CMakeFiles/traceroute.dir/build.make examples/CMakeFiles/traceroute.dir/traceroute.cpp.s
+.PHONY : traceroute.cpp.s
+
+wps_detect.o: wps_detect.cpp.o
+.PHONY : wps_detect.o
+
+# target to build an object file
+wps_detect.cpp.o:
+	cd /home/dmclaren/project/cs244b_final_project/libtins/build && $(MAKE) -f examples/CMakeFiles/wps_detect.dir/build.make examples/CMakeFiles/wps_detect.dir/wps_detect.cpp.o
+.PHONY : wps_detect.cpp.o
+
+wps_detect.i: wps_detect.cpp.i
+.PHONY : wps_detect.i
+
+# target to preprocess a source file
+wps_detect.cpp.i:
+	cd /home/dmclaren/project/cs244b_final_project/libtins/build && $(MAKE) -f examples/CMakeFiles/wps_detect.dir/build.make examples/CMakeFiles/wps_detect.dir/wps_detect.cpp.i
+.PHONY : wps_detect.cpp.i
+
+wps_detect.s: wps_detect.cpp.s
+.PHONY : wps_detect.s
+
+# target to generate assembly for a file
+wps_detect.cpp.s:
+	cd /home/dmclaren/project/cs244b_final_project/libtins/build && $(MAKE) -f examples/CMakeFiles/wps_detect.dir/build.make examples/CMakeFiles/wps_detect.dir/wps_detect.cpp.s
+.PHONY : wps_detect.cpp.s
 
 # Help Target
 help:
@@ -155,13 +511,50 @@ help:
 	@echo "... all (the default if no target is provided)"
 	@echo "... clean"
 	@echo "... depend"
+	@echo "... arpmonitor"
+	@echo "... arpspoofing"
+	@echo "... beacon_display"
+	@echo "... dns_queries"
+	@echo "... dns_spoof"
+	@echo "... dns_stats"
 	@echo "... edit_cache"
+	@echo "... examples"
 	@echo "... install"
 	@echo "... install/local"
 	@echo "... install/strip"
 	@echo "... list_install_components"
+	@echo "... portscan"
 	@echo "... rebuild_cache"
 	@echo "... test"
+	@echo "... traceroute"
+	@echo "... wps_detect"
+	@echo "... arpmonitor.o"
+	@echo "... arpmonitor.i"
+	@echo "... arpmonitor.s"
+	@echo "... arpspoofing.o"
+	@echo "... arpspoofing.i"
+	@echo "... arpspoofing.s"
+	@echo "... beacon_display.o"
+	@echo "... beacon_display.i"
+	@echo "... beacon_display.s"
+	@echo "... dns_queries.o"
+	@echo "... dns_queries.i"
+	@echo "... dns_queries.s"
+	@echo "... dns_spoof.o"
+	@echo "... dns_spoof.i"
+	@echo "... dns_spoof.s"
+	@echo "... dns_stats.o"
+	@echo "... dns_stats.i"
+	@echo "... dns_stats.s"
+	@echo "... portscan.o"
+	@echo "... portscan.i"
+	@echo "... portscan.s"
+	@echo "... traceroute.o"
+	@echo "... traceroute.i"
+	@echo "... traceroute.s"
+	@echo "... wps_detect.o"
+	@echo "... wps_detect.i"
+	@echo "... wps_detect.s"
 .PHONY : help
 
 
@@ -173,6 +566,6 @@ help:
 # No rule that depends on this can have commands that come from listfiles
 # because they might be regenerated.
 cmake_check_build_system:
-	cd /home/elizabeth/Desktop/cs244b_final_project/libtins/build && $(CMAKE_COMMAND) -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 0
+	cd /home/dmclaren/project/cs244b_final_project/libtins/build && $(CMAKE_COMMAND) -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 0
 .PHONY : cmake_check_build_system
 

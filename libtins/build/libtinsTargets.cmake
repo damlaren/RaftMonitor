@@ -45,7 +45,7 @@ add_library(tins SHARED IMPORTED)
 set_property(TARGET tins APPEND PROPERTY IMPORTED_CONFIGURATIONS RELWITHDEBINFO)
 set_target_properties(tins PROPERTIES
   IMPORTED_LINK_INTERFACE_LIBRARIES_RELWITHDEBINFO "/usr/lib/x86_64-linux-gnu/libpcap.so;/usr/lib/x86_64-linux-gnu/libssl.so;/usr/lib/x86_64-linux-gnu/libcrypto.so"
-  IMPORTED_LOCATION_RELWITHDEBINFO "/home/elizabeth/Desktop/cs244b_final_project/libtins/build/lib/libtins.so.3.2"
+  IMPORTED_LOCATION_RELWITHDEBINFO "/home/dmclaren/project/cs244b_final_project/libtins/build/lib/libtins.so.3.2"
   IMPORTED_SONAME_RELWITHDEBINFO "libtins.so.3.2"
   )
 

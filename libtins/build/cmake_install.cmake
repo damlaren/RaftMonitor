@@ -1,4 +1,4 @@
-# Install script for directory: /home/elizabeth/Desktop/cs244b_final_project/libtins
+# Install script for directory: /home/dmclaren/project/cs244b_final_project/libtins
 
 # Set the install prefix
 IF(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -33,13 +33,13 @@ IF(NOT DEFINED CMAKE_INSTALL_SO_NO_EXE)
 ENDIF(NOT DEFINED CMAKE_INSTALL_SO_NO_EXE)
 
 IF(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
-  FILE(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/pkgconfig" TYPE FILE FILES "/home/elizabeth/Desktop/cs244b_final_project/libtins/build/libtins.pc")
+  FILE(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/pkgconfig" TYPE FILE FILES "/home/dmclaren/project/cs244b_final_project/libtins/build/libtins.pc")
 ENDIF(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
 
 IF(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "dev")
   FILE(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/CMake" TYPE FILE FILES
-    "/home/elizabeth/Desktop/cs244b_final_project/libtins/build/libtinsConfig.cmake"
-    "/home/elizabeth/Desktop/cs244b_final_project/libtins/build/libtinsConfigVersion.cmake"
+    "/home/dmclaren/project/cs244b_final_project/libtins/build/libtinsConfig.cmake"
+    "/home/dmclaren/project/cs244b_final_project/libtins/build/libtinsConfigVersion.cmake"
     )
 ENDIF(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "dev")
 
@@ -47,7 +47,7 @@ IF(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "dev")
   IF(EXISTS "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/CMake/libtinsTargets.cmake")
     FILE(DIFFERENT EXPORT_FILE_CHANGED FILES
          "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/CMake/libtinsTargets.cmake"
-         "/home/elizabeth/Desktop/cs244b_final_project/libtins/build/CMakeFiles/Export/CMake/libtinsTargets.cmake")
+         "/home/dmclaren/project/cs244b_final_project/libtins/build/CMakeFiles/Export/CMake/libtinsTargets.cmake")
     IF(EXPORT_FILE_CHANGED)
       FILE(GLOB OLD_CONFIG_FILES "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/CMake/libtinsTargets-*.cmake")
       IF(OLD_CONFIG_FILES)
@@ -56,18 +56,18 @@ IF(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "dev")
       ENDIF(OLD_CONFIG_FILES)
     ENDIF(EXPORT_FILE_CHANGED)
   ENDIF()
-  FILE(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/CMake" TYPE FILE FILES "/home/elizabeth/Desktop/cs244b_final_project/libtins/build/CMakeFiles/Export/CMake/libtinsTargets.cmake")
+  FILE(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/CMake" TYPE FILE FILES "/home/dmclaren/project/cs244b_final_project/libtins/build/CMakeFiles/Export/CMake/libtinsTargets.cmake")
   IF("${CMAKE_INSTALL_CONFIG_NAME}" MATCHES "^([Rr][Ee][Ll][Ww][Ii][Tt][Hh][Dd][Ee][Bb][Ii][Nn][Ff][Oo])$")
-    FILE(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/CMake" TYPE FILE FILES "/home/elizabeth/Desktop/cs244b_final_project/libtins/build/CMakeFiles/Export/CMake/libtinsTargets-relwithdebinfo.cmake")
+    FILE(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/CMake" TYPE FILE FILES "/home/dmclaren/project/cs244b_final_project/libtins/build/CMakeFiles/Export/CMake/libtinsTargets-relwithdebinfo.cmake")
   ENDIF("${CMAKE_INSTALL_CONFIG_NAME}" MATCHES "^([Rr][Ee][Ll][Ww][Ii][Tt][Hh][Dd][Ee][Bb][Ii][Nn][Ff][Oo])$")
 ENDIF(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "dev")
 
 IF(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for each subdirectory.
-  INCLUDE("/home/elizabeth/Desktop/cs244b_final_project/libtins/build/include/cmake_install.cmake")
-  INCLUDE("/home/elizabeth/Desktop/cs244b_final_project/libtins/build/src/cmake_install.cmake")
-  INCLUDE("/home/elizabeth/Desktop/cs244b_final_project/libtins/build/tests/cmake_install.cmake")
-  INCLUDE("/home/elizabeth/Desktop/cs244b_final_project/libtins/build/examples/cmake_install.cmake")
+  INCLUDE("/home/dmclaren/project/cs244b_final_project/libtins/build/include/cmake_install.cmake")
+  INCLUDE("/home/dmclaren/project/cs244b_final_project/libtins/build/src/cmake_install.cmake")
+  INCLUDE("/home/dmclaren/project/cs244b_final_project/libtins/build/tests/cmake_install.cmake")
+  INCLUDE("/home/dmclaren/project/cs244b_final_project/libtins/build/examples/cmake_install.cmake")
 
 ENDIF(NOT CMAKE_INSTALL_LOCAL_ONLY)
 
@@ -77,7 +77,7 @@ ELSE(CMAKE_INSTALL_COMPONENT)
   SET(CMAKE_INSTALL_MANIFEST "install_manifest.txt")
 ENDIF(CMAKE_INSTALL_COMPONENT)
 
-FILE(WRITE "/home/elizabeth/Desktop/cs244b_final_project/libtins/build/${CMAKE_INSTALL_MANIFEST}" "")
+FILE(WRITE "/home/dmclaren/project/cs244b_final_project/libtins/build/${CMAKE_INSTALL_MANIFEST}" "")
 FOREACH(file ${CMAKE_INSTALL_MANIFEST_FILES})
-  FILE(APPEND "/home/elizabeth/Desktop/cs244b_final_project/libtins/build/${CMAKE_INSTALL_MANIFEST}" "${file}\n")
+  FILE(APPEND "/home/dmclaren/project/cs244b_final_project/libtins/build/${CMAKE_INSTALL_MANIFEST}" "${file}\n")
 ENDFOREACH(file)
