@@ -1,9 +1,11 @@
 /* 
- * An attempt to monitor RAFT communications
+ * An attempt to monitor RAFT communications via raw packet analysis.
  */
 
 #include <iostream>
 #include <tins/tins.h>
+#include "packetutils/Common.h"
+#include "packetutils/ongaro.h"
  
 using namespace Tins;
 using namespace std;
@@ -17,58 +19,45 @@ bool callback(const PDU &pdu) {
     int version = (int)data.payload()[12]; //RAFT communication version, only appears in requests
 
     std::string action = "Reply";
+    std::vector<uint8_t> pkt;
+    
+    int type = ongaroRAFT::packetType(data.payload());
 
-    if (version == 1) { //this is a request, not a reply
-        // 1 = client service, 2 = RAFT service, as defined in Common.h
-        int service = (int)data.payload()[14];
-        int opCode = (int)data.payload()[17];
-        if (service == 1) {
-            switch (opCode) { //opcodes are defined in Client.proto and Raft.proto
- 		case 0:
-    	            action = "Get Supported RPC Versions From";
-                    break;
-                case 1:
-                    action = "Open Session With";
-                    break;
-                case 2:
-                    action = "Get Configuration From";
-                    break;
-                case 3:
-                    action = "Set Configuration Of";
-                    break;
-                case 4:
-                    action = "Get Read-Only Tree From";
-                    break;
-                case 5:
-                    action = "Get Read-Write Tree From";
-                    break;
-                default:
-                    action = "Invalid opcode";
-            }
-        }
-        else if (service == 2) {
-            switch (opCode) {
- 		case 0:
-    	            action = "Get Supported RPC Versions From";
-                    break;
-                case 1:
-                    action = "Request Vote From";
-                    break;
-                case 2:
-                    action = "Append Entries/Heartbeat";
-                    break;
-                case 3:
-                    action = "Append Snapshot Chunk";
-                    break;
-                default:
-                    action = "Invalid opcode";
-            }
-        }
-        else {
-            action = "Invalid service number";
-        }
-
+    switch (type) { //opcodes are defined in Client.proto and Raft.proto
+        case GET_RPC_VERSIONS:
+                action = "Get Supported RPC Versions From";
+                break;
+        case OPEN_SESSION:
+                action = "Open Session With";
+                break;
+        case GET_CONFIG:
+                action = "Get Configuration From";
+                break;
+        case SET_CONFIG:
+                action = "Set Configuration Of";
+                break;
+        case READ_ONLY_TREE:
+                action = "Get Read-Only Tree From";
+                break;
+        case READ_WRITE_TREE:
+                action = "Get Read-Write Tree From";
+                break;
+        case REQUEST_VOTE:
+                action = "Request Vote From";
+                break;
+        case APPEND_HEARTBEAT:
+                action = "Append/Heartbeat";
+                break;
+        case APPEND_SNAPSHOT:
+                action = "Append Snapshot";
+                break;
+        case REPLY:
+                action = "Reply";
+                break;
+        default:
+                action = "Invalid opcode";
     }
+        
 
     std::cout << ip.src_addr() << ": " << action << " -> "
               << ip.dst_addr() << std::endl;
