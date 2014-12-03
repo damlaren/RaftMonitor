@@ -1,4 +1,4 @@
-SUBDIRS = packetutils RaftMonitor
+SUBDIRS = packetutils RaftMonitor clients
 
 .PHONY: subdirs $(SUBDIRS)
 
@@ -6,7 +6,7 @@ subdirs: $(SUBDIRS)
 
 $(SUBDIRS):
 	$(MAKE) -C $@
-	
+
 OBJECTS = $(patsubst %.cpp, %.o, $(wildcard */*.cpp))
 OBJECTS += $(patsubst %.cpp, %.o, $(wildcard *.cpp))
 
