@@ -2,6 +2,7 @@
 #define RM_RAFTTESTRUNNER_H
 
 #include <cstdio>
+#include <cstdlib>
 #include "clients/client.h"
 #include <string>
 
@@ -13,7 +14,7 @@ void setupLo(int numNodes) {
 
 void teardownLo(int numNodes) {
   std::string loStopCmd = "./shutdown_lo.sh ";
-  loStopCmd += std::to_String(numNodes);
+  loStopCmd += std::to_string(numNodes);
   system(loStopCmd.c_str());
 }
 
@@ -27,7 +28,7 @@ void setupRedirs(int numNodes, int clusterPort) {
 
 void teardownRedirs(int numNodes, int clusterPort) {
   std::string reStopCmd = "./teardown_redirects.sh ";
-  reStopCmd += std::to_string(numNodes):
+  reStopCmd += std::to_string(numNodes);
   reStopCmd += " ";
   reStopCmd += std::to_string(clusterPort);
   system(reStopCmd.c_str());
