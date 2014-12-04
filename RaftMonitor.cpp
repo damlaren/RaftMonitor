@@ -13,6 +13,7 @@ using namespace std;
 bool callback(const PDU &pdu) {
     const RawPDU &data = pdu.rfind_pdu<RawPDU>();
     const IP &ip = pdu.rfind_pdu<IP>();
+    const TCP &tcp = pdu.rfind_pdu<TCP>();
     
     const int size = sizeof(data.payload());
 
@@ -59,8 +60,7 @@ bool callback(const PDU &pdu) {
     }
         
 
-    std::cout << ip.src_addr() << ": " << action << " -> "
-              << ip.dst_addr() << std::endl;
+    std::cout << ip.src_addr() << ":" << tcp.sport() << ": " << action << " -> " << ip.dst_addr() << ":" << tcp.dport() << std::endl;
     return true;
 }
  
