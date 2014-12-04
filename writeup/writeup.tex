@@ -24,6 +24,7 @@
 \begin{document} 
 
 \twocolumn[
+
 \icmltitle{TITLE}
 
 \icmlauthor{David McLaren}{dmclaren@stanford.edu}
@@ -42,11 +43,45 @@ ABSTRACT
 
 \end{abstract} 
 
-\section{blah}
+\section{Introduction}
 
-\subsection{blah}
+basic description of system (maybe 1/2 page)
 
-blah
+\section{Simulating Partitions}
+
+concepts for simulating partitions, sniffing packets
+- iptables and packet redirection
+- sniffing with libtins
+
+\section{System Overview}
+
+discussion of different modules in system, and how we support adaptation for different raft implementations
+
+- test driver (glue that holds everything together)
+- setup scripting
+- the monitor/sniffer module
+- the Client API
+-- API functions to read/write using a specific Raft implementation
+-- system-wide API also getting tucked in here
+-- (The Client API will probably be renamed to something else to better reflect its meaning-- something like an ``Adaptation Layer'')
+- teardown, if it's worth it
+
+\subsection{Future Work}
+
+- plans for additional checkers for more raft implementations
+- more functionality in monitors? delaying or blocking packets
+
+\section{Tests}
+
+discussion of tests supported by the system:
+- basic sanity check (client does op expected to succeed)
+- multiple clients writing to file system
+- failure and restart of raft nodes
+- partitions
+
+\subsection{Future Work}
+
+additional tests we plan to do or didn't get to
 
 \bibliography{citations}
 \bibliographystyle{icml2014}

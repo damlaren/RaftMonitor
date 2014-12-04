@@ -1,11 +1,32 @@
 #ifndef LG_CLIENT_H
 #define LG_CLIENT_H
 
+#include <map>
 #include "../client.h"
 #include "Client/Client.h" // LogCabin RAFT
 
 using LogCabin::Client::Cluster;
 using LogCabin::Client::Tree;
+
+class LogCabinRaftClusterConfig : public RaftClusterConfig
+{
+public:
+  // Map node ID (1, 2, ...) to process pid.
+  std::map<int, pid_t> id2pid;
+  
+  virtual void launchCluster(int numNodes);
+
+  virtual void stopCluster(int numNodes);
+
+  // Get address of host given node index
+  std::string getHost(int nodeNumber);
+
+  // Launch node with given ID using configuration file (<X>.conf)
+  bool launchNode(const char* confFile, int id);
+
+  // Kill node with given ID
+  bool killNode(int id);
+};
 
 /*
  * The LogCabin RAFT client is the first and probably
@@ -15,10 +36,12 @@ using LogCabin::Client::Tree;
  */
 class LogCabinRaftClient : public RaftClient
 {
- private:
-  Cluster *cluster;
-
  public:
+  Cluster *cluster; // Raft Cluster
+  static LogCabinRaftClusterConfig clusterConfig;
+
+  virtual RaftClusterConfig* getClusterConfig();
+
   virtual bool createClient();
 
   virtual void destroyClient();
