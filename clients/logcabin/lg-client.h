@@ -16,8 +16,7 @@ using LogCabin::Client::Tree;
 class LogCabinRaftClient : public RaftClient
 {
  private:
-  Cluster cluster;
-  Tree tree;
+  Cluster *cluster;
 
  public:
   virtual bool createClient();
@@ -28,6 +27,8 @@ class LogCabinRaftClient : public RaftClient
 
   virtual bool writeFile(const std::string& path,
 			 const std::string& contents);
+
+  virtual std::string readFile(const std::string& path);
 };
 
 #endif

@@ -36,6 +36,9 @@ class RaftClient
   // - contents: Value to write to file.
   virtual bool writeFile(const std::string& path,
 			 const std::string& contents) = 0;
+
+  // Read file contents, return as string.
+  virtual std::string readFile(const std::string& path) = 0;
 };
 
 #endif

@@ -1,3 +1,5 @@
+default: ongaro
+
 ongaro: ongaro.cpp
 	g++ -c ongaro.cpp 
 	g++ -c Parser.cpp
