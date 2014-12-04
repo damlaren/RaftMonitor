@@ -7,8 +7,6 @@
 #include <string.h>
 #include <iostream>
 
-LogCabinRaftClusterConfig LogCabinRaftClient::clusterConfig;
-
 std::string LogCabinRaftClusterConfig::getHost(int nodeNumber)
 {
   return std::string("192.168.2.") + std::to_string(nodeNumber);
@@ -75,6 +73,9 @@ bool LogCabinRaftClusterConfig::launchNode(const char* confFile, int id)
     std::cerr << "error: failed to launch subprocess" << std::endl;
     return false;
   }
+
+  id2pid[id] = pid;
+
   return true;
 }
 
@@ -89,14 +90,10 @@ bool LogCabinRaftClusterConfig::killNode(int id)
   return stopProcess(pid);
 }
 
-RaftClusterConfig* LogCabinRaftClient::getClusterConfig()
-{
-  return &LogCabinRaftClient::clusterConfig;
-}
-
-bool LogCabinRaftClient::createClient()
+bool LogCabinRaftClient::createClient(RaftClusterConfig *config)
 {
   cluster = nullptr;
+  clusterConfig = config;
   return true;
 }
 

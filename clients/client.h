@@ -8,8 +8,8 @@
 
 /*
  * Raft cluster configuration base class. Provides
- * for setting up or tearing down clusters and
- * Raft nodes.
+ * functions for setting up or tearing down clusters
+ * and Raft nodes.
  */
 class RaftClusterConfig
 {
@@ -47,10 +47,9 @@ class RaftClient
   virtual ~RaftClient(){};
 
   // --- Abstract functions ---
-  virtual RaftClusterConfig* getClusterConfig() = 0;
   
   // Set up a client associated with this object.
-  virtual bool createClient() = 0;
+  virtual bool createClient(RaftClusterConfig *config) = 0;
 
   // Shut it down.
   virtual void destroyClient() = 0;
@@ -78,6 +77,9 @@ class RaftClient
   // port number used for sending RAFT messages by the
   // cluster's nodes
   int clusterPort;
+
+  // Raft cluster configuration must be passed in during creation.
+  RaftClusterConfig* clusterConfig;
 };
 
 #endif

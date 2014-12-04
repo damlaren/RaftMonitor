@@ -37,12 +37,9 @@ public:
 class LogCabinRaftClient : public RaftClient
 {
  public:
-  Cluster *cluster; // Raft Cluster
-  static LogCabinRaftClusterConfig clusterConfig;
+  Cluster *cluster; // Raft Cluster. This is an object from ongaro's LogCabin.
 
-  virtual RaftClusterConfig* getClusterConfig();
-
-  virtual bool createClient();
+  virtual bool createClient(RaftClusterConfig *config);
 
   virtual void destroyClient();
 

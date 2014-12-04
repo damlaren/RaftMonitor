@@ -9,12 +9,15 @@
 
 int main(const int argc, const char *argv[])
 {
+  // Create cluster configuration.
+  RaftClusterConfig *clusterConfig = new LogCabinRaftClusterConfig();
+  clusterConfig->launchCluster(3);
+
+  // Create at least one client.
   RaftClient *client = new LogCabinRaftClient();
-  bool yay = client->createClient();
+  bool yay = client->createClient(clusterConfig);
   assert(yay);
 
-  // For this test it is assumed that the cluster
-  // is already running.
   // TODO: how to spec multiple hosts?
   client->connectToCluster("192.168.2.1:61023");
   if (!client->writeFile("/testfile", "testvalue"))
@@ -24,7 +27,14 @@ int main(const int argc, const char *argv[])
   if (client->readFile("/testfile") != "testvalue") {
     std::cerr << "Read failed" << std::endl;
   }
+
+  // Destroy client
   client->destroyClient();
+  delete client;
+
+  // Stop the clustera
+  clusterConfig->stopCluster(3);
+  delete clusterConfig;
 
   return 0;
 }
