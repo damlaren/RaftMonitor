@@ -37,6 +37,20 @@ class RaftClient
   virtual bool writeFile(const std::string& path,
 			 const std::string& contents) = 0;
 
+  // Should be set by an implementing client to the port number used
+  // for sending RAFT messages by the cluster's nodes
+  int clusterPort;
+
+  // Should contain an implementation that launches a RAFT cluster for the
+  // client to use, placing nodes on loopback interfaces 192.168.2.{1,2,3...}
+  // for however many nodes are requested.
+  virtual void launchCluster(int numNodes) = 0;
+
+
+  // Should contain an implementation that shuts down a RAFT cluster of the
+  // argument size currently running.
+  virtual void stopCluster(int numNodes) = 0;
+
   // Read file contents, return as string.
   virtual std::string readFile(const std::string& path) = 0;
 };
