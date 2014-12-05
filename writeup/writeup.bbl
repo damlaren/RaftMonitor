@@ -1,8 +1,14 @@
-\begin{thebibliography}{0}
+\begin{thebibliography}{1}
 \providecommand{\natexlab}[1]{#1}
 \providecommand{\url}[1]{\texttt{#1}}
 \expandafter\ifx\csname urlstyle\endcsname\relax
   \providecommand{\doi}[1]{doi: #1}\else
   \providecommand{\doi}{doi: \begingroup \urlstyle{rm}\Url}\fi
+
+\bibitem[Ontaro \& Ousterhout(2013)Ontaro and Ousterhout]{raftPaper}
+Ontaro, Diego and Ousterhout, John.
+\newblock In search of an understandable consensus algorithm (extended
+  version).
+\newblock 2013.
 
 \end{thebibliography}
