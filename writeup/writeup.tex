@@ -25,7 +25,7 @@
 
 \twocolumn[
 
-\icmltitle{TITLE}
+\icmltitle{RAFT System Analysis and Testing Framework}
 
 \icmlauthor{David McLaren}{dmclaren@stanford.edu}
 \icmlauthor{Elizabeth Walkup}{ewalkup@stanford.edu}
@@ -46,15 +46,18 @@ A system is presented for analyzing the operation of implementations of the RAFT
 
 \section{Introduction}
 
-As a relatively recent development, the RAFT consensus algorithm \cite{raftPaper} has many implementations at varying levels of completeness and functionality. This project aims at providing a system that can test and evaluate a RAFT implementation's protocol correctness. To do so, this system simulates a cluster on which RAFT is deployed, but logs and controls all internal communication between the RAFT nodes while also executing client applications that make requests of the RAFT cluster. This setup allows both external results-centric testing of the RAFT implementation from the client point of view, and invasive testing including reading and analyzing the internal messages sent among the RAFT nodes, node failures, network partitions, and lost messages.
+Raft is a consensus algorithm that keeps replicated logs of transactions to a database or key-value store \cite{raftPaper}. Despite its relatively recent release, it has gained a large following. There are currently over 50 different implementations of Raft listed on their website.
+ 
+As with any system, each implementation is slightly different, and this introduces possibilities for protocol errors and inconsistent corner case performance. When evaluating (or even just observing) these systems, it would be beneficial to be able to quickly compare how different implementations handle the same error conditions.Such comparisons would also be beneficial for anyone writing a new Raft implementation and wishing to check its behavior against that of some of the more established implementations (like LogCabin).
 
-\section{Simulating Partitions}
-
-concepts for simulating partitions, sniffing packets
-- iptables and packet redirection
-- sniffing with libtins
+With this goal in mind, we have built a testing framework that provides common interfaces and runs some of the cases that people might be interested in testing. To do so, this system simulates a cluster on which RAFT is deployed, but logs and controls all internal communication between the RAFT nodes while also executing client applications that make requests of the RAFT cluster. This setup allows both external results-centric testing of the RAFT implementation from the client point of view, and invasive testing including reading and analyzing the internal messages sent among the RAFT nodes, node failures, network partitions, and lost messages.
 
 \section{System Overview}
+One of the biggest challenges of our system is that it needs to accommodate the wide variety seen in the different Raft implementations. Although their functionality is very similar, these implementations vary widely in structure, language, and networking choices.
+\subsection{Implementation Setup}
+In order to actually test a Raft implementation, a running copy is needed. Since there is no common script for this between implementations, we wrote separate setup and teardown scripts to save time. These set up the network interfaces and configure the necessary Raft parameters. In practice, people who use this program will most likely have their own Raft implementation already running, so this is offered more as a convenience than as an integral part of the program.
+
+\subsection{Implementation Interfaces}
 
 discussion of different modules in system, and how we support adaptation for different raft implementations
 
@@ -67,46 +70,43 @@ discussion of different modules in system, and how we support adaptation for dif
 -- (The Client API will probably be renamed to something else to better reflect its meaning-- something like an ``Adaptation Layer'')
 - teardown, if it's worth it
 
-\subsection{Environment Setup}
-
-Simulating a cluster makes use of generated, virtual network interfaces to allow RAFT cluster nodes to appear to one another as though on independent devices. Much of this setup is independent of the specific RAFT implementation; it is executed via shell script.
-
-\subsection{Client API}
-
-Different implementations of RAFT may have a different interface for receiving and responding to client requests, so the implementation of tests that include client requests must include functionality specific to individual RAFT implementations. To avoid large amounts of redundant functionality and allow the checker to be applied to new RAFT implementations more easily, a Client API is provided. The API is defined as base RaftClient and RaftClusterConfig classes in C++ with several pure virtual methods, which should be extended to provide a client for a particular RAFT implementation. This client can then be passed to the RAFT checker's tests and manipulated via the API in a manner externally identical to any other client. The RaftClusterConfig implementation should implement any necessary implementation-specific logic to set up a RAFT cluster, and the RaftClient should implement logic to handle a client capable of communicating with that cluster. RAFT implementations that provide a much cleaner interface for clients in some language other than C++ can be supported by creating a C++ client implementation that calls out to execute functionality in scripts or programs of the language in question.
-
-The Client API requires that RaftClients implement the following methods:
-
-\begin{itemize}
-\item \texttt{createClient(RaftClusterConfig*)}: Create and initialize a client  
-\end{itemize}
-
 \subsection{RaftMonitor}
 
-The RaftMonitor monitors and responds to messages passed internally among the RAFT cluster's nodes by acting as a proxy or middleman to all of the cluster's internal communications. The IP address and port presented to the rest of the cluster for a RAFT node is instead one assigned to the monitor. However, on setup this should be completely transparent to the RAFT cluster, since the default behavior of the monitor is just to log packets, rewrite their destination to the appropriate node based on the address and/or port the monitor received the packet on, and resend the packet. Thus when non-invasive testing is being performed, the cluster should operate in an entirely normal manner unaffected by the monitor's presence.
+The checker monitors and responds to messages passed internally among the RAFT cluster's nodes by acting as a proxy or middleman to all of the cluster's internal communications. The IP address and port presented to the rest of the cluster for a RAFT node is instead one assigned to the monitor. However, on setup this should be completely transparent to the RAFT cluster, since the default behavior of the monitor is just to log packets, rewrite their destination to the appropriate node based on the address and/or port the monitor received the packet on, and resend the packet. Thus when non-invasive testing is being performed, the cluster should operate in an entirely normal manner unaffected by the monitor's presence.
 
-For this to be the case it is important that any processing the monitor performs on the packet not lengthen too much the time required for the packet to reach the RAFT node it is intended for, lest the monitor interfere with RAFT's heartbeat messages and thus affect the cluster's operation. However, this does seem a manageable constraint: since the checking program simulates a cluster within a single machine, round-trip times for packet transmission are low (on the order of $0.05$-$0.2$ milliseconds). Recommended settings for RAFT election timeout are in the low hundreds of milliseconds \cite{raftPaper}. Simple logging, mangling, and resending of packets, then, is unlikely to cause an unexpected timeout under this sort of mode of operation. However, more expensive actions such as killing one of the RAFT node processes could be concerning given this time constraint; actions that are too expensive are placed in a separate thread. For example, the action to kill a node would consist of creating a separate thread tasked with killing the node's RAFT process, and the monitor will begin dropping all packets to and from that node in the meantime.
+\subsubsection{Simulating Partitions}
 
-\subsection{Future Work}
+In distributed systems, one of the most common problems is network partitions, where some subset of nodes are cut off from the rest. Since we are operating on a small scale (one machine as opposed to a production-size network), it is necessary to simulate partitions rather than actually causing them through switch or router manipulation.
+\\ \indent There are two methods we examined for simulating partitions. The first, and arguably the simplest is to set up a local iptables firewall. By adding and removing rules, we can drop or allow packets going between specific nodes. The downside of this method is that we cannot see the dropped packets, so that insight into the behavior of the partitioned nodes is lost.
+\\ \indent The second method, which is the one we have chosen to use, is to make RaftMonitor a sort of proxy firewall. Since all the system packets go through this module, it can decide which packets to forward and which ones to drop, while still keeping track of what each node is trying to do.
+
+\subsubsection{Issues Considered}
+
+In order for RaftMonitor to be transparent, is important that any processing the monitor performs on the packet not lengthen too much the time required for the packet to reach the RAFT node it is intended for, lest the monitor interfere with RAFT's heartbeat messages and thus affect the cluster's operation. However, this does seem a manageable constraint: since the checking program simulates a cluster within a single machine, round-trip times for packet transmission are low (on the order of $0.05$-$0.2$ milliseconds). Recommended settings for RAFT election timeout are in the low hundreds of milliseconds \cite{raftPaper}. Simple logging, mangling and resending of packets, then, is unlikely to cause an unexpected timeout under this sort of mode of operation. However, more expensive actions such as killing one of the RAFT node processes could be concerning given this time constraint; actions that are too expensive are placed in a separate thread. For example, the action to kill a node will consist of creating a separate thread tasked with killing the node's RAFT process, and the monitor will begin dropping all packets to and from that node in the meantime.
+
+\section{Tests}
+Obviously there are many, many test cases that could be implemented. We have picked what we feel to be a representative sample of useful ones.
+\subsection{Log-Based Tests}
+\begin{enumerate}
+  \item A basic sanity check, where the client submits a set of operations to the master that are expected to succeed.
+  \item Multiple client submitting write operations at the same time.
+\end{enumerate}
+\subsection{Partition Tests}
+These are currently written for the assumption that the system only has three nodes, since this is the case with our setup scripts on a single machine. Once a system is set up using our implementation interfaces, the tests can be run without any further modification. 
+\begin{enumerate}
+  \item A non-master node becoming partitioned from the rest and, after a fairly long interval, rejoining the cluster.
+  \item The master node being partitioned from the other nodes and rejoining the cluster later.
+\end{enumerate}
+\subsection{Node Failure Tests}
+\begin{enumerate}
+  \item The master node fails by crashing.
+  \item A non-master node fails by crashing, then restarts.
+\end{enumerate}
+
+\section{Future Work}
 
 - plans for additional checkers for more raft implementations
 - more functionality in monitors? delaying or blocking packets
-
-\section{Tests}
-
-discussion of tests supported by the system:
-- basic sanity check (client does op expected to succeed)
-- multiple clients writing to file system
-- failure and restart of raft nodes
-- partitions
-
-\subsection{External Tests}
-External tests examine the results of requests made of the RAFT cluster; fundamentally for correctness they are limited to examining a cluster only as a normal client of it could, although the monitor's message logs and statistics can still be considered.
-
-\subsection{Invasive Tests}
-Invasive tests rely on the RaftMonitor's position as a middleman in the internal communications between the RAFT nodes. The monitor allows the dropping of particular packets or closing of connections, as well as the killing or restarting of nodes at more specific points in execution than can be done externally, such as causing a node to die after having received a request but before it replies.
-
-\subsection{Future Work}
 
 additional tests we plan to do or didn't get to
 
