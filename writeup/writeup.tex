@@ -56,16 +56,13 @@ concepts for simulating partitions, sniffing packets
 
 \section{System Overview}
 
-discussion of different modules in system, and how we support adaptation for different raft implementations
+The checker is composed of various modules which are held together by a single test driver program written in C++. Base classes representing Raft clusters and clients are adapted for different Raft implementations to support reuse of functionality and enable the same tests to be executed across different platforms. The test driver proceeds through several stages.
 
-- test driver (glue that holds everything together)
-- setup scripting
-- the monitor/sniffer module
-- the Client API
--- API functions to read/write using a specific Raft implementation
--- system-wide API also getting tucked in here
--- (The Client API will probably be renamed to something else to better reflect its meaning-- something like an ``Adaptation Layer'')
-- teardown, if it's worth it
+\subsection{Cluster and Client Setup}
+
+The test driver begins by starting a new Raft cluster with a specified number of nodes, and clients to request operations on the cluster. The client class provides a common interface to connect to a Raft cluster and read or write files on it. Each client subclass supports these operations for a different Raft implementation. The test driver calls the client interface to request these operations.
+
+- the monitor/sniffer module (next subsection, but TODO: not clear yet where this will live?)
 
 \subsection{RaftMonitor}
 
