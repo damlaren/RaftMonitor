@@ -1,12 +1,10 @@
-This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013/Debian) (format=pdflatex 2014.12.4)  4 DEC 2014 22:29
+This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013/Debian) (format=pdflatex 2014.10.22)  4 DEC 2014 22:34
 entering extended mode
  restricted \write18 enabled.
+ file:line:error style messages enabled.
  %&-line parsing enabled.
-**writeup.tex
-(./writeup.tex
-LaTeX2e <2011/06/27>
-Babel <3.9h> and hyphenation patterns for 2 languages loaded.
-(/usr/share/texlive/texmf-dist/tex/latex/base/article.cls
+**\input ./writeup.tex
+(./writeup.tex (/usr/share/texlive/texmf-dist/tex/latex/base/article.cls
 Document Class: article 2007/10/19 v1.4h Standard LaTeX document class
 (/usr/share/texlive/texmf-dist/tex/latex/base/size10.clo
 File: size10.clo 2007/10/19 v1.4h Standard LaTeX file (size option)
@@ -311,27 +309,308 @@ G,.JBIG2,.JB2,.eps]
 File: epstopdf-sys.cfg 2010/07/13 v1.3 Configuration of (r)epstopdf for TeX Liv
 e
 )))
+(/usr/share/texlive/texmf-dist/tex/latex/subfigure/subfigure.sty
+Package: subfigure 2002/03/15 v2.1.5 subfigure package
+\subfigtopskip=\skip54
+\subfigcapskip=\skip55
+\subfigcaptopadj=\dimen127
+\subfigbottomskip=\skip56
+\subfigcapmargin=\dimen128
+\subfiglabelskip=\skip57
+\c@subfigure=\count119
+\c@lofdepth=\count120
+\c@subtable=\count121
+\c@lotdepth=\count122
 
-! LaTeX Error: File `subfigure.sty' not found.
+****************************************
+* Local config file subfigure.cfg used *
+****************************************
+(/usr/share/texlive/texmf-dist/tex/latex/subfigure/subfigure.cfg)
+\subfig@top=\skip58
+\subfig@bottom=\skip59
+)
+(/usr/share/texlive/texmf-dist/tex/latex/qtree/qtree.sty
+Package: 2008/12/12 v.3.1bQtree: tree-drawing for linguistics
+Package: qtree 2008/12/12 v.3.1bQtree: tree-drawing for linguistics
+(/usr/share/texlive/texmf-dist/tex/latex/pict2e/pict2e.sty
+Package: pict2e 2014/01/12 v0.2z Improved picture commands (HjG,RN,JT)
 
-Type X to quit or <RETURN> to proceed,
-or enter new name. (Default extension: sty)
+(/usr/share/texlive/texmf-dist/tex/latex/pict2e/pict2e.cfg
+File: pict2e.cfg 2011/04/05 v0.1t pict2e configuration for teTeX/TeXLive
+)
+Package pict2e Info: Driver file: pdftex.def on input line 119.
+Package pict2e Info: Driver file for pict2e: p2e-pdftex.def on input line 121.
 
-Enter file name: 
-! Emergency stop.
-<read *> 
-         
-l.13 \usepackage
-                {qtree}^^M
-*** (cannot \read from terminal in nonstop modes)
+(/usr/share/texlive/texmf-dist/tex/latex/pict2e/p2e-pdftex.def
+File: p2e-pdftex.def 2011/04/05 v0.1t Driver-dependant file (RN,HjG,JT)
+)
+\pIIe@GRAPH=\toks23
+\@arclen=\dimen129
+\@arcrad=\dimen130
+\@tempdimd=\dimen131
+)
+\c@treecount=\count123
+\c@branchcount=\count124
+\parentbox=\box30
+\treebox=\box31
+\treeboxone=\box32
+\treeboxtwo=\box33
+\treeboxthree=\box34
+\treeboxfour=\box35
+\treeboxfive=\box36
+\treeboxsix=\box37
+\treeboxseven=\box38
+\treeboxeight=\box39
+\treeboxnine=\box40
+\treeboxten=\box41
+\treeboxeleven=\box42
+\treeboxtwelve=\box43
+\treeboxthirteen=\box44
+\treeboxfourteen=\box45
+\treeboxfifteen=\box46
+\treeboxsixteen=\box47
+\treeboxseventeen=\box48
+\treeboxeighteen=\box49
+\treeboxnineteen=\box50
+\treeboxtwenty=\box51
+\treeoffsetone=\skip60
+\treeoffsettwo=\skip61
+\treeoffsetthree=\skip62
+\treeoffsetfour=\skip63
+\treeoffsetfive=\skip64
+\treeoffsetsix=\skip65
+\treeoffsetseven=\skip66
+\treeoffseteight=\skip67
+\treeoffsetnine=\skip68
+\treeoffsetten=\skip69
+\treeoffseteleven=\skip70
+\treeoffsettwelve=\skip71
+\treeoffsetthirteen=\skip72
+\treeoffsetfourteen=\skip73
+\treeoffsetfifteen=\skip74
+\treeoffsetsixteen=\skip75
+\treeoffsetseventeen=\skip76
+\treeoffseteighteen=\skip77
+\treeoffsetnineteen=\skip78
+\treeoffsettwenty=\skip79
+\treeshiftone=\skip80
+\treeshifttwo=\skip81
+\treeshiftthree=\skip82
+\treeshiftfour=\skip83
+\treeshiftfive=\skip84
+\treeshiftsix=\skip85
+\treeshiftseven=\skip86
+\treeshifteight=\skip87
+\treeshiftnine=\skip88
+\treeshiftten=\skip89
+\treeshifteleven=\skip90
+\treeshifttwelve=\skip91
+\treeshiftthirteen=\skip92
+\treeshiftfourteen=\skip93
+\treeshiftfifteen=\skip94
+\treeshiftsixteen=\skip95
+\treeshiftseventeen=\skip96
+\treeshifteighteen=\skip97
+\treeshiftnineteen=\skip98
+\treeshifttwenty=\skip99
+\treewidthone=\skip100
+\treewidthtwo=\skip101
+\treewidththree=\skip102
+\treewidthfour=\skip103
+\treewidthfive=\skip104
+\treewidthsix=\skip105
+\treewidthseven=\skip106
+\treewidtheight=\skip107
+\treewidthnine=\skip108
+\treewidthten=\skip109
+\treewidtheleven=\skip110
+\treewidthtwelve=\skip111
+\treewidththirteen=\skip112
+\treewidthfourteen=\skip113
+\treewidthfifteen=\skip114
+\treewidthsixteen=\skip115
+\treewidthseventeen=\skip116
+\treewidtheighteen=\skip117
+\treewidthnineteen=\skip118
+\treewidthtwenty=\skip119
+\daughteroffsetone=\skip120
+\daughteroffsettwo=\skip121
+\daughteroffsetthree=\skip122
+\daughteroffsetfour=\skip123
+\branchwidthone=\skip124
+\branchwidthtwo=\skip125
+\branchwidththree=\skip126
+\branchwidthfour=\skip127
+\parentoffset=\skip128
+\treeoffset=\skip129
+\daughteroffset=\skip130
+\branchwidth=\skip131
+\parentwidth=\skip132
+\treewidth=\skip133
+\qta=\toks24
+\qtb=\toks25
+\nbranches=\count125
+\qroofx=\count126
+\qroofy=\count127
+\@qrscratchbox=\box52
+)
+(./icml2014.sty
+Package: icml2014 2014/01/01 v2.0 ICML Conference Style File
+ (./fancyhdr.sty
+\fancy@headwidth=\skip134
+\f@ncyO@elh=\skip135
+\f@ncyO@erh=\skip136
+\f@ncyO@olh=\skip137
+\f@ncyO@orh=\skip138
+\f@ncyO@elf=\skip139
+\f@ncyO@erf=\skip140
+\f@ncyO@olf=\skip141
+\f@ncyO@orf=\skip142
+)
+(/usr/share/texlive/texmf-dist/tex/latex/graphics/color.sty
+Package: color 2005/11/14 v1.0j Standard LaTeX Color (DPC)
 
- 
+(/usr/share/texlive/texmf-dist/tex/latex/latexconfig/color.cfg
+File: color.cfg 2007/01/18 v1.5 color configuration of teTeX/TeXLive
+)
+Package color Info: Driver file: pdftex.def on input line 130.
+)
+(/usr/share/texlive/texmf-dist/tex/latex/eso-pic/eso-pic.sty
+Package: eso-pic 2013/10/06 v2.0d eso-pic (RN)
+)
+Package hyperref Info: Option `colorlinks' set `true' on input line 96.
+\titrun=\box53
+\captionbox=\box54
+\captionboxwid=\dimen132
+\icmlrulerbox=\box55
+\icmlrulercount=\count128
+\icmlruleroffset=\dimen133
+\cv@lineheight=\dimen134
+\cv@boxheight=\dimen135
+\cv@tmpbox=\box56
+\cv@refno=\count129
+\cv@tot=\count130
+\cv@tmpc@=\count131
+\cv@tmpc=\count132
+)
+(/usr/share/texlive/texmf-dist/tex/latex/enumitem/enumitem.sty
+Package: enumitem 2011/09/28 v3.5.2 Customized lists
+\labelindent=\skip143
+\enit@outerparindent=\dimen136
+\enit@toks=\toks26
+\enit@inbox=\box57
+\enitdp@description=\count133
+)
+
+LaTeX Warning: Unused global option(s):
+    [UTF8].
+
+(./writeup.aux)
+\openout1 = `writeup.aux'.
+
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 24.
+LaTeX Font Info:    ... okay on input line 24.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 24.
+LaTeX Font Info:    ... okay on input line 24.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 24.
+LaTeX Font Info:    ... okay on input line 24.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 24.
+LaTeX Font Info:    ... okay on input line 24.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 24.
+LaTeX Font Info:    ... okay on input line 24.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 24.
+LaTeX Font Info:    ... okay on input line 24.
+LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 24.
+LaTeX Font Info:    ... okay on input line 24.
+LaTeX Font Info:    Try loading font information for OT1+ptm on input line 24.
+ (/usr/share/texlive/texmf-dist/tex/latex/psnfss/ot1ptm.fd
+File: ot1ptm.fd 2001/06/04 font definitions for OT1/ptm.
+)
+(/usr/share/texlive/texmf-dist/tex/context/base/supp-pdf.mkii
+[Loading MPS to PDF converter (version 2006.09.02).]
+\scratchcounter=\count134
+\scratchdimen=\dimen137
+\scratchbox=\box58
+\nofMPsegments=\count135
+\nofMParguments=\count136
+\everyMPshowfont=\toks27
+\MPscratchCnt=\count137
+\MPscratchDim=\dimen138
+\MPnumerator=\count138
+\makeMPintoPDFobject=\count139
+\everyMPtoPDFconversion=\toks28
+)
+\AtBeginShipoutBox=\box59
+Package hyperref Info: Link coloring ON on input line 24.
+ (/usr/share/texlive/texmf-dist/tex/latex/hyperref/nameref.sty
+Package: nameref 2012/10/27 v2.43 Cross-referencing by name of section
+
+(/usr/share/texlive/texmf-dist/tex/generic/oberdiek/gettitlestring.sty
+Package: gettitlestring 2010/12/03 v1.4 Cleanup title references (HO)
+)
+\c@section@level=\count140
+)
+LaTeX Info: Redefining \ref on input line 24.
+LaTeX Info: Redefining \pageref on input line 24.
+LaTeX Info: Redefining \nameref on input line 24.
+
+(./writeup.out) (./writeup.out)
+\@outlinefile=\write3
+\openout3 = `writeup.out'.
+
+LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <9> not available
+(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 38.
+LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <14.4> not available
+(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 38.
+LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <10> not available
+(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 38.
+
+Overfull \hbox (5.1225pt too wide) in paragraph at lines 41--41
+ [] 
+ []
+
+LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <12> not available
+(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 41.
+
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [1{/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}
+
+
+
+] (./writeup.bbl)
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 99.
+ [2
+
+]
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 99.
+ (./writeup.aux)
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 99.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 99.
+Package rerunfilecheck Info: File `writeup.out' has not changed.
+(rerunfilecheck)             Checksum: D41D8CD98F00B204E9800998ECF8427E;0.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 99.
+ ) 
 Here is how much of TeX's memory you used:
- 6250 strings out of 495028
- 91167 string characters out of 6181497
- 178167 words of memory out of 5000000
- 9430 multiletter control sequences out of 15000+600000
- 3640 words of font info for 14 fonts, out of 8000000 for 9000
- 14 hyphenation exceptions out of 8191
- 33i,0n,23p,261b,36s stack positions out of 5000i,500n,10000p,200000b,80000s
-!  ==> Fatal error occurred, no output PDF file produced!
+ 7847 strings out of 493304
+ 113343 string characters out of 6139870
+ 218993 words of memory out of 5000000
+ 11188 multiletter control sequences out of 15000+600000
+ 16506 words of font info for 32 fonts, out of 8000000 for 9000
+ 957 hyphenation exceptions out of 8191
+ 33i,11n,45p,1195b,327s stack positions out of 5000i,500n,10000p,200000b,80000s
+{/usr/share/texlive/texmf-dist/fonts/enc/dvips/base/8r.enc}</usr/share/texliv
+e/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/share/texlive/texm
+f-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/share/texlive/texmf-dist/
+fonts/type1/urw/times/utmb8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw
+/times/utmr8a.pfb>
+Output written on writeup.pdf (2 pages, 53883 bytes).
+PDF statistics:
+ 50 PDF objects out of 1000 (max. 8388607)
+ 41 compressed objects within 1 object stream
+ 14 named destinations out of 1000 (max. 500000)
+ 1 words of extra memory for PDF output out of 10000 (max. 10000000)
+
