@@ -40,13 +40,13 @@
 
 \begin{abstract}
 	
-ABSTRACT
+A system is presented for analyzing the operation of implementations of the RAFT consensus algorithm under both normal operation and in the presence of various failures. Its implementation is described with an API allowing the RAFT checking system to interface with additional RAFT implementations with a minimum of additional implementation-specific code.
 
 \end{abstract} 
 
 \section{Introduction}
 
-basic description of system (maybe 1/2 page)
+As a relatively recent development, the RAFT consensus algorithm \cite{raftPaper} has many implementations at varying levels of completeness and functionality. This project aims at providing a system that can test and evaluate a RAFT implementation's protocol correctness. To do so, this system simulates a cluster on which RAFT is deployed, but logs and controls all internal communication between the RAFT nodes while also executing client applications that make requests of the RAFT cluster. This setup allows both external results-centric testing of the RAFT implementation from the client point of view, and invasive testing including reading and analyzing the internal messages sent among the RAFT nodes, node failures, network partitions, and lost messages.
 
 \section{Simulating Partitions}
 
