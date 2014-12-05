@@ -83,7 +83,7 @@ The Client API requires that RaftClients implement the following methods:
 \item \texttt{destroyClient()}: Stop a client and free any resources it uses.
 \item \texttt{connectToCluster(string hosts)}: Connect client to a Raft cluster consisting of the specified hosts.
 \item \texttt{writeFile(string path, string contents)}: Write a file with content value on cluster at specified path.
-\item \texttt{readFile(string path)}: Read file contents at path and return as a string.
+\item \texttt{readFile(string path)}: Read file contents at path from the cluster and return as a string.
 \end{itemize}
 
 \subsection{RaftMonitor}
@@ -99,6 +99,9 @@ In distributed systems, one of the most common problems is network partitions, w
 \subsection{Issues Considered}
 
 In order for RaftMonitor to be transparent, is important that any processing the monitor performs on the packet not lengthen too much the time required for the packet to reach the RAFT node it is intended for, lest the monitor interfere with RAFT's heartbeat messages and thus affect the cluster's operation. However, this does seem a manageable constraint: since the checking program simulates a cluster within a single machine, round-trip times for packet transmission are low (on the order of $0.05$-$0.2$ milliseconds). Recommended settings for RAFT election timeout are in the low hundreds of milliseconds \cite{raftPaper}. Simple logging, modifying, and resending of packets, then, is unlikely to cause an unexpected timeout under this sort of mode of operation. However, more expensive actions such as killing one of the RAFT node processes could be concerning given this time constraint; actions that are too expensive are placed in a separate thread. For example, the action to kill a node will consist of creating a separate thread tasked with killing the node's RAFT process, and the monitor will begin dropping all packets to and from that node in the meantime.
+
+
+In order for RaftMonitor to be transparent, is important that any processing the monitor performs on the packet not lengthen too much the time required for the packet to reach the RAFT node it is intended for, lest the monitor interfere with RAFT's heartbeat messages and thus affect the cluster's operation. However, this does seem a manageable constraint: since the checking program simulates a cluster within a single machine, round-trip times for packet transmission are low (on the order of $0.05$-$0.2$ milliseconds). Recommended settings for RAFT election timeout are in the low hundreds of milliseconds \cite{raftPaper}. Simple logging, mangling and resending of packets, then, is unlikely to cause an unexpected timeout under this sort of mode of operation. However, more expensive actions such as killing one of the RAFT node processes could be concerning given this time constraint; actions that are too expensive are placed in a separate thread. For example, the action to kill a node will consist of creating a separate thread tasked with killing the node's RAFT process, and the monitor will begin dropping all packets to and from that node in the meantime to present to the remainder of the cluster the impression of the node having been killed at the precise moment decided by the monitor.
 
 \subsection{Packet Interpretation}
 RaftMonitor keeps track of what commands pass between nodes. It does this by parsing out operation codes directly from the packets themselves. This allows it to run independently of the implementation language or function names. Unfortunately, it does still require implementation-specific adapters. These adapters are based off how each implementation constructs its packets. While they require some research, they are not lengthy (usually only around 50 lines of code each) and seem to perform quite well.
@@ -121,8 +124,9 @@ These are currently written for the assumption that the system only has three no
 \end{enumerate}
 \subsection{Node Failure Tests}
 \begin{enumerate}
-  \item The master node fails by crashing.
-  \item A non-master node fails by crashing, then restarts.
+  \item The current leader node fails by crashing.
+  \item A non-leader node fails by crashing, then restarts.
+  \item The current leader node fails by crashing, then restarts. 
 \end{enumerate}
 
 \section{Future Work}
