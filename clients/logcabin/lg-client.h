@@ -14,12 +14,15 @@ public:
   // Map node ID (1, 2, ...) to process pid.
   std::map<int, pid_t> id2pid;
   
-  virtual void launchCluster(int numNodes);
+  virtual void launchCluster(int numNodes, int port);
 
   virtual void stopCluster(int numNodes);
 
   // Get address of host given node index
   std::string getHost(int nodeNumber);
+
+  // Get address:port of host given node index
+  std::string getHostPort(int nodeNumber, int port);
 
   // Launch node with given ID using configuration file (<X>.conf)
   bool launchNode(const char* confFile, int id);

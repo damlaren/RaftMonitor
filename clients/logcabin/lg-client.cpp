@@ -11,20 +11,33 @@ std::string LogCabinRaftClusterConfig::getHost(int nodeNumber)
   return std::string("192.168.2.") + std::to_string(nodeNumber);
 }
 
-void LogCabinRaftClusterConfig::launchCluster(int numNodes)
+std::string getHostPort(int nodeNumber, int port)
+{
+  return std::string("192.168.2.") + std::to_string(nodeNumber) + std::string(":") + std::to_string(port);
+}
+
+void LogCabinRaftClusterConfig::launchCluster(int numNodes, int port)
 {
   id2pid.clear();
+
+  clusterPort = port;
 
   // TODO: set up loopback interfaces
 
   // TODO: set up redirects
 
-  // TODO: logcabin.conf must already exist. Initialize it?
+  // TODO: Write logcabin.conf configuration file?
+  // or just reuse existing?
+  std::string confFile = RaftEnv::rootDir +
+    std::string("/logcabin/logcabin.conf");
+
+  // Do bootstrap, in case it hasn't been done before.
+  system((RaftEnv::rootDir + std::string("/logcabin/build/LogCabin --bootstrap --id 1 --config ") + confFile).c_str());
 
   // start individual Raft nodes
   for (int id = 1; id <= numNodes; id++)
   {
-    if (!launchNode((RaftEnv::rootDir + std::string("/logcabin/logcabin.conf")).c_str(), id))
+    if (!launchNode(confFile.c_str(), id))
     {
       std::cerr << "Failed to launch cluster; exiting" << std::endl;
       exit(1);

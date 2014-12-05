@@ -11,7 +11,7 @@ int main(const int argc, const char *argv[])
 {
   // Create cluster configuration.
   RaftClusterConfig *clusterConfig = new LogCabinRaftClusterConfig();
-  clusterConfig->launchCluster(3);
+  clusterConfig->launchCluster(3, 61023);
 
   std::cout << "started cluster" << std::endl;
 
@@ -31,9 +31,11 @@ int main(const int argc, const char *argv[])
   {
     std::cerr << "Write failed" << std::endl;
   }
+  std::cout << "write succeeded!" << std::endl;
   if (client->readFile("/testfile") != "testvalue") {
     std::cerr << "Read failed" << std::endl;
   }
+  std::cout << "read succeeded!" << std::endl;
 
   // Destroy client
   client->destroyClient();

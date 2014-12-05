@@ -18,6 +18,13 @@ char* copyStr(const char* src);
 class RaftClusterConfig
 {
 public:
+  // Should be set by an implementing client to the
+  // port number used for sending RAFT messages by the
+  // cluster's nodes
+  int clusterPort;
+
+  // Oops. I actually did forget this time.
+  virtual ~RaftClusterConfig(){}
 
   // Create a subprocess and return its pid (or -1 on failure).
   // - path: file path to executable
@@ -30,10 +37,11 @@ public:
   // Kill subprocess, return true on success.
   bool stopProcess(pid_t pid);
 
-  // Should contain an implementation that launches a RAFT cluster for the
-  // client to use, placing nodes on loopback interfaces 192.168.2.{1,2,3...}
-  // for however many nodes are requested.
-  virtual void launchCluster(int numNodes) = 0;
+  // Launch a Raft cluster for the client to use,
+  // placing nodes on loopback interfaces
+  // 192.168.2.{1,2,3...} for however many nodes
+  // are requested, listening on passed port.
+  virtual void launchCluster(int numNodes, int port) = 0;
 
   // Should contain an implementation that shuts down a RAFT cluster of the
   // argument size currently running.
@@ -79,11 +87,6 @@ class RaftClient
   virtual std::string readFile(const std::string& path) = 0;
 
   // --- Variables ---
-
-  // Should be set by an implementing client to the
-  // port number used for sending RAFT messages by the
-  // cluster's nodes
-  int clusterPort;
 
   // Raft cluster configuration must be passed in during creation.
   RaftClusterConfig* clusterConfig;
