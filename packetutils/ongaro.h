@@ -4,5 +4,5 @@
 
 class ongaroRAFT {
     public:
-        static int packetType(std::vector<uint8_t>);
+        static int packetType(std::vector<unsigned char>);
 };
