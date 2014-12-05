@@ -6,3 +6,6 @@ logcabin/smoketeststorage/*
 
 #ignore object files
 *.o
+
+#ignore writeup intermediate files
+writeup/writeup.log
