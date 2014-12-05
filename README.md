@@ -13,8 +13,7 @@ Built on Ubuntu 14.04.
    ** Make sure dependencies are installed
    * Update CMakeCache.txt with location of libtins on system
    * cd to libtins/build
-   * cmake ../
-   ** TODO: include C++11 features? -DLIBTINS_ENABLE_CXX11=1
+   * cmake -DLIBTINS_ENABLE_CXX11=1 ../
    * make
    * sudo make install
 
