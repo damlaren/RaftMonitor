@@ -54,25 +54,45 @@ With this goal in mind, we have built a testing framework that provides common i
 
 \section{System Overview}
 One of the biggest challenges of our system is that it needs to accommodate the wide variety seen in the different Raft implementations. Although their functionality is very similar, these implementations vary widely in structure, language, and networking choices.
+
+The checker is composed of various modules which are held together by a test driver program written in C++. Base classes representing Raft clusters and clients are adapted for different Raft implementations to support reuse of functionality and enable the same tests to be executed across different platforms. The test driver proceeds through several stages.
+
 \subsection{Implementation Setup}
 In order to actually test a Raft implementation, a running copy is needed. Since there is no common script for this between implementations, we wrote separate setup and teardown scripts to save time. These set up the network interfaces and configure the necessary Raft parameters. In practice, people who use this program will most likely have their own Raft implementation already running, so this is offered more as a convenience than as an integral part of the program.
 
-\subsection{Implementation Interfaces}
+\subsection{Setup}
 
-discussion of different modules in system, and how we support adaptation for different raft implementations
+Simulating a cluster makes use of generated, virtual network interfaces to allow RAFT cluster nodes to appear to one another as though on independent devices. Much of this setup is independent of the specific RAFT implementation; it is executed via shell script.
 
-- test driver (glue that holds everything together)
-- setup scripting
-- the monitor/sniffer module
-- the Client API
--- API functions to read/write using a specific Raft implementation
--- system-wide API also getting tucked in here
--- (The Client API will probably be renamed to something else to better reflect its meaning-- something like an ``Adaptation Layer'')
-- teardown, if it's worth it
+Once environment setup is complete, the test driver begins by starting a new Raft cluster with a specified number of nodes, and clients to request operations on the cluster. The driver calls the client interface to request operations on the cluster.
+
+\subsection{Client API}
+
+Different implementations of RAFT may have a different interface for receiving and responding to client requests, so the implementation of tests that include client requests must include functionality specific to individual RAFT implementations. To avoid large amounts of redundant functionality and allow the checker to be applied to new RAFT implementations more easily, a Client API is provided. The client class provides a common interface to connect to a Raft cluster and read or write files on it. Each client subclass supports these operations for a different Raft implementation.
+
+The API is defined as RaftClient and RaftClusterConfig base classes in C++ with several pure virtual methods, which must be extended to provide a client for a particular RAFT implementation. This client can then be passed to the RAFT checker's tests and manipulated via the API in a manner externally identical to any other client. The RaftClusterConfig implementation implements implementation-specific logic to set up a RAFT cluster, and the RaftClient implements logic to handle a client capable of communicating with that cluster. RAFT implementations that provide a much cleaner interface for clients in some language other than C++ can be supported by creating a C++ client implementation that calls out to execute functionality in scripts or programs of the language in question.
+
+The RaftClusterConfig API provides helper functions to create or kill subprocesses (to take down nodes in the Raft cluster). It requires subclasses to implement the following methods for different Raft implementations:
+
+\begin{itemize}
+\item \texttt{launchCluster(int numNodes, int port)}: Start a new Raft cluster with the requested number of nodes, listening on the specified port.
+\item \texttt{stopCluster(int numNodes)}: Shut down Raft cluster with the provided number of nodes.
+\end{itemize}
+
+The Client API requires that RaftClients implement the following methods:
+
+\begin{itemize}
+\item \texttt{createClient(RaftClusterConfig* config)}: Create and initialize a client.
+\item \texttt{destroyClient()}: Stop a client and free any resources it uses.
+\item \texttt{connectToCluster(string hosts)}: Connect client to a Raft cluster consisting of the specified hosts.
+\item \texttt{writeFile(string path, string contents)}: Write a file with content value on cluster at specified path.
+\item \texttt{readFile(string path)}: Read file contents at path and return as a string.
+\end{itemize}
 
 \subsection{RaftMonitor}
 
-The checker monitors and responds to messages passed internally among the RAFT cluster's nodes by acting as a proxy or middleman to all of the cluster's internal communications. The IP address and port presented to the rest of the cluster for a RAFT node is instead one assigned to the monitor. However, on setup this should be completely transparent to the RAFT cluster, since the default behavior of the monitor is just to log packets, rewrite their destination to the appropriate node based on the address and/or port the monitor received the packet on, and resend the packet. Thus when non-invasive testing is being performed, the cluster should operate in an entirely normal manner unaffected by the monitor's presence.
+The RaftMonitor monitors and responds to messages passed internally among the RAFT cluster's nodes by acting as a proxy or middleman to all of the cluster's internal communications. The IP address and port presented to the rest of the cluster for a RAFT node is instead one assigned to the monitor. However, on setup this should be completely transparent to the RAFT cluster, since the default behavior of the monitor is just to log packets, rewrite their destination to the appropriate node based on the address and/or port the monitor received the packet on, and resend the packet. Thus when non-invasive testing is being performed, the cluster should operate in an entirely normal manner unaffected by the monitor's presence.
+
 
 \subsubsection{Simulating Partitions}
 
