@@ -130,11 +130,12 @@ These are currently written for the assumption that the system only has three no
 \end{enumerate}
 
 \section{Future Work}
+Since this is a testing framework, tests are central. Adding more tests is always possible. We could expand into bigger networks, given more time and computing resources, to make it a better tool for people using large implementations.
 
-- plans for additional checkers for more raft implementations
-- more functionality in monitors? delaying or blocking packets
+At the moment, the framework's adapters are only completely written for the LogCabin implementation. They are partially complete for two other implementations (copycat and CKite). Finishing these adapters would be a priority. Since there are over 50 different implementations, more adapters will always been needed, so adding more in the future will improve our functionality and ease of use.
 
-additional tests we plan to do or didn't get to
+As mentioned previously, looking into automatic comparison of test results is another useful feature. Because some Raft changes (like who becomes leader) are somewhat non-deterministic, it may be difficult to have a simple algorithm to pull out the differences. However, such automation would still be of value, since the files would still be there for manual comparison if necessary.
+
 
 
 \bibliographystyle{icml2014}
