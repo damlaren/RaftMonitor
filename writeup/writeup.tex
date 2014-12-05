@@ -36,6 +36,7 @@
 
 \vskip 0.3in
 ]
+\setlength\parindent{24pt}
 
 \begin{abstract}
 	
@@ -66,6 +67,12 @@ discussion of different modules in system, and how we support adaptation for dif
 -- (The Client API will probably be renamed to something else to better reflect its meaning-- something like an ``Adaptation Layer'')
 - teardown, if it's worth it
 
+\subsection{RaftMonitor}
+
+The checker monitors and responds to messages passed internally among the RAFT cluster's nodes by acting as a proxy or middleman to all of the cluster's internal communications. The IP address and port presented to the rest of the cluster for a RAFT node is instead one assigned to the monitor. However, on setup this should be completely transparent to the RAFT cluster, since the default behavior of the monitor is just to log packets, rewrite their destination to the appropriate node based on the address and/or port the monitor received the packet on, and resend the packet. Thus when non-invasive testing is being performed, the cluster should operate in an entirely normal manner unaffected by the monitor's presence.
+
+For this to be the case it is important that any processing the monitor performs on the packet not lengthen too much the time required for the packet to reach the RAFT node it is intended for, lest the monitor interfere with RAFT's heartbeat messages and thus affect the cluster's operation. However, this does seem a manageable constraint: since the checking program simulates a cluster within a single machine, round-trip times for packet transmission are low (on the order of $0.05$-$0.2$ milliseconds). Recommended settings for RAFT election timeout are in the low hundreds of milliseconds \cite{raftPaper}. Simple logging, mangling and resending of packets, then, is unlikely to cause an unexpected timeout under this sort of mode of operation. However, more expensive actions such as killing one of the RAFT node processes could be concerning given this time constraint; actions that are too expensive are placed in a separate thread. For example, the action to kill a node will consist of creating a separate thread tasked with killing the node's RAFT process, and the monitor will begin dropping all packets to and from that node in the meantime.
+
 \subsection{Future Work}
 
 - plans for additional checkers for more raft implementations
@@ -83,8 +90,10 @@ discussion of tests supported by the system:
 
 additional tests we plan to do or didn't get to
 
-\bibliography{citations}
+
 \bibliographystyle{icml2014}
+\bibliography{citations}
+
 
 \end{document} 
 

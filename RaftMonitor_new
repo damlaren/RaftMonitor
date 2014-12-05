@@ -1,0 +1,112 @@
+/* 
+ * An attempt to monitor RAFT communications via raw packet analysis.
+ */
+
+#include <iostream>
+#include <crafter.h>
+#include <algorithm>
+#include "packetutils/Common.h"
+#include "packetutils/ongaro.h"
+ 
+using namespace Crafter;
+using namespace std;
+
+
+int p[3] = {61024,61025,61026};
+std::vector<int> ports (&p[0], &p[0]+2);
+std::string st[3] = {"192.168.2.1","192.168.2.2","192.168.2.3"};
+std::vector<std::string> ips (&st[0], &st[0]+2);
+
+int out_port = 61023;
+
+void sendPacket(RawLayer* data, IP* ip, TCP* tcp) {
+    //get the appropriate destination IP based on incoming port
+    std::vector<int>::iterator it;
+    it=find(ports.begin(),ports.end(), (int)tcp->GetDstPort());
+    int pos = std::distance(ports.begin(), it);
+    //construct the packet
+    tcp->SetDstPort(out_port);
+    ip->SetDestinationIP(ips[pos]);
+    //send the packet
+    Packet packet(Ethernet() / *ip / *tcp / *data);
+    packet.Send("lo");
+}
+ 
+void callback(Packet* sniff_packet, void* user) {
+    RawLayer* data = sniff_packet->GetLayer<RawLayer>();
+    std::vector<unsigned char> bytes (0);
+    if (data != 0) {
+        std::string by = data->GetStringPayload();
+        bytes.assign(by.begin(), by.end());
+    }
+
+    IP* ip = sniff_packet->GetLayer<IP>();
+    TCP* tcp = sniff_packet->GetLayer<TCP>();
+    
+    if (ip->GetDestinationIP().compare("127.0.0.1") == 0) {
+        sendPacket(data, ip, tcp);
+    }
+    else{
+        return;
+    }
+    
+    std::string action = "Reply";
+    
+    int type = ongaroRAFT::packetType(bytes);
+
+    switch (type) { //opcodes are defined in Client.proto and Raft.proto
+        case GET_RPC_VERSIONS:
+                action = "Get Supported RPC Versions From";
+                break;
+        case OPEN_SESSION:
+                action = "Open Session With";
+                break;
+        case GET_CONFIG:
+                action = "Get Configuration From";
+                break;
+        case SET_CONFIG:
+                action = "Set Configuration Of";
+                break;
+        case READ_ONLY_TREE:
+                action = "Get Read-Only Tree From";
+                break;
+        case READ_WRITE_TREE:
+                action = "Get Read-Write Tree From";
+                break;
+        case REQUEST_VOTE:
+                action = "Request Vote From";
+                break;
+        case APPEND_HEARTBEAT:
+                action = "Append/Heartbeat";
+                break;
+        case APPEND_SNAPSHOT:
+                action = "Append Snapshot";
+                break;
+        case REPLY:
+                action = "Reply";
+                break;
+        default:
+                action = "Session Reply";
+    }
+        
+    std::cout << ip->GetSourceIP() << ":" << tcp->GetSrcPort() << ": "<< action << " -> "
+              << ip->GetDestinationIP() << ":" << tcp->GetDstPort()  << std::endl;
+    
+}
+ 
+int main() {
+
+        Sniffer sniff("tcp","lo", callback);
+        //sniffer loop
+        //sniff.Spawn(-1); //spawns sniffer in a new thread
+        sniff.Capture(-1);
+        
+        while (true) {
+            sleep(1);
+        }
+
+        sniff.Cancel(); //quit the sniffer
+
+        return 0;
+
+}
