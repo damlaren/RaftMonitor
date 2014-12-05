@@ -6,6 +6,9 @@
 #Usage: ./setup_redirects.sh [ <# of nodes> [ <Port # the RAFT impl uses> ]]
 #Defaults to assuming 3 nodes that communicate with port 61023.
 
+#make sure firewall is enabled
+ufw enable
+
 NUM_INTERFACES=0
 
 if [ $# -lt 1 ]

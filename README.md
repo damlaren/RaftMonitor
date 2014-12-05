@@ -13,12 +13,20 @@ Built on Ubuntu 14.04.
    ** Make sure dependencies are installed
    * Update CMakeCache.txt with location of libtins on system
    * cd to libtins/build
-   * cmake ../
-   ** TODO: include C++11 features? -DLIBTINS_ENABLE_CXX11=1
+   * cmake -DLIBTINS_ENABLE_CXX11=1 ../
    * make
    * sudo make install
 
-3. Build RaftMonitor
+3. Build libcrafter (https://github.com/pellegre/libcrafter)
+   * sudo apt-get install autoconf libtool
+   * git clone https://github.com/pellegre/libcrafter
+   * cd libcrafter/libcrafter
+   * ./autogen.sh 
+   * make
+   * sudo make install
+   * sudo ldconfig
+
+4. Build RaftMonitor
    * 'make' in this directory
 
 --- Run Instructions ---
@@ -26,3 +34,5 @@ Built on Ubuntu 14.04.
 1. Setup loopback interface as on LogCabin
 2. 'source setup_monitor.sh' to set up path for running RaftMonitor
 3. sudo LD_LIBRARY_PATH=$LD_LIBRARY_PATH ./RaftMonitor
+
+

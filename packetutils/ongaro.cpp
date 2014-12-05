@@ -2,13 +2,13 @@
  * This is the packet interpreter for the RPC calls of LogCabin,
  * Ongaro's RAFT implementation.
  */
-
+#include "crafter.h"
 #include "ongaro.h"
 #include "Common.h"
     
-int ongaroRAFT::packetType(std::vector<uint8_t> pkt) {
+//int ongaroRAFT::packetType(std::vector<uint8_t> pkt) {
+int ongaroRAFT::packetType(std::vector<unsigned char> pkt) {
     int version = (int)pkt[12]; //RAFT communication version, only appears in requests
-
     if (version == 1) { //this is a request, not a reply
         // 1 = client service, 2 = RAFT service, as defined in Common.h
         int service = (int)pkt[14];
