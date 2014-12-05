@@ -3,3 +3,6 @@ libtins/build/*
 
 # Ignore logcabin run data
 logcabin/smoketeststorage/*
+
+#ignore object files
+*.o
