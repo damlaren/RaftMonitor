@@ -4,7 +4,6 @@
 
 #include "../env.h"
 #include "lg-client.h"
-#include <string.h>
 #include <iostream>
 
 std::string LogCabinRaftClusterConfig::getHost(int nodeNumber)
@@ -55,19 +54,17 @@ bool LogCabinRaftClusterConfig::launchNode(const char* confFile, int id)
   const std::string program = RaftEnv::rootDir + "/logcabin/build/LogCabin";
   const std::string idStr = std::to_string(id);
 
-  // sigh...
-  char* idCopy = new char[idStr.size() + 1];
-  std::copy(idStr.begin(), idStr.end(), idCopy);
-  idCopy[idStr.size()] = '\0';
-  char* confCopy = new char[strlen(confFile) + 1];
-  confCopy = strcpy(confCopy, confFile);
-  confCopy[strlen(confFile)] = '\0';
+  // sigh... need char*, not const char*.
+  char* idCopy = copyStr(idStr.c_str());
+  char* confCopy = copyStr(confFile);
+  char* progCopy = copyStr(program.c_str());
 
-  char* const args[] = {"-i", idCopy, "-c", confCopy, nullptr};
+  char* const args[] = {progCopy, "--id", idCopy, "--config", confCopy, nullptr};
   pid_t pid = createProcess(program.c_str(), args);
 
   delete[] idCopy;
   delete[] confCopy;
+  delete[] progCopy;
   if (pid == -1)
   {
     std::cerr << "error: failed to launch subprocess" << std::endl;

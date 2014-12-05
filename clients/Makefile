@@ -9,8 +9,11 @@ subdirs: $(SUBDIRS)
 $(SUBDIRS):
 	$(MAKE) -C $@
 
-client: client.o
+client: client.cpp
 	g++ -std=c++11 -c client.cpp
 
-env: env.o
+env: env.cpp
 	g++ -std=c++11 -c env.cpp
+
+clean:
+	rm -f *.o

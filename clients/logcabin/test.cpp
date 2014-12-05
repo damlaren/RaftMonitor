@@ -13,13 +13,20 @@ int main(const int argc, const char *argv[])
   RaftClusterConfig *clusterConfig = new LogCabinRaftClusterConfig();
   clusterConfig->launchCluster(3);
 
+  std::cout << "started cluster" << std::endl;
+
   // Create at least one client.
   RaftClient *client = new LogCabinRaftClient();
   bool yay = client->createClient(clusterConfig);
   assert(yay);
 
+  std::cout << "created client" << std::endl;
+
   // TODO: how to spec multiple hosts?
   client->connectToCluster("192.168.2.1:61023");
+
+  std::cout << "connected" << std::endl;
+  
   if (!client->writeFile("/testfile", "testvalue"))
   {
     std::cerr << "Write failed" << std::endl;

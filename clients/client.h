@@ -6,6 +6,10 @@
 #include <string>
 #include <map>
 
+// Returns a char* copy of argument.
+// Allocates new memory which must be delete[]d.
+char* copyStr(const char* src);
+
 /*
  * Raft cluster configuration base class. Provides
  * functions for setting up or tearing down clusters
@@ -17,8 +21,11 @@ public:
 
   // Create a subprocess and return its pid (or -1 on failure).
   // - path: file path to executable
-  // - args: program arguments; MUST END with a nullptr
-  pid_t createProcess(const char* path, char* const args[]);
+  // - args: program arguments. Must follow conventions:
+  //         1. first arg = executable path
+  //         2. last arg = nullptr
+  pid_t createProcess(const char* path,
+		      char* const args[]);
 
   // Kill subprocess, return true on success.
   bool stopProcess(pid_t pid);
