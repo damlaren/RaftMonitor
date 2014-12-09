@@ -12,8 +12,8 @@ using namespace std;
 
 
 PacketSender sender;
-int p[3] = {61024,61025,61026};
-std::vector<int> ports (&p[0], &p[0]+2);
+std::string p[3] = {"192.168.2.4","192.168.2.5","192.168.2.6"};
+std::vector<std::string> incs (&p[0], &p[0]+2);
 std::string st[3] = {"192.168.2.1","192.168.2.2","192.168.2.3"};
 std::vector<std::string> ips (&st[0], &st[0]+2);
 
@@ -21,15 +21,26 @@ int out_port = 61023;
 
 void sendPacket(const RawPDU &data, const IP &ip, const TCP &tcp) {
     //get the appropriate destination IP based on incoming port
-    std::vector<int>::iterator it;
-    it=find(ports.begin(),ports.end(), tcp.dport());
-    int pos = std::distance(ports.begin(), it);
+    std::vector<std::string>::iterator it;
+    std::vector<std::string>::iterator it2;
+    it=find(incs.begin(),incs.end(), ip.dst_addr().to_string());
+    it2=find(ips.begin(), ips.end(), ip.src_addr().to_string());
+    std::string nDstIp = ip.dst_addr().to_string();
+    std::string nSrcIp = ip.src_addr().to_string();
+    if (it != incs.end()) {
+      int pos = std::distance(incs.begin(), it);
+      nDstIp = ips[pos];
+    }
+    if (it2 != ips.end()) {
+      int pos = std::distance(ips.begin(), it2);
+      nSrcIp = incs[pos];
+    }
     //construct the packet
     TCP tsend = TCP(out_port, tcp.sport());
     tsend.seq(tcp.seq());
     //tsend.ack_seq(tcp.ack_seq());
     tsend.flags(tcp.flags());
-    EthernetII pkt = EthernetII() /  IP(ips[pos], ip.src_addr()) / tsend / data;
+    EthernetII pkt = EthernetII() /  IP(nDstIp, nSrcIp) / tsend / data;
     //send the packet
     sender.send(pkt, "lo");
 }
@@ -39,7 +50,12 @@ bool callback(const PDU &pdu) {
     const IP &ip = pdu.rfind_pdu<IP>();
     const TCP &tcp = pdu.rfind_pdu<TCP>();
     
-     if (ip.dst_addr().to_string().compare("127.0.0.1") == 0) {
+     if (ip.dst_addr().to_string().compare("192.168.2.4") == 0 ||
+	 ip.dst_addr().to_string().compare("192.168.2.5") == 0 || 
+	 ip.dst_addr().to_string().compare("192.168.2.6") == 0 ||
+	 ip.src_addr().to_string().compare("192.168.2.1") == 0 ||
+	 ip.src_addr().to_string().compare("192.168.2.2") == 0 ||
+	 ip.src_addr().to_string().compare("192.168.2.3")) {
         sendPacket(data, ip, tcp);
     }
     
@@ -90,6 +106,7 @@ bool callback(const PDU &pdu) {
 
     std::cout << ip.src_addr() << ":" << tcp.sport() << ": "<< action << " -> "
               << ip.dst_addr() << ":" << tcp.dport()  << std::endl;
+
     return true;
 }
  
