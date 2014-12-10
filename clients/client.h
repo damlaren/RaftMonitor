@@ -27,6 +27,7 @@ class PacketDropConfig
   std::string srcAddr;
   float frac;
 
+ public:
   PacketDropConfig(const std::string& s, float f);
   ~PacketDropConfig();
 

@@ -5,6 +5,7 @@
 
 #include <assert.h>
 #include <iostream>
+#include <unistd.h>
 #include "lg-client.h"
 
 int main(const int argc, const char *argv[])
@@ -14,6 +15,12 @@ int main(const int argc, const char *argv[])
   clusterConfig->launchCluster(3, 61023);
 
   std::cout << "started cluster" << std::endl;
+
+  // Configure packet loss on a Raft node.
+  // It'll automatically unconfigure itself on
+  // destruction.
+  PacketDropConfig packetDropper("192.168.2.1", 0.03);
+  packetDropper.startDropping();
 
   // Create at least one client.
   RaftClient *client = new LogCabinRaftClient();
@@ -37,11 +44,13 @@ int main(const int argc, const char *argv[])
   }
   std::cout << "read succeeded!" << std::endl;
 
+  //sleep(10); // Here to check if packetDropper works
+
   // Destroy client
   client->destroyClient();
   delete client;
 
-  // Stop the clustera
+  // Stop the cluster
   clusterConfig->stopCluster(3);
   delete clusterConfig;
 
