@@ -94,26 +94,30 @@ RaftClient::RaftClient(int id) :
   assert(id >= 1);
 }
 
-void RaftClient::runTestOperations(int nIterations)
+void RaftClient::runTestOperations(int nIterations, int nClients)
 {
-  std::string testfile = std::string("/testfile") + std::to_string(clientId);
-  if (!writeFile(testfile, "testvalue"))
+  for (int i = 0; i < nIterations; i++)
   {
-    std::cerr << "Write failed: " << testfile << std::endl;
-  }
-  else
-  {
-    std::cout << "Write succeeded! " << testfile << std::endl;
-  }
+    std::string testfile = std::string("/testfile") + std::to_string(clientId + i * nClients);
 
-  // TODO: can check later if read succeeded
-  if (readFile(testfile) != "testvalue")
-  {
-    std::cerr << "Read failed: " << testfile << std::endl;
-  }
-  else
-  {
-    std::cout << "Read succeeded! " << testfile << std::endl;
+    if (!writeFile(testfile, "testvalue"))
+    {
+      std::cerr << "Write failed: " << testfile << std::endl;
+    }
+    else
+    {
+      std::cout << "Write succeeded! " << testfile << std::endl;
+    }
+
+    // TODO: can check later if read succeeded
+    if (readFile(testfile) != "testvalue")
+    {
+      std::cerr << "Read failed: " << testfile << std::endl;
+    }
+    else
+    {
+      std::cout << "Read succeeded! " << testfile << std::endl;
+    }
   }
 }
 
@@ -122,6 +126,6 @@ void* runClient(void *arg)
   ClientOperations *opsInfo = static_cast<ClientOperations*>(arg);
   assert(opsInfo);
 
-  opsInfo->client->runTestOperations(opsInfo->nIterations);
+  opsInfo->client->runTestOperations(opsInfo->nIterations, opsInfo->nClients);
   delete opsInfo;
 }

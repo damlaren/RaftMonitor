@@ -103,7 +103,7 @@ class RaftClient
 
   // Run test operations: just do some writes in a
   // KV store.
-  void runTestOperations(int nIterations);
+  void runTestOperations(int nIterations, int nClients);
 
   // --- Abstract functions ---
   
@@ -144,6 +144,7 @@ typedef struct ClientOperations
 {
   RaftClient *client; // Which client to run ops on
   int nIterations; // # of times to do the operation
+  int nClients; // total # of clients running
 };
 
 // Function to start an independent client.

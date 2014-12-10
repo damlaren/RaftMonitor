@@ -147,7 +147,8 @@ int main(const int argc, const char *argv[])
     {
       ClientOperations *opsInfo = new ClientOperations;
       opsInfo->client = client;
-      opsInfo->nIterations = 1;
+      opsInfo->nIterations = 5;
+      opsInfo->nClients = clients.size();
 
       // Start a new thread for this client.
       if (pthread_create(&client->thread, nullptr,
@@ -174,8 +175,11 @@ int main(const int argc, const char *argv[])
     }
 
     // Stop the cluster
+    cout << "testdriver: stopping cluster" << endl;
     clusterConfig->stopCluster(3);
     delete clusterConfig;
+
+    cout << "testdriver: test complete!" << endl;
   }
 
   return 0;
