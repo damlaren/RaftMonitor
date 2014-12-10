@@ -25,7 +25,6 @@ Built on Ubuntu 14.04.
    * make
    * sudo make install
    * sudo ldconfig
-   * Modify /usr/local/include/crafter/Utils/CrafterUtils.h - put in #include "TCPConnection.h" at the end
 
 4. Build RaftMonitor
    * 'make' in this directory
