@@ -7,6 +7,7 @@
 # 1: source address
 # 2: fraction
 
-cmd="sudo iptables -A OUTPUT -m statistic --mode random --source $1 --probability $2 -j DROP"
+frac=$2
+cmd="sudo iptables -A OUTPUT -m statistic --mode random --source $1 --probability ${frac} -j DROP"
 echo "Executing ${cmd}"
 $cmd
