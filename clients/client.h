@@ -1,6 +1,7 @@
 #ifndef RAFT_CLIENT_H
 #define RAFT_CLIENT_H
 
+#include <pthread.h>
 #include <sys/types.h>
 #include <vector>
 #include <string>
@@ -90,6 +91,9 @@ class RaftClient
   // Unique ID assigned to this client.
   // Keep it >= 1.
   int clientId;
+
+  // Thread on which this client runs operations.
+  pthread_t thread;
 
   // Assign ID to this client.
   RaftClient(int id);

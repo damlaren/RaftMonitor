@@ -143,15 +143,26 @@ int main(const int argc, const char *argv[])
     sleep(1);
 
     // Start the test by having clients run commands.
-    for(RaftClient* client : clients)
+    for (RaftClient* client : clients)
     {
       ClientOperations *opsInfo = new ClientOperations;
       opsInfo->client = client;
       opsInfo->nIterations = 1;
-      runClient(opsInfo);
+
+      // Start a new thread for this client.
+      if (pthread_create(&client->thread, nullptr,
+			 &runClient, opsInfo) != 0)
+      {
+	cerr << "testdriver: error creating client thread" << endl;
+	exit(0);
+      }
     }
 
-    // TODO: wait until all clients are finished
+    // wait until all clients are finished
+    for (RaftClient* client : clients)
+    {
+      pthread_join(client->thread, nullptr);
+    }
 
     // Destroy clients
     sleep(1);
