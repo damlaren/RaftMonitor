@@ -57,6 +57,17 @@ void PacketDropConfig::stopDropping()
   }
 }
 
+int RaftClusterConfig::firstNodeId() const
+{
+  return 1;
+}
+
+int RaftClusterConfig::lastNodeId() const
+{
+  assert(numNodes >= 1);
+  return numNodes;
+}
+
 pid_t RaftClusterConfig::createProcess(const char* path, char* const args[])
 {
   pid_t pid = fork();

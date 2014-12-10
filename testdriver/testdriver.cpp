@@ -129,7 +129,7 @@ int main(const int argc, const char *argv[])
 
     // Create at least one client.
     createClients(nClients);
-    cout << "created clients" << endl;
+    cout << "testdriver: created clients" << endl;
 
     // Connect clients to cluster.
     // TODO: cluster hostname is hardcoded
@@ -139,7 +139,7 @@ int main(const int argc, const char *argv[])
 	to_string(clusterConfig->clusterPort);
       client->connectToCluster(host);
     }
-    cout << "connected" << endl;
+    cout << "testdriver: connected" << endl;
     sleep(1);
 
     // Start the test by having clients run commands.
@@ -176,7 +176,7 @@ int main(const int argc, const char *argv[])
 
     // Stop the cluster
     cout << "testdriver: stopping cluster" << endl;
-    clusterConfig->stopCluster(3);
+    clusterConfig->stopCluster();
     delete clusterConfig;
 
     cout << "testdriver: test complete!" << endl;
