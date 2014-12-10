@@ -1,6 +1,6 @@
 /*
- * Simple test program to demonstrate use of the
- * LogCabin client.
+ * Test driver program. Right now it only demonstrates
+ * use of the Client API.
  */
 
 #include "../clients/logcabin/lg-client.h"
@@ -19,8 +19,13 @@ int main(const int argc, const char *argv[])
   // Configure packet loss on a Raft node.
   // It'll automatically unconfigure itself on
   // destruction.
-  PacketDropConfig packetDropper("192.168.2.1", 0.03);
+  // Dropping packets from 2 nodes causes the program
+  // to hang with the logcabin implementation, which
+  // is good!
+  PacketDropConfig packetDropper("192.168.2.2", 1.0);
   packetDropper.startDropping();
+  //PacketDropConfig packetDropper2("192.168.2.3", 1.0);
+  //packetDropper2.startDropping();
 
   // Create at least one client.
   RaftClient *client = new LogCabinRaftClient();
@@ -30,7 +35,9 @@ int main(const int argc, const char *argv[])
   std::cout << "created client" << std::endl;
 
   // TODO: how to spec multiple hosts?
-  client->connectToCluster("192.168.2.1:61023");
+  client->connectToCluster("logcabin:61023");
+
+  //sleep(10);
 
   std::cout << "connected" << std::endl;
   
