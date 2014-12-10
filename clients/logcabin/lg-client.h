@@ -44,6 +44,8 @@ class LogCabinRaftClient : public RaftClient
  public:
   LogCabin::Client::Cluster *cluster; // Raft Cluster. This is an object from ongaro's LogCabin.
 
+  LogCabinRaftClient(int id);
+
   virtual bool createClient(RaftClusterConfig *config);
 
   virtual void destroyClient();

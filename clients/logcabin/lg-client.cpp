@@ -109,6 +109,11 @@ bool LogCabinRaftClusterConfig::killNode(int id)
   return stopProcess(pid);
 }
 
+LogCabinRaftClient::LogCabinRaftClient(int id):
+  RaftClient(id)
+{
+}
+
 bool LogCabinRaftClient::createClient(RaftClusterConfig *config)
 {
   cluster = nullptr;

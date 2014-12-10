@@ -30,10 +30,10 @@ vector<RaftClient*> clients;
 void help()
 {
   cout << "From the project root directory: " << endl
-       << "sudo ./testdriver/testdriver <impl> <nClients>" << endl
+       << "sudo ./testdriver/testdriver <impl> <nClients> <testname-1> [testname-2] ..." << endl
        << "\timpl: Raft implementation to use. Values={logcabin}." << endl
        << "\tnClients: Number of clients to start." << endl
-       << "TODO: later we'll select a test to run." << endl;
+       << "\ttestnames: Names of tests to run. Values={TODO: not used yet}." << endl;
   exit(0);
 }
 
@@ -70,11 +70,12 @@ void createClients(int nClients)
 {
   for (int i = 0; i < nClients; i++)
   {
+    int id = i + 1;
     RaftClient *newClient = nullptr;
     switch (raftImpl)
     {
     case RaftImplementation::LOGCABIN:
-      newClient = new LogCabinRaftClient();
+      newClient = new LogCabinRaftClient(id);
       break;
     default:
       help();
@@ -87,7 +88,7 @@ void createClients(int nClients)
 
 int main(const int argc, const char *argv[])
 {
-  if (argc < 3 || std::string(argv[0]) == "--help")
+  if (argc < 4 || std::string(argv[0]) == "--help")
   {
     help();
   }
@@ -142,39 +143,12 @@ int main(const int argc, const char *argv[])
     sleep(1);
 
     // Start the test by having clients run commands.
-    // TODO: identify what test is being run.
-    // TODO: this should be done in separate threads.
-    int id = 1;
     for(RaftClient* client : clients)
     {
-      string testfile = string("/testfile") + to_string(id);
-      if (!client->writeFile(testfile, "testvalue"))
-      {
-	cerr << "Write failed" << endl;
-      }
-      else
-      {
-	cout << "Write succeeded!" << endl;
-      }
-
-      if (client->readFile(testfile) != "testvalue")
-      {
-	cerr << "Read failed" << endl;
-      }
-      else
-      {
-	cout << "Read succeeded!" << endl;
-      }
-
-      if (!client->writeFile(testfile, "erased"))
-      {
-	cerr << "Erase failed" << endl;
-      }
-      else
-      {
-	cerr << "Erase succeeded!" << endl;
-      }
-      id++;
+      ClientOperations *opsInfo = new ClientOperations;
+      opsInfo->client = client;
+      opsInfo->nIterations = 1;
+      runClient(opsInfo);
     }
 
     // TODO: wait until all clients are finished
