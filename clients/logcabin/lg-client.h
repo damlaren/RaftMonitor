@@ -13,7 +13,7 @@ class LogCabinRaftClusterConfig : public RaftClusterConfig
 public:
   // Map node ID (1, 2, ...) to process pid.
   std::map<int, pid_t> id2pid;
-  
+
   virtual void launchCluster(int numNodes, int port);
 
   virtual void stopCluster(int numNodes);
