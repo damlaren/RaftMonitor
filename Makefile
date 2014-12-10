@@ -11,8 +11,8 @@ OBJECTS = $(patsubst %.cpp, %.o, $(wildcard packetutils/*.cpp))
 OBJECTS += $(patsubst %.cpp, %.o, $(wildcard *.cpp))
 
 RaftMonitor: $(OBJECTS)
-	g++ -o RaftMonitor $^ -ltins
-	#g++ -o RaftMonitor $^ -lcrafter
+	#g++ -o RaftMonitor $^ -ltins
+	g++ -std=c++11 -o RaftMonitor $^ -lcrafter
 
 clean:
 	rm -f $(OBJECTS)
