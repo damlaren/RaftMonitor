@@ -11,9 +11,36 @@
 char* copyStr(const char* src);
 
 /*
+ * Configuration for packet loss corresponding to an
+ * entry in iptables. On creation, a rule to drop
+ * a fraction <frac> of outbound packets from <srcAddr>
+ * is added to iptables. The rule is automatically
+ * removed when this object is destroyed.
+ *
+ * It is important to destroy these objects to remove
+ * extra entries from iptables after a test is done.
+ */
+class PacketDropConfig
+{
+ private:
+  bool dropping;
+  std::string srcAddr;
+  float frac;
+
+  PacketDropConfig(const std::string& s, float f);
+  ~PacketDropConfig();
+
+  // Start or stop dropping packets.
+  void startDropping();
+  void stopDropping();
+};
+
+/*
  * Raft cluster configuration base class. Provides
- * functions for setting up or tearing down clusters
- * and Raft nodes.
+ * functions that aren't specific to any one Raft
+ * node or client, including:
+ * - Setting up and tearing down clusters
+ * - Helper functions for creating or stopping processes
  */
 class RaftClusterConfig
 {
@@ -24,9 +51,10 @@ public:
   int clusterPort;
 
   // Oops. I actually did forget this time.
-  virtual ~RaftClusterConfig(){}
+  virtual ~RaftClusterConfig(){};
 
-  // Create a subprocess and return its pid (or -1 on failure).
+  // Create a subprocess and return its pid
+  // (or -1 on failure).
   // - path: file path to executable
   // - args: program arguments. Must follow conventions:
   //         1. first arg = executable path
