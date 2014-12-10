@@ -3,10 +3,10 @@
  * LogCabin client.
  */
 
+#include "../clients/logcabin/lg-client.h"
 #include <assert.h>
 #include <iostream>
 #include <unistd.h>
-#include "lg-client.h"
 
 int main(const int argc, const char *argv[])
 {

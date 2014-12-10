@@ -3,10 +3,6 @@
 
 #include <map>
 #include "../client.h"
-#include "Client/Client.h" // LogCabin RAFT
-
-using LogCabin::Client::Cluster;
-using LogCabin::Client::Tree;
 
 class LogCabinRaftClusterConfig : public RaftClusterConfig
 {
@@ -31,6 +27,12 @@ public:
   bool killNode(int id);
 };
 
+namespace LogCabin {
+  namespace Client {
+    class Cluster;
+  }
+}
+
 /*
  * The LogCabin RAFT client is the first and probably
  * the easiest one to implement. It is adapted from
@@ -40,7 +42,7 @@ public:
 class LogCabinRaftClient : public RaftClient
 {
  public:
-  Cluster *cluster; // Raft Cluster. This is an object from ongaro's LogCabin.
+  LogCabin::Client::Cluster *cluster; // Raft Cluster. This is an object from ongaro's LogCabin.
 
   virtual bool createClient(RaftClusterConfig *config);
 

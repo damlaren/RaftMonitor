@@ -4,7 +4,11 @@
 
 #include "../env.h"
 #include "lg-client.h"
+#include "Client/Client.h" // LogCabin RAFT
 #include <iostream>
+
+using LogCabin::Client::Cluster;
+using LogCabin::Client::Tree;
 
 std::string LogCabinRaftClusterConfig::getHost(int nodeNumber)
 {

@@ -1,4 +1,4 @@
-SUBDIRS = packetutils RaftMonitor clients
+SUBDIRS = packetutils RaftMonitor clients testdriver
 
 .PHONY: subdirs $(SUBDIRS)
 
