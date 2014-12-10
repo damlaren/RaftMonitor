@@ -5,6 +5,7 @@
 #include "../env.h"
 #include "lg-client.h"
 #include "Client/Client.h" // LogCabin RAFT
+#include <assert.h>
 #include <fstream>
 #include <iostream>
 #include <unistd.h>
@@ -27,7 +28,7 @@ bool LogCabinRaftClusterConfig::writeConfFile(const std::string& confFile, const
   std::ofstream ofs(confFile.c_str());
   if (!ofs.good())
   {
-    std::cerr << "Failed to open: " << confFile << std::endl;
+    std::cout << "error: Failed to open: " << confFile << std::endl;
     return false;
   }
 
@@ -69,7 +70,7 @@ void LogCabinRaftClusterConfig::launchCluster(int nNodes, int port)
     std::string("/teststorage/logcabin.conf");
   if (!writeConfFile(confFile, storageDir))
   {
-    std::cerr << "lg-client: failed to write conf file" << std::endl;
+    std::cout << "error: failed to write conf file" << std::endl;
     exit(1);
   }
 
@@ -81,7 +82,7 @@ void LogCabinRaftClusterConfig::launchCluster(int nNodes, int port)
   {
     if (!launchNode(confFile.c_str(), id))
     {
-      std::cerr << "Failed to launch cluster; exiting" << std::endl;
+      std::cout << "error: Failed to launch cluster; exiting" << std::endl;
       exit(1);
     }
   }
@@ -103,7 +104,7 @@ void LogCabinRaftClusterConfig::stopCluster()
   {
     if (!killNode(id))
     {
-      std::cerr << "Failed to kill node: " << id << std::endl;
+      std::cout << "error: Failed to kill node: " << id << std::endl;
     }
   }
 }
@@ -126,7 +127,7 @@ bool LogCabinRaftClusterConfig::launchNode(const char* confFile, int id)
   delete[] progCopy;
   if (pid == -1)
   {
-    std::cerr << "error: failed to launch subprocess" << std::endl;
+    std::cout << "error: failed to launch subprocess" << std::endl;
     return false;
   }
 

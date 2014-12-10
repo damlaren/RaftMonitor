@@ -47,7 +47,7 @@ void selectImplementation(const std::string& implStr)
 
   if (raftImpl == RaftImplementation::UNKNOWN)
   {
-    cerr << "Unrecognized implementation: " << implStr << endl;
+    cout << "error: Unrecognized implementation: " << implStr << endl;
     help();
   }
 }
@@ -154,7 +154,7 @@ int main(const int argc, const char *argv[])
       if (pthread_create(&client->thread, nullptr,
 			 &runClient, opsInfo) != 0)
       {
-	cerr << "testdriver: error creating client thread" << endl;
+	cout << "error: couldn't create client thread" << endl;
 	exit(0);
       }
     }
