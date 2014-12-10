@@ -95,90 +95,103 @@ int main(const int argc, const char *argv[])
   selectImplementation(argv[1]);
   int nClients = std::stoi(argv[2]);
 
-  // Create cluster configuration.
-  clusterConfig = createClusterConfig();
-  assert(clusterConfig != nullptr);
-
-  // Launch the cluster.
-  clusterConfig->launchCluster(3, 61023);
-  cout << "testdriver: started cluster" << endl;
-  sleep(1);
-
-  // Configure packet loss on a Raft node.
-  // It'll automatically unconfigure itself on
-  // destruction.
-  // Dropping packets from 2 nodes causes the program
-  // to hang with the logcabin implementation, which
-  // is good!
-  PacketDropConfig packetDropper("192.168.2.1", 1.0);
-  //packetDropper.startDropping();
-  //PacketDropConfig packetDropper2("192.168.2.3", 1.0);
-  //packetDropper2.startDropping();
-
-  // Create at least one client.
-  createClients(nClients);
-  cout << "created clients" << endl;
-
-  // Connect clients to cluster.
-  // TODO: cluster hostname is hardcoded
-  for (RaftClient* client : clients)
+  // Identify and run all tests.
+  // Reinitialize the cluster AND the file system
+  // between each and every test.
+  // TODO: tests could 'build' on each other,
+  // but that can come in a later system.
+  for (int i = 3; i < argc; i++)
   {
-    string host = string("logcabin:") +
-      to_string(clusterConfig->clusterPort);
-    client->connectToCluster(host);
+    // Determine what test is being run
+    string testName = argv[i];
+    cout << "testdriver: running test " << testName << endl;
+
+    // Create cluster configuration.
+    clusterConfig = createClusterConfig();
+    assert(clusterConfig != nullptr);
+
+    // Launch the cluster.
+    clusterConfig->launchCluster(3, 61023);
+    cout << "testdriver: started cluster" << endl;
+    sleep(1);
+
+    // Configure packet loss on a Raft node.
+    // It'll automatically unconfigure itself on
+    // destruction.
+    // Dropping packets from 2 nodes causes the program
+    // to hang with the logcabin implementation, which
+    // is good!
+    PacketDropConfig packetDropper("192.168.2.1", 1.0);
+    //packetDropper.startDropping();
+    //PacketDropConfig packetDropper2("192.168.2.3", 1.0);
+    //packetDropper2.startDropping();
+
+    // Create at least one client.
+    createClients(nClients);
+    cout << "created clients" << endl;
+
+    // Connect clients to cluster.
+    // TODO: cluster hostname is hardcoded
+    for (RaftClient* client : clients)
+    {
+      string host = string("logcabin:") +
+	to_string(clusterConfig->clusterPort);
+      client->connectToCluster(host);
+    }
+    cout << "connected" << endl;
+    sleep(1);
+
+    // Start the test by having clients run commands.
+    // TODO: identify what test is being run.
+    // TODO: this should be done in separate threads.
+    int id = 1;
+    for(RaftClient* client : clients)
+    {
+      string testfile = string("/testfile") + to_string(id);
+      if (!client->writeFile(testfile, "testvalue"))
+      {
+	cerr << "Write failed" << endl;
+      }
+      else
+      {
+	cout << "Write succeeded!" << endl;
+      }
+
+      if (client->readFile(testfile) != "testvalue")
+      {
+	cerr << "Read failed" << endl;
+      }
+      else
+      {
+	cout << "Read succeeded!" << endl;
+      }
+
+      if (!client->writeFile(testfile, "erased"))
+      {
+	cerr << "Erase failed" << endl;
+      }
+      else
+      {
+	cerr << "Erase succeeded!" << endl;
+      }
+      id++;
+    }
+
+    // TODO: wait until all clients are finished
+
+    // Destroy clients
+    sleep(1);
+    cout << "testdriver: destroying clients" << endl;
+    for (RaftClient* client : clients)
+    {
+      client->destroyClient();
+      delete client;
+    }
+
+    // Stop the cluster
+    clusterConfig->stopCluster(3);
+    delete clusterConfig;
   }
-  cout << "connected" << endl;
-  sleep(1);
-  
-  // TODO: for now just pick one client and write
-  // something.
-  // TODO: reinitialize that file system, at least
-  // every time that the test driver is started.
-  int id = 1;
-  for(RaftClient* client : clients)
-  {
-    string testfile = string("/testfile") + to_string(id);
-    if (!client->writeFile(testfile, "testvalue"))
-    {
-      cerr << "Write failed" << endl;
-    }
-    else
-    {
-      cout << "Write succeeded!" << endl;
-    }
-
-    if (client->readFile(testfile) != "testvalue")
-    {
-      cerr << "Read failed" << endl;
-    }
-    else
-    {
-      cout << "Read succeeded!" << endl;
-    }
-
-    if (!client->writeFile(testfile, "erased"))
-    {
-      cerr << "Erase failed" << endl;
-    }
-    else
-    {
-      cerr << "Erase succeeded!" << endl;
-    }
-    id++;
-  }
-
-  // Destroy clients
-  sleep(1);
-  cout << "testdriver: destroying clients" << endl;
-  for (RaftClient* client : clients)
-  {
-    client->destroyClient();
-    delete client;
-  }
-
-  // Stop the cluster
-  clusterConfig->stopCluster(3);
-  delete clusterConfig;
 
   return 0;
 }
