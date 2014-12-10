@@ -4,14 +4,19 @@
 
 #include "../env.h"
 #include "lg-client.h"
+#include "Client/Client.h" // LogCabin RAFT
 #include <iostream>
+#include <unistd.h>
+
+using LogCabin::Client::Cluster;
+using LogCabin::Client::Tree;
 
 std::string LogCabinRaftClusterConfig::getHost(int nodeNumber)
 {
   return std::string("192.168.2.") + std::to_string(nodeNumber);
 }
 
-std::string getHostPort(int nodeNumber, int port)
+std::string LogCabinRaftClusterConfig::getHostPort(int nodeNumber, int port)
 {
   return std::string("192.168.2.") + std::to_string(nodeNumber) + std::string(":") + std::to_string(port);
 }
@@ -22,9 +27,7 @@ void LogCabinRaftClusterConfig::launchCluster(int numNodes, int port)
 
   clusterPort = port;
 
-  // TODO: set up loopback interfaces
-
-  // TODO: set up redirects
+  // TODO: set up loopback interfaces?
 
   // TODO: Write logcabin.conf configuration file?
   // or just reuse existing?
@@ -44,7 +47,15 @@ void LogCabinRaftClusterConfig::launchCluster(int numNodes, int port)
     }
   }
 
-  // TODO reconfigure once all nodes have joined
+  // reconfigure once all nodes have joined
+  sleep(1);
+  std::string cmdStr = RaftEnv::rootDir + std::string("/logcabin/build/Examples/Reconfigure");
+  for (int id = 1; id <= numNodes; id++)
+  {
+    cmdStr += std::string(" ") + getHostPort(id, clusterPort);
+  }
+  std::cout << "executing: " << cmdStr << std::endl;
+  system(cmdStr.c_str());
 }
 
 void LogCabinRaftClusterConfig::stopCluster(int numNodes)
@@ -57,9 +68,7 @@ void LogCabinRaftClusterConfig::stopCluster(int numNodes)
     }
   }
 
-  // TODO: shut down redirects
-  
-  // TODO: shut down loopback interfaces
+  // TODO: shut down loopback interfaces?
 }
 
 bool LogCabinRaftClusterConfig::launchNode(const char* confFile, int id)
@@ -98,6 +107,11 @@ bool LogCabinRaftClusterConfig::killNode(int id)
   pid_t pid = id2pid[id];
   id2pid.erase(id);
   return stopProcess(pid);
+}
+
+LogCabinRaftClient::LogCabinRaftClient(int id):
+  RaftClient(id)
+{
 }
 
 bool LogCabinRaftClient::createClient(RaftClusterConfig *config)

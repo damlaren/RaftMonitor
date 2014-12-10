@@ -1,5 +1,6 @@
 #include "client.h"
 #include "env.h"
+#include <assert.h>
 #include <cstdio>
 #include <iostream>
 #include <signal.h>
@@ -85,4 +86,46 @@ bool RaftClusterConfig::stopProcess(pid_t pid)
     return false;
   }
   return true;
+}
+
+RaftClient::RaftClient(int id) :
+  clientId(id)
+{
+  assert(id >= 1);
+}
+
+void RaftClient::runTestOperations(int nIterations, int nClients)
+{
+  for (int i = 0; i < nIterations; i++)
+  {
+    std::string testfile = std::string("/testfile") + std::to_string(clientId + i * nClients);
+
+    if (!writeFile(testfile, "testvalue"))
+    {
+      std::cerr << "Write failed: " << testfile << std::endl;
+    }
+    else
+    {
+      std::cout << "Write succeeded! " << testfile << std::endl;
+    }
+
+    // TODO: can check later if read succeeded
+    if (readFile(testfile) != "testvalue")
+    {
+      std::cerr << "Read failed: " << testfile << std::endl;
+    }
+    else
+    {
+      std::cout << "Read succeeded! " << testfile << std::endl;
+    }
+  }
+}
+
+void* runClient(void *arg)
+{
+  ClientOperations *opsInfo = static_cast<ClientOperations*>(arg);
+  assert(opsInfo);
+
+  opsInfo->client->runTestOperations(opsInfo->nIterations, opsInfo->nClients);
+  delete opsInfo;
 }

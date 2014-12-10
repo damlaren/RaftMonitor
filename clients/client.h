@@ -1,6 +1,7 @@
 #ifndef RAFT_CLIENT_H
 #define RAFT_CLIENT_H
 
+#include <pthread.h>
 #include <sys/types.h>
 #include <vector>
 #include <string>
@@ -87,8 +88,22 @@ public:
 class RaftClient
 {
  public:
+  // Unique ID assigned to this client.
+  // Keep it >= 1.
+  int clientId;
+
+  // Thread on which this client runs operations.
+  pthread_t thread;
+
+  // Assign ID to this client.
+  RaftClient(int id);
+
   // Never forget.
   virtual ~RaftClient(){};
+
+  // Run test operations: just do some writes in a
+  // KV store.
+  void runTestOperations(int nIterations, int nClients);
 
   // --- Abstract functions ---
   
@@ -120,5 +135,20 @@ class RaftClient
   // Raft cluster configuration must be passed in during creation.
   RaftClusterConfig* clusterConfig;
 };
+
+/*
+ * Arguments for spawning a separate client thread
+ * to do operations on the Raft implementation.
+ */
+typedef struct ClientOperations
+{
+  RaftClient *client; // Which client to run ops on
+  int nIterations; // # of times to do the operation
+  int nClients; // total # of clients running
+};
+
+// Function to start an independent client.
+// <arg> refers to a ClientOperations.
+void* runClient(void *arg);
 
 #endif
