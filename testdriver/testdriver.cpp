@@ -22,7 +22,7 @@ int main(const int argc, const char *argv[])
   // Dropping packets from 2 nodes causes the program
   // to hang with the logcabin implementation, which
   // is good!
-  PacketDropConfig packetDropper("192.168.2.2", 1.0);
+  PacketDropConfig packetDropper("192.168.2.1", 1.0);
   packetDropper.startDropping();
   //PacketDropConfig packetDropper2("192.168.2.3", 1.0);
   //packetDropper2.startDropping();
