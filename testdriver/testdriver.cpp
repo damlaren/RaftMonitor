@@ -11,8 +11,6 @@
 
 using namespace std;
 
-const int NUM_HOSTS = 3;
-
 // Flag for current Raft implementation that's in use.
 enum class RaftImplementation
 {
@@ -20,6 +18,62 @@ enum class RaftImplementation
   LOGCABIN
 };
 RaftImplementation raftImpl = RaftImplementation::UNKNOWN;
+
+// Which of the test types is in use.
+// Each has its own set of arguments.
+enum class TestType
+{
+    BASIC, // No funny business.
+    BLOCK, // Block packets from a random node
+    KILL   // Kill a random node, restart it later
+};
+
+// Arguments specific to the basic test.
+typedef struct
+{
+} BasicArgs;
+
+// Arguments specific to the block test.
+typedef struct
+{
+  float frac; // what fraction of packets to drop.
+} BlockArgs;
+
+// Arguments specific to the kill test.
+typedef struct
+{
+  int killCount; // how many to take out at once?
+} KillArgs;
+
+// Wrapped-up test arguments.
+// Every test is repeated for some number of iterations,
+// and each iteration is some number of seconds long.
+// During that whole time, clients will try to blast
+// packets at the cluster.
+typedef struct
+{
+  TestType type;
+  int iterations; // # of times to repeat the test.
+  int time; // in seconds-- an argument for sleep().
+  union {
+    BasicArgs basic;
+    BlockArgs block;
+    KillArgs kill;
+  };
+} TestArgs;
+TestArgs testArgs;
+
+// Args for spinning off RM.
+typedef struct
+{
+  string impl;
+  int numhosts;
+  string iface;
+} RMArgs;
+RMArgs rmArgs;
+
+// Thread in which to run RM.
+pthread_t rmThread;
 
 // Configuration for Raft cluster.
 RaftClusterConfig *clusterConfig = nullptr;
@@ -33,10 +87,15 @@ vector<RaftClient*> clients;
 void help()
 {
   cout << "From the project root directory: " << endl
-       << "sudo ./testdriver/testdriver <impl> <nClients> <testname-1> [testname-2] ..." << endl
+       << "sudo ./testdriver/testdriver <impl> <nNodes> <nClients> <testname> <iterations> <time> [test args] ..." << endl
        << "\timpl: Raft implementation to use. Values={logcabin}." << endl
        << "\tnClients: Number of clients to start." << endl
-       << "\ttestnames: Names of tests to run. Values={TODO: not used yet}." << endl;
+       << "\ttestname: Names of test to run. Values={basic,block,kill}." << endl
+       << "\titerations: # of iterations of test to run." << endl
+       << "\ttime: how long to run a test (seconds)" << endl
+       << "\ttest args: Any test-specific args, required as follows:" << endl
+       << "\t\tblock: TODO" << endl
+       << "\t\tkill: TODO" << endl;
   exit(0);
 }
 
@@ -52,6 +111,51 @@ void selectImplementation(const std::string& implStr)
   {
     cout << "error: Unrecognized implementation: " << implStr << endl;
     help();
+  }
+}
+
+// Consume required arguments for current test.
+void eatTestArguments(const int argc, const char* argv[],
+		      int& argi, string& testName)
+{
+  assert(argi < argc);
+  testName = argv[argi++];
+
+  TestType &testType = testArgs.type;
+  if (testName == "basic")
+  {
+    testType = TestType::BASIC;
+  }
+  else if (testName == "block")
+  {
+    testType = TestType::BLOCK;
+  }
+  else if (testName == "kill")
+  {
+    testType = TestType::KILL;
+  }
+  else
+  {
+    cout << "error: Unrecognized test name " << testName << endl;
+    exit(1);
+  }
+
+  assert(argi < argc);
+  testArgs.iterations = stoi(argv[argi++]);
+  assert(argi < argc);
+  testArgs.time = stoi(argv[argi++]);
+
+  switch (testType)
+  {
+  case TestType::BLOCK:
+    testArgs.block.frac = stof(argv[argi++]);
+    break;
+  case TestType::KILL:
+    testArgs.kill.killCount = stoi(argv[argi++]);
+    break;
+  default: // Fall through.
+  case TestType::BASIC:
+    break;
   }
 }
 
@@ -89,18 +193,6 @@ void createClients(int nClients)
   }
 }
 
-// Args for spinning off RM.
-typedef struct
-{
-  string impl;
-  int numhosts;
-  string iface;
-} RMArgs;
-RMArgs rmArgs;
-
-// Thread in which to run RM.
-pthread_t rmThread;
-
 // Start Raft in its own thread.
 void* spawnRaft(void *arg)
 {
@@ -114,7 +206,7 @@ void* spawnRaft(void *arg)
 
 int main(const int argc, const char *argv[])
 {
-  if (argc < 4 || string(argv[0]) == "--help")
+  if (argc < 7 || string(argv[0]) == "--help")
   {
     help();
   }
@@ -122,13 +214,14 @@ int main(const int argc, const char *argv[])
   RaftMonitor *prm = RaftMonitor::getRaftMonitor();
   string impl = argv[1];
   selectImplementation(impl);
-  int nClients = stoi(argv[2]);
+  int nNodes = stoi(argv[2]);
+  int nClients = stoi(argv[3]);
 
   // Start the RaftMonitor.
   // TODO: this makes assumptions about host IP addrs.
   // And to assume makes something of you and me.
   rmArgs.impl = impl;
-  rmArgs.numhosts = 3;
+  rmArgs.numhosts = nNodes;
   rmArgs.iface = "lo";
   if (pthread_create(&rmThread, nullptr, spawnRaft,
 		     &rmArgs) != 0)
@@ -147,10 +240,12 @@ int main(const int argc, const char *argv[])
   // between each and every test.
   // TODO: tests could 'build' on each other,
   // but that can come in a later system.
-  for (int i = 3; i < argc; i++)
+  int argi = 4;
+  while (argi < argc)
   {
     // Determine what test is being run
-    string testName = argv[i];
+    string testName;
+    eatTestArguments(argc, argv, argi, testName);
     cout << "testdriver: running test " << testName << endl;
 
     // TODO: partition parms, depending on the test.
@@ -164,7 +259,7 @@ int main(const int argc, const char *argv[])
     assert(clusterConfig != nullptr);
 
     // Launch the cluster.
-    clusterConfig->launchCluster(NUM_HOSTS, 61023);
+    clusterConfig->launchCluster(nNodes, 61023);
     cout << "testdriver: started cluster" << endl;
     sleep(1);
 
