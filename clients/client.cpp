@@ -139,4 +139,6 @@ void* runClient(void *arg)
 
   opsInfo->client->runTestOperations(opsInfo->nIterations, opsInfo->nClients);
   delete opsInfo;
+
+  pthread_exit(nullptr);
 }

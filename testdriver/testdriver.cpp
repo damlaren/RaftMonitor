@@ -4,11 +4,14 @@
  */
 
 #include "../clients/logcabin/lg-client.h"
+#include "../RaftMonitor.h"
 #include <assert.h>
 #include <iostream>
 #include <unistd.h>
 
 using namespace std;
+
+const int NUM_HOSTS = 3;
 
 // Flag for current Raft implementation that's in use.
 enum class RaftImplementation
@@ -86,15 +89,58 @@ void createClients(int nClients)
   }
 }
 
+// Args for spinning off RM.
+typedef struct
+{
+  string impl;
+  int numhosts;
+  string iface;
+} RMArgs;
+RMArgs rmArgs;
+
+// Thread in which to run RM.
+pthread_t rmThread;
+
+// Start Raft in its own thread.
+void* spawnRaft(void *arg)
+{
+  RMArgs* prmArgs = static_cast<RMArgs*>(arg);
+  assert(prmArgs);
+  startRaft(prmArgs->impl, prmArgs->numhosts,
+	    prmArgs->iface);
+
+  pthread_exit(nullptr);
+}
+
 int main(const int argc, const char *argv[])
 {
-  if (argc < 4 || std::string(argv[0]) == "--help")
+  if (argc < 4 || string(argv[0]) == "--help")
   {
     help();
   }
 
-  selectImplementation(argv[1]);
-  int nClients = std::stoi(argv[2]);
+  RaftMonitor *prm = RaftMonitor::getRaftMonitor();
+  string impl = argv[1];
+  selectImplementation(impl);
+  int nClients = stoi(argv[2]);
+
+  // Start the RaftMonitor.
+  // TODO: this makes assumptions about host IP addrs.
+  // And to assume makes something of you and me.
+  rmArgs.impl = impl;
+  rmArgs.numhosts = 3;
+  rmArgs.iface = "lo";
+  if (pthread_create(&rmThread, nullptr, spawnRaft,
+		     &rmArgs) != 0)
+  {
+    cout << "error: couldn't create RM thread" << endl;
+    exit(1);
+  }
+
+  // Wait for RM to come online.
+  // TODO: This isn't perfect-- sniffer may not start
+  // capturing yet. Not sure if that's a problem.
+  while (!prm->alive){ sleep(1); }
 
   // Identify and run all tests.
   // Reinitialize the cluster AND the file system
@@ -112,7 +158,7 @@ int main(const int argc, const char *argv[])
     assert(clusterConfig != nullptr);
 
     // Launch the cluster.
-    clusterConfig->launchCluster(3, 61023);
+    clusterConfig->launchCluster(NUM_HOSTS, 61023);
     cout << "testdriver: started cluster" << endl;
     sleep(1);
 
@@ -152,10 +198,10 @@ int main(const int argc, const char *argv[])
 
       // Start a new thread for this client.
       if (pthread_create(&client->thread, nullptr,
-			 &runClient, opsInfo) != 0)
+			 runClient, opsInfo) != 0)
       {
 	cout << "error: couldn't create client thread" << endl;
-	exit(0);
+	exit(1);
       }
     }
 
@@ -181,6 +227,11 @@ int main(const int argc, const char *argv[])
 
     cout << "testdriver: test complete!" << endl;
   }
+
+  // Shut down the RaftMonitor.
+  cout << "testdriver: shutting down RM" << endl;
+  RaftMonitor::getRaftMonitor()->sniff->Cancel();
+  pthread_join(rmThread, nullptr);
 
   return 0;
 }

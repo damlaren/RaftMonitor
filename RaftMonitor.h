@@ -30,6 +30,8 @@ class RaftMonitor {
         std::vector<std::string> ips; //vector of node ips
         int num_elections;
         bool run_test; //are we currently running a test?
+	bool alive; //time to shut down?
+	Sniffer* sniff; // crafter Sniffer
         
     private:  
         int getIndex(std::string);

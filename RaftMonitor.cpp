@@ -256,21 +256,15 @@ void RaftMonitor::clear_block(const string& src_ip, float fraction) {
 }
  
 int startRaft(string impl, int numhosts, string iface) {
-
         RaftMonitor* prm = RaftMonitor::getRaftMonitor();
 	*prm = RaftMonitor(impl, numhosts, iface);
-        Sniffer sniff("tcp", prm->interface,
-		      prm->callback);
-        //sniffer loop
-        //sniff.Spawn(-1); //spawns sniffer in a new thread
-        sniff.Capture(-1);
-        
-        while (true) {
-            sleep(1);
-        }
+	prm->sniff = new Sniffer("tcp", prm->interface,
+				 prm->callback);
 
-        sniff.Cancel(); //quit the sniffer
+	// sniff until external thread cancels it.
+	prm->alive = true;
+        prm->sniff->Capture(-1);
 
+	delete prm->sniff; // Time to die.
         return 0;
-
 }
