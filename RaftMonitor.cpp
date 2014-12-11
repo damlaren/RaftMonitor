@@ -265,6 +265,5 @@ int startRaft(string impl, int numhosts, string iface) {
 	prm->alive = true;
         prm->sniff->Capture(-1);
 
-	delete prm->sniff; // Time to die.
         return 0;
 }

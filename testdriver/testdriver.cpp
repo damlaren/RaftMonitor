@@ -360,8 +360,15 @@ int main(const int argc, const char *argv[])
 
   // Shut down the RaftMonitor.
   cout << "testdriver: shutting down RM" << endl;
-  RaftMonitor::getRaftMonitor()->sniff->Cancel();
+  prm->sniff->Cancel();
   pthread_join(rmThread, nullptr);
+
+  delete prm->sniff;
+
+  cout << "testdriver: exiting" << endl;
+
+  // TODO: something is getting corrupted when I
+  // only run with 2 clients?
 
   return 0;
 }
