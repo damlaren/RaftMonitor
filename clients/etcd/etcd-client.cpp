@@ -52,8 +52,8 @@ std::string EtcdClusterConfig::getPeerString(int numNodes, int thisNode, int por
 bool EtcdClusterConfig::launchNode(int nodeNum) {
   const std::string program = RaftEnv::rootDir + "/etcd-v0.4.6-linux-amd64/etcd";
   char* progCopy = copyStr(program.c_str());
-  char* peerAddr = copyStr((getAddress() + getPeerPort(nodeNum, clusterPort)).c_str());
-  char* pubAddr = copyStr((getAddress() + getPublicPort(nodeNum, clusterPort)).c_str());
+  char* peerAddr = copyStr((getAddress() + std::string(":") + getPeerPort(nodeNum, clusterPort)).c_str());
+  char* pubAddr = copyStr((getAddress() + std::string(":") + getPublicPort(nodeNum, clusterPort)).c_str());
   char* dataDir = copyStr((dataPathRoot + std::string("/machine") + std::to_string(nodeNum)).c_str());
   char* peerCopy = copyStr(getPeerString(numNodes, nodeNum, clusterPort).c_str());
   
@@ -86,8 +86,8 @@ void EtcdClusterConfig::launchCluster(int nNodes, int port) {
   dataPathRoot = RaftEnv::rootDir + std::string("/teststorage");
 
   char* progCopy = copyStr(program.c_str());
-  char* peerAddr = copyStr((getAddress() + getPeerPort(1, port)).c_str());
-  char* pubAddr = copyStr((getAddress() + getPublicPort(1, port)).c_str());
+  char* peerAddr = copyStr((getAddress() + std::string(":") + getPeerPort(1, port)).c_str());
+  char* pubAddr = copyStr((getAddress() + std::string(":") + getPublicPort(1, port)).c_str());
   char* dataDir = copyStr((dataPathRoot + std::string("/machine1")).c_str());
 
   char* const args[] = { progCopy, "-peer-addr", peerAddr, "-addr", pubAddr, "-data-dir", dataDir, nullptr };
@@ -135,6 +135,8 @@ void EtcdClusterConfig::stopCluster() {
 EtcdRaftClient::EtcdRaftClient(int id) :
   RaftClient(id)
 {
+  // TODO? cur_leader is empty
+  //cur_leader = get
 }
 
 /* Extract the first 'value' shown in the given output. */
