@@ -28,6 +28,12 @@ enum class TestType
     KILL   // Kill a random node, restart it later
 };
 
+enum class TestMode
+{
+    RANDOM, // Pick node to tamper with at random.
+    LEADER  // Shoot the leader.
+};
+
 // Arguments specific to the basic test.
 typedef struct
 {
@@ -36,13 +42,14 @@ typedef struct
 // Arguments specific to the block test.
 typedef struct
 {
-  float frac; // what fraction of packets to drop.
+  TestMode mode;
+  float frac;    // what fraction of packets to drop.
 } BlockArgs;
 
 // Arguments specific to the kill test.
 typedef struct
 {
-  int killCount; // how many to take out at once?
+  TestMode mode;
 } KillArgs;
 
 // Wrapped-up test arguments.
@@ -95,10 +102,11 @@ void help()
        << "\titerations: # of iterations of test to run." << endl
        << "\ttime: how long to run a test (seconds)" << endl
        << "\ttest args: Any test-specific args, required as follows:" << endl
-       << "\t\tblock: <frac>" << endl
+       << "\t\tblock: <mode> <frac>" << endl
+       << "\t\t\tmode: What node to block. Values={random,leader}." << endl
        << "\t\t\tfrac: What fraction of packets to drop from nodes." << endl
-       << "\t\tkill: <count>" << endl
-       << "\t\t\tcount: How many nodes to kill." << endl;
+       << "\t\tkill: <mode>" << endl
+       << "\t\t\tmode: What node to kill. Values={random,leader}." << endl;
   exit(0);
 }
 
@@ -113,6 +121,23 @@ void selectImplementation(const std::string& implStr)
   if (raftImpl == RaftImplementation::UNKNOWN)
   {
     cout << "error: Unrecognized implementation: " << implStr << endl;
+    help();
+  }
+}
+
+TestMode eatTestMode(const std::string& modeStr)
+{
+  if (modeStr == "random")
+  {
+    return TestMode::RANDOM;
+  }
+  else if (modeStr == "leader")
+  {
+    return TestMode::LEADER;
+  }
+  else
+  {
+    cout << "error: Unrecognized test mode: " << modeStr << endl;
     help();
   }
 }
@@ -152,11 +177,13 @@ void eatTestArguments(const int argc, const char* argv[],
   {
   case TestType::BLOCK:
     assert(argi < argc);
+    testArgs.block.mode = eatTestMode(argv[argi++]);
+    assert(argi < argc);
     testArgs.block.frac = stof(argv[argi++]);
     break;
   case TestType::KILL:
     assert(argi < argc);
-    testArgs.kill.killCount = stoi(argv[argi++]);
+    testArgs.kill.mode = eatTestMode(argv[argi++]);
     break;
   default: // Fall through.
   case TestType::BASIC:
@@ -290,7 +317,15 @@ int main(const int argc, const char *argv[])
       {
 	partition = 1;
 	frac = testArgs.block.frac;
+	if (testArgs.block.mode == TestMode::LEADER)
+	{
+	  markedNode = prm->getCurrentLeader();
+	  cout << "testdriver: going to block leader node " << markedNode << endl;
+	}
 	blockSource = clusterConfig->getHost(markedNode);
+	//TODO: doesn't quite work for blocking.
+	//Need to blast out some packets first
+	//to get the leader updated...
       }
 
       if (prm->startTest(testName, partition, frac,
@@ -322,6 +357,11 @@ int main(const int argc, const char *argv[])
       // Kill test! Let the clients spawn first.
       if (testArgs.type == TestType::KILL)
       {
+	if (testArgs.kill.mode == TestMode::LEADER)
+	{
+	  markedNode = prm->getCurrentLeader();
+	}
+
 	// Now kill a node, wait, and bring it back.
 	cout << "testdriver: killing node " << markedNode << endl;
 	clusterConfig->killNode(markedNode);
