@@ -89,6 +89,7 @@ void help()
   cout << "From the project root directory: " << endl
        << "sudo ./testdriver/testdriver <impl> <nNodes> <nClients> <testname> <iterations> <time> [test args] ..." << endl
        << "\timpl: Raft implementation to use. Values={logcabin}." << endl
+       << "\tnNodes: Number of Raft nodes." << endl
        << "\tnClients: Number of clients to start." << endl
        << "\ttestname: Names of test to run. Values={basic,block,kill}." << endl
        << "\titerations: # of iterations of test to run." << endl
