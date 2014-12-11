@@ -64,6 +64,9 @@ public:
   // Return id of last Raft node, consistently.
   int lastNodeId() const;
 
+  // Return id of a random Raft node.
+  int getRandomHostId() const;
+
   // Create a subprocess and return its pid
   // (or -1 on failure).
   // - path: file path to executable
@@ -85,6 +88,12 @@ public:
   // Should contain an implementation that shuts down a RAFT cluster of the
   // argument size currently running.
   virtual void stopCluster() = 0;
+
+  // Get address of host given node index
+  virtual std::string getHost(int nodeId) = 0;
+
+  // Get address:port of host given node index
+  virtual std::string getHostPort(int nodeId) = 0;
 };
 
 /*

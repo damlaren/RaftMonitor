@@ -68,6 +68,11 @@ int RaftClusterConfig::lastNodeId() const
   return numNodes;
 }
 
+int RaftClusterConfig::getRandomHostId() const
+{
+  return (rand() % numNodes) + 1;
+}
+
 pid_t RaftClusterConfig::createProcess(const char* path, char* const args[])
 {
   pid_t pid = fork();

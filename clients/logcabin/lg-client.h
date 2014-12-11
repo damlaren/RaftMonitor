@@ -18,11 +18,9 @@ public:
 
   virtual void stopCluster();
 
-  // Get address of host given node index
-  std::string getHost(int nodeNumber);
+  virtual std::string getHost(int nodeId);
 
-  // Get address:port of host given node index
-  std::string getHostPort(int nodeNumber, int port);
+  virtual std::string getHostPort(int nodeId);
 
   // Launch node with given ID using configuration file (<X>.conf)
   bool launchNode(const char* confFile, int id);

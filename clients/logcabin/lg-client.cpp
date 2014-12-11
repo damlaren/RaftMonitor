@@ -18,9 +18,9 @@ std::string LogCabinRaftClusterConfig::getHost(int nodeNumber)
   return std::string("192.168.2.") + std::to_string(nodeNumber);
 }
 
-std::string LogCabinRaftClusterConfig::getHostPort(int nodeNumber, int port)
+std::string LogCabinRaftClusterConfig::getHostPort(int nodeNumber)
 {
-  return std::string("192.168.2.") + std::to_string(nodeNumber) + std::string(":") + std::to_string(port);
+  return std::string("192.168.2.") + std::to_string(nodeNumber) + std::string(":") + std::to_string(clusterPort);
 }
 
 bool LogCabinRaftClusterConfig::writeConfFile(const std::string& confFile, const std::string& storageDir)
@@ -43,7 +43,7 @@ bool LogCabinRaftClusterConfig::writeConfFile(const std::string& confFile, const
       ofs << ";";
     }
     first = false;
-    ofs << getHostPort(id, clusterPort);
+    ofs << getHostPort(id);
   }
   ofs << std::endl;
 
@@ -92,7 +92,7 @@ void LogCabinRaftClusterConfig::launchCluster(int nNodes, int port)
   std::string cmdStr = RaftEnv::rootDir + std::string("/logcabin/build/Examples/Reconfigure");
   for (int id = firstNodeId(); id <= lastNodeId(); id++)
   {
-    cmdStr += std::string(" ") + getHostPort(id, clusterPort);
+    cmdStr += std::string(" ") + getHostPort(id);
   }
   std::cout << "executing: " << cmdStr << std::endl;
   system(cmdStr.c_str());
