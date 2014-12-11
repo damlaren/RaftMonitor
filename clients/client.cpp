@@ -93,8 +93,6 @@ pid_t RaftClusterConfig::createProcess(const char* path, char* const args[])
 
 bool RaftClusterConfig::stopProcess(pid_t pid)
 {
-  //TODO: this should be done in a separate thread
-  //for timing reasons.
   if (kill(pid, SIGKILL) == -1)
   {
     perror("stopProcess failed");

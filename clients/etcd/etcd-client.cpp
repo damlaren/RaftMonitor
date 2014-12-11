@@ -1,5 +1,11 @@
+#include "../env.h"
 #include "etcd-client.h"
 #include <cstdio>
+#include <iostream>
+
+std::string getRequestURL(std::string path, std::string leaderUrl) {
+  return std::string(leaderUrl + "/v2" + path);
+}
 
 EtcdClusterConfig::EtcdClusterConfig(std::string path) {
   etcdPath = path;
@@ -14,13 +20,13 @@ std::string EtcdClusterConfig::getPublicPort(int nodeNumber, int port) {
 }
 
 std::string EtcdClusterConfig::getAddress() {
-  return "192.168.2.1";
+  return "192.168.2.1"; // TODO?
 }
 
 std::string EtcdClusterConfig::getPeerString(int numNodes, int thisNode, int port) {
   std::string peerStr = std::string("");
   bool first = true;
-  for (int i = 1; i <= numNodes) {
+  for (int i = 1; i <= numNodes; i++) {
     if (i != thisNode) {
       if (!first) {
 	peerStr += ";";
@@ -33,7 +39,7 @@ std::string EtcdClusterConfig::getPeerString(int numNodes, int thisNode, int por
   return peerStr;
 }
 
-void EtcdClusterConfig::launchNode(int numNodes, int nodeNum, std::string dataPathRoot) {
+bool EtcdClusterConfig::launchNode(int nodeNum) {
 
   char* progCopy = copyStr(etcdPath.c_str());
   char* peerAddr = copyStr((getAddress() + getPeerPort(nodeNum, clusterPort)).c_str());
@@ -60,12 +66,13 @@ void EtcdClusterConfig::launchNode(int numNodes, int nodeNum, std::string dataPa
   return true;
 }
 
-void EtcdClusterConfig::launchCluster(int numNodes, int port) {
+void EtcdClusterConfig::launchCluster(int nNodes, int port) {
   id2pid.clear();
 
   clusterPort = port; 
+  numNodes = nNodes;
 
-  std::string dataPathRoot = RaftEnv::rootDir + std::string("/teststorage");
+  dataPathRoot = RaftEnv::rootDir + std::string("/teststorage");
 
   char* progCopy = copyStr(etcdPath.c_str());
   char* peerAddr = copyStr((getAddress() + getPeerPort(1, port)).c_str());
@@ -73,6 +80,7 @@ void EtcdClusterConfig::launchCluster(int numNodes, int port) {
   char* dataDir = copyStr((dataPathRoot + std::string("/machine1")).c_str());
 
   char* const args[] = { progCopy, "-peer-addr", peerAddr, "-addr", pubAddr, "-data-dir", dataDir };
+
   // Start node 1
   pid_t pid = createProcess(etcdPath.c_str(), args);
 
@@ -89,14 +97,14 @@ void EtcdClusterConfig::launchCluster(int numNodes, int port) {
   id2pid[1] = pid;
 
   for (int i = 2; i <= numNodes; i++) {
-    if (!launchNode(i, dataPathRoot)) {
+    if (!launchNode(i)) {
       std::cerr << "Error: failed to launch cluster; exiting" << std::endl;
       exit(1);
     }
   }
 }
 
-void EtcdClusterConfig::killNode(int nodeNum) {
+bool EtcdClusterConfig::killNode(int nodeNum) {
   if (id2pid.find(nodeNum) == id2pid.end()) {
     return false;
   }
@@ -117,10 +125,6 @@ EtcdRaftClient::EtcdRaftClient(EtcdClusterConfig* configPtr, int id) : RaftClien
   clusterConfig = configPtr;
 }
 
-std::string EtcdRaftCLient::getRequestURL(std::string path, std::string leaderUrl) {
-  return std::string(leaderUrl + "/v2" + path);
-}
-
 /* Extract the first 'value' shown in the given output. */
 std::string extractFirstValue(const std::string& output) {
   size_t loc = output.find("value");
@@ -137,7 +141,7 @@ bool EtcdRaftClient::writeFile(const std::string& path, const std::string& conte
   auto pipe = popen((std::string("curl -L ") + getRequestURL(path, cur_leader) + std::string(" -XPUT -d value=") + contents).c_str(), "r");
   char line[512];
   std::string res;
-  atypeGood = false;
+  bool atypeGood = false;
   while (fgets(line, 512, pipe)) {
     std::string ln = std::string(line);
     res += ln;
@@ -168,7 +172,7 @@ std::string EtcdRaftClient::readFile(const std::string& path) {
   auto pipe = popen((std::string("curl -L ") + getRequestURL(path, cur_leader)).c_str(), "r");
    char line[512];
   std::string res;
-  atypeGood = false;
+  bool atypeGood = false;
   while (fgets(line, 512, pipe)) {
     std::string ln = std::string(line);
     res += ln;
@@ -193,7 +197,7 @@ std::string EtcdRaftClient::readFile(const std::string& path) {
   return std::string("");
 }
 
-EtcdRaftClient::connectToCluster(const std::string& hosts) {
+bool EtcdRaftClient::connectToCluster(const std::string& hosts) {
   /* Do nothing. */
 }
 

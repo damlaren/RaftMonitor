@@ -82,7 +82,9 @@ void LogCabinRaftClusterConfig::launchCluster(int nNodes, int port)
   // Do bootstrap, in case it hasn't been done before.
   executeCommand((RaftEnv::rootDir + std::string("/logcabin/build/LogCabin --bootstrap --id 1 --config ") + confFile).c_str());
 
-  // start individual Raft nodes
+  // Start individual Raft nodes.
+  // TODO: hmm... wait, we don't need to start the
+  // first one again...
   for (int id = firstNodeId(); id <= lastNodeId(); id++)
   {
     if (!launchNode(id))

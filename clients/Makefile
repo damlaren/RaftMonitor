@@ -1,4 +1,4 @@
-SUBDIRS = logcabin
+SUBDIRS = logcabin etcd
 
 .PHONY: subdirs $(SUBDIRS)
 
