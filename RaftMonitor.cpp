@@ -51,10 +51,11 @@ RaftMonitor::RaftMonitor(string impl, int numhosts, string iface) {
             counts.push_back(0);
         }**/
     }
+    currentLeader = 1; // TODO: assumed
 }
 
 RaftMonitor::RaftMonitor() {
-    
+  currentLeader = 1; // TODO: assumed
 }
 
 
@@ -67,7 +68,6 @@ RaftMonitor::~RaftMonitor() {
  * get the number of the last field
  */
 int getLastIP(string ip) {
-  assert(false); // never called
     char * str = strdup(ip.c_str());
     char * pch;
     pch = strtok(str,".");
@@ -92,6 +92,11 @@ int RaftMonitor::getPortNum(int port) {
     }
     
     return pos;
+}
+
+int RaftMonitor::getCurrentLeader()
+{
+  return currentLeader;
 }
 
 void RaftMonitor::sendPacket(RawLayer* data, IP* ip, TCP* tcp) {
@@ -172,6 +177,22 @@ void RaftMonitor::callback(Packet* sniff_packet, void* user) {
                 break;
         default:
                 action = "Session Reply";
+    }
+
+    // Reads come from the leader (or are supposed to).
+    // This is a quick and dirty, but not perfect,
+    // way of identifying a leader.
+    if (type == READ_ONLY_TREE ||
+	type == READ_WRITE_TREE)
+    {
+      std::string ipStr(ip->GetSourceIP());
+      int nodeId = getLastIP(ipStr);
+      if (nodeId != rm.currentLeader)
+      {
+	rm.currentLeader = nodeId;
+	std::cout << "RM: new leader = "
+		  << rm.currentLeader << std::endl;
+      }
     }
  
     //update counts

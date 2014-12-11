@@ -18,6 +18,9 @@ class RaftMonitor {
         void sendPacket(RawLayer*, IP*, TCP*);
         static void callback(Packet*, void*);
         int getPortNum(int);
+	
+	int getCurrentLeader();
+
         RaftMonitor(std::string, int, std::string iface="lo");
         RaftMonitor();
 	virtual ~RaftMonitor();
@@ -34,6 +37,8 @@ class RaftMonitor {
         bool run_test; //are we currently running a test?
 	bool alive; //time to shut down?
 	Sniffer* sniff; // crafter Sniffer
+
+	int currentLeader; // id of last known leader node
         
     private:  
         int getIndex(std::string);
