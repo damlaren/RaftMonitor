@@ -181,8 +181,16 @@ void RaftMonitor::callback(Packet* sniff_packet, void* user) {
     int src_num = rm.getPortNum(tcp->GetSrcPort());
     int dest_num = rm.getPortNum(tcp->GetDstPort());
     int index = (rm.num_hosts*(src_num))+(dest_num);
-    //assert(index >= 0 && index < rm.counts.size());
-    rm.counts[index]++;
+    if(!(index >= 0 && index < rm.counts.size())) {
+      //std::cout << "index = " << index << std::endl
+      //	<< "src_num=" << src_num << std::endl
+      //	<< "dest_num=" << dest_num << std::endl
+      //	<< "|rm|=" << rm.counts.size() << std::endl;
+    }
+    else
+    {
+      rm.counts[index]++;
+    }
     
     if (action.compare("Append/Heartbeat") != 0 && action.compare("Reply") != 0) {
  
