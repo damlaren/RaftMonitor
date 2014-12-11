@@ -10,9 +10,13 @@ public:
   // Map node ID (1, 2, ...) to process pid.
   std::map<int, pid_t> id2pid;
 
+  // Write configuration file (logcabin.conf) for nodes.
+  bool writeConfFile(const std::string& confFile,
+		     const std::string& storageDir);
+
   virtual void launchCluster(int numNodes, int port);
 
-  virtual void stopCluster(int numNodes);
+  virtual void stopCluster();
 
   // Get address of host given node index
   std::string getHost(int nodeNumber);

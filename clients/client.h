@@ -49,11 +49,20 @@ class RaftClusterConfig
 public:
   // Should be set by an implementing client to the
   // port number used for sending RAFT messages by the
-  // cluster's nodes
+  // cluster's nodes.
   int clusterPort;
+
+  // Number of nodes in this cluster.
+  int numNodes;
 
   // Oops. I actually did forget this time.
   virtual ~RaftClusterConfig(){};
+
+  // Return id of first Raft node, consistently.
+  int firstNodeId() const;
+
+  // Return id of last Raft node, consistently.
+  int lastNodeId() const;
 
   // Create a subprocess and return its pid
   // (or -1 on failure).
@@ -71,11 +80,11 @@ public:
   // placing nodes on loopback interfaces
   // 192.168.2.{1,2,3...} for however many nodes
   // are requested, listening on passed port.
-  virtual void launchCluster(int numNodes, int port) = 0;
+  virtual void launchCluster(int nNodes, int port) = 0;
 
   // Should contain an implementation that shuts down a RAFT cluster of the
   // argument size currently running.
-  virtual void stopCluster(int numNodes) = 0;
+  virtual void stopCluster() = 0;
 };
 
 /*
@@ -94,6 +103,9 @@ class RaftClient
 
   // Thread on which this client runs operations.
   pthread_t thread;
+
+  // Whether to keep running.
+  bool alive;
 
   // Assign ID to this client.
   RaftClient(int id);
@@ -140,12 +152,12 @@ class RaftClient
  * Arguments for spawning a separate client thread
  * to do operations on the Raft implementation.
  */
-typedef struct ClientOperations
+typedef struct
 {
   RaftClient *client; // Which client to run ops on
   int nIterations; // # of times to do the operation
   int nClients; // total # of clients running
-};
+} ClientOperations;
 
 // Function to start an independent client.
 // <arg> refers to a ClientOperations.
