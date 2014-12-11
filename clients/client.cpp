@@ -107,18 +107,18 @@ RaftClient::RaftClient(int id) :
   clientId(id)
 {
   assert(id >= 1);
-  alive = true;
 }
 
 void RaftClient::runTestOperations(int nIterations, int nClients)
 {
-  //for (int i = 0; i < nIterations; i++)
   int i = 0;
+  alive = true;
   while (alive)
   {
     std::string testfile = std::string("/testfile") + std::to_string(clientId + i * nClients);
+    std::string value = std::to_string(nIterations);
 
-    if (!writeFile(testfile, "testvalue"))
+    if (!writeFile(testfile, value))
     {
       std::cerr << "Write failed: " << testfile << std::endl;
     }
@@ -128,7 +128,7 @@ void RaftClient::runTestOperations(int nIterations, int nClients)
     }
 
     // TODO: can check later if read succeeded
-    if (readFile(testfile) != "testvalue")
+    if (readFile(testfile) != value)
     {
       std::cerr << "Read failed: " << testfile << std::endl;
     }
