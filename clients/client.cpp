@@ -103,6 +103,7 @@ RaftClient::RaftClient(int id) :
   clientId(id)
 {
   assert(id >= 1);
+  alive = true;
 }
 
 void RaftClient::runTestOperations(int nIterations, int nClients)

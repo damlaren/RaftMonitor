@@ -248,80 +248,96 @@ int main(const int argc, const char *argv[])
     eatTestArguments(argc, argv, argi, testName);
     cout << "testdriver: running test " << testName << endl;
 
-    // TODO: partition parms, depending on the test.
-    if (prm->startTest(testName, 0, 0, "TODO") == -1)
+    // Run test for requested number of iterations.
+    for (int iter = 0; iter < testArgs.iterations; iter++)
     {
-      cout << "error: rm->startTest failed" << endl;
-    }
-
-    // Create cluster configuration.
-    clusterConfig = createClusterConfig();
-    assert(clusterConfig != nullptr);
-
-    // Launch the cluster.
-    clusterConfig->launchCluster(nNodes, 61023);
-    cout << "testdriver: started cluster" << endl;
-    sleep(1);
-
-    // Create at least one client.
-    createClients(nClients);
-    cout << "testdriver: created clients" << endl;
-
-    // Connect clients to cluster.
-    // TODO: cluster hostname is hardcoded
-    for (RaftClient* client : clients)
-    {
-      string host = string("logcabin:") +
-	to_string(clusterConfig->clusterPort);
-      client->connectToCluster(host);
-    }
-    cout << "testdriver: connected" << endl;
-    sleep(1);
-
-    // Start the test by having clients run commands.
-    for (RaftClient* client : clients)
-    {
-      ClientOperations *opsInfo = new ClientOperations;
-      opsInfo->client = client;
-      opsInfo->nIterations = 5;
-      opsInfo->nClients = clients.size();
-
-      // Start a new thread for this client.
-      if (pthread_create(&client->thread, nullptr,
-			 runClient, opsInfo) != 0)
+      // TODO: partition parms, depending on the test.
+      if (prm->startTest(testName, 0, 0, "TODO") == -1)
       {
-	cout << "error: couldn't create client thread" << endl;
-	exit(1);
+	cout << "error: rm->startTest failed" << endl;
       }
+
+      // Create cluster configuration.
+      clusterConfig = createClusterConfig();
+      assert(clusterConfig != nullptr);
+
+      // Launch the cluster.
+      clusterConfig->launchCluster(nNodes, 61023);
+      cout << "testdriver: started cluster" << endl;
+      sleep(1);
+
+      // Create at least one client.
+      createClients(nClients);
+      cout << "testdriver: created clients" << endl;
+
+      // Connect clients to cluster.
+      // TODO: cluster hostname is hardcoded
+      for (RaftClient* client : clients)
+      {
+	string host = string("logcabin:") +
+	  to_string(clusterConfig->clusterPort);
+	client->connectToCluster(host);
+      }
+      cout << "testdriver: connected" << endl;
+      sleep(1);
+
+      // Start the test by having clients run commands.
+      for (RaftClient* client : clients)
+      {
+	ClientOperations *opsInfo = new ClientOperations;
+	opsInfo->client = client;
+	opsInfo->nIterations = 5;
+	opsInfo->nClients = clients.size();
+
+	// Start a new thread for this client.
+	if (pthread_create(&client->thread, nullptr,
+			   runClient, opsInfo) != 0)
+	{
+	  cout << "error: couldn't create client thread" << endl;
+	  exit(1);
+	}
+      }
+
+      // On to the next one. Clients will keep
+      // blasting packets at the cluster.
+      sleep(testArgs.time);
+
+      // Stop the clients.
+      for (RaftClient* client : clients)
+      {
+	client->alive = false;
+      }
+
+      // Wait until all clients are finished.
+      for (RaftClient* client : clients)
+      {
+	pthread_join(client->thread, nullptr);
+      }
+
+      sleep(1);
+
+      // The test is done; stop the RM.
+      // TODO: partition parms, depending on the test.
+      if (prm->stopTest(testName, 0, 0, "TODO") == -1)
+      {
+	cout << "error: rm->startTest failed" << endl;
+      }
+
+      // Destroy clients
+      cout << "testdriver: destroying clients" << endl;
+      for (RaftClient* client : clients)
+      {
+	client->destroyClient();
+	delete client;
+      }
+
+      // Stop the cluster
+      cout << "testdriver: stopping cluster" << endl;
+      clusterConfig->stopCluster();
+      delete clusterConfig;
+
+      cout << "testdriver: iteration " << iter << " complete" << endl;
     }
-
-    // Wait until all clients are finished.
-    for (RaftClient* client : clients)
-    {
-      pthread_join(client->thread, nullptr);
-    }
-
-    sleep(1);
-
-    // The test is done; stop the RM.
-    // TODO: partition parms, depending on the test.
-    if (prm->stopTest(testName, 0, 0, "TODO") == -1)
-    {
-      cout << "error: rm->startTest failed" << endl;
-    }
-
-    // Destroy clients
-    cout << "testdriver: destroying clients" << endl;
-    for (RaftClient* client : clients)
-    {
-      client->destroyClient();
-      delete client;
-    }
-
-    // Stop the cluster
-    cout << "testdriver: stopping cluster" << endl;
-    clusterConfig->stopCluster();
-    delete clusterConfig;
 
     cout << "testdriver: test complete!" << endl;
   }

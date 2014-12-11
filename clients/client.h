@@ -104,6 +104,9 @@ class RaftClient
   // Thread on which this client runs operations.
   pthread_t thread;
 
+  // Whether to keep running.
+  bool alive;
+
   // Assign ID to this client.
   RaftClient(int id);
 
