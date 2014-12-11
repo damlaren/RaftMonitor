@@ -46,10 +46,10 @@ RaftMonitor::RaftMonitor(string impl, int numhosts, string iface) {
     run_test = false;
     for (int i = 0; i < numhosts; i++) {
         ips.push_back("192.168.2." + to_string(i+1));
-        for (int j = 0; j < numhosts; j++) {
+        /*for (int j = 0; j < numhosts; j++) {
             counts.push_back(0);
             counts.push_back(0);
-        }
+        }**/
     }
 }
 
@@ -178,19 +178,20 @@ void RaftMonitor::callback(Packet* sniff_packet, void* user) {
     //for if IPs ever worked as intended...
     //int src_num = getLastIP(ip->GetSourceIP());
     //int dest_num = getLastIP(ip->GetDestinationIP());
-    int src_num = rm.getPortNum(tcp->GetSrcPort());
-    int dest_num = rm.getPortNum(tcp->GetDstPort());
-    int index = (rm.num_hosts*(src_num))+(dest_num);
-    if(!(index >= 0 && index < rm.counts.size())) {
+    //int src_num = rm.getPortNum(tcp->GetSrcPort());
+    //int dest_num = rm.getPortNum(tcp->GetDstPort());
+    //int index = (rm.num_hosts*(src_num))+(dest_num);
+    //if(!(index >= 0 && index < rm.counts.size())) {
       //std::cout << "index = " << index << std::endl
       //	<< "src_num=" << src_num << std::endl
       //	<< "dest_num=" << dest_num << std::endl
       //	<< "|rm|=" << rm.counts.size() << std::endl;
-    }
-    else
-    {
-      rm.counts[index]++;
-    }
+    //}
+    //else
+    //{
+      //rm.counts[index]++;
+    //}
+    rm.counts[std::make_pair(tcp->GetSrcPort(),tcp->GetDstPort())]+=1;
     
     if (action.compare("Append/Heartbeat") != 0 && action.compare("Reply") != 0
             && action.compare("Session Reply") != 0) {
@@ -218,6 +219,7 @@ string RaftMonitor::getTime() {
         std::string str(buffer);
         return str;
 }
+
 /*
  * This function indicates the beginning of a Raft test. 
  * fraction is the amount of packets to drop from source
@@ -237,7 +239,7 @@ int RaftMonitor::startTest(string testname, int partition, float fraction, strin
         //get starting time
         string str = getTime();
         out_file << "+----------------------------------------------+\n";
-        out_file << "Beginning test " + testname + " at time " + str;
+        out_file << "Beginning test " + testname + " at time " + str + "\n";
         return 0;
     }
     else {
@@ -255,23 +257,30 @@ int RaftMonitor::stopTest(string testname, int partition, float fraction, string
     }
     run_test = false;
     //write out all counts
-    for (int i = 0; i < num_hosts; i++) {
+    /*for (int i = 0; i < num_hosts; i++) {
         for (int j = 0; j < num_hosts; j++) {
           //out_file << "Packets " + ips[i] + "->" + ips[j] + ":";
-	    out_file << "Packets " << ports[i] << "->" << ports[j] << ":";
             out_file << "Packets " + to_string(ports[i]) + "->" + to_string(ports[j]) + ":";
             out_file << to_string(counts[(num_hosts*i+j)]);
             out_file << endl;
         }
+    }*/
+    for(map<pair<int,int>, int>::const_iterator it = counts.begin();
+    it != counts.end(); ++it) {
+        out_file << "Packets " + to_string(it->first.first) + "->" + to_string(it->first.second) + ":";
+        out_file << to_string(it->second);
+        out_file << endl;
     }
+
     out_file << "Elections: " << to_string(num_elections) << endl;
     //get ending time, write, and close
     string str = getTime();
-    out_file << "Ending test " + testname + " at time " + str;
+    out_file << "Ending test " + testname + " at time " + str + "\n";
     out_file << "+----------------------------------------------+\n";
     out_file.close();
     //reset the packet counts
-    fill(counts.begin(),counts.end(),0); 
+    //fill(counts.begin(),counts.end(),0); 
+    counts.clear();
     return 0;
 }
 
