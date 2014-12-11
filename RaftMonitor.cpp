@@ -86,8 +86,8 @@ int RaftMonitor::getPortNum(int port) {
         }
     }
     if (pos == -1) {
-        prm->ports.push_back(port);
-        pos = prm->ports.size()-1;
+        rm.ports.push_back(port);
+        pos = rm.ports.size()-1;
     }
     
     return pos;
