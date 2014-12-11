@@ -94,8 +94,10 @@ void help()
        << "\titerations: # of iterations of test to run." << endl
        << "\ttime: how long to run a test (seconds)" << endl
        << "\ttest args: Any test-specific args, required as follows:" << endl
-       << "\t\tblock: TODO" << endl
-       << "\t\tkill: TODO" << endl;
+       << "\t\tblock: <frac>" << endl
+       << "\t\t\tfrac: What fraction of packets to drop from nodes." << endl
+       << "\t\tkill: <count>" << endl
+       << "\t\t\tcount: How many nodes to kill." << endl;
   exit(0);
 }
 
@@ -148,9 +150,11 @@ void eatTestArguments(const int argc, const char* argv[],
   switch (testType)
   {
   case TestType::BLOCK:
+    assert(argi < argc);
     testArgs.block.frac = stof(argv[argi++]);
     break;
   case TestType::KILL:
+    assert(argi < argc);
     testArgs.kill.killCount = stoi(argv[argi++]);
     break;
   default: // Fall through.
