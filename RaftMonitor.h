@@ -17,6 +17,7 @@ class RaftMonitor {
         int stopTest(std::string, int, float, std::string);
         void sendPacket(RawLayer*, IP*, TCP*);
         static void callback(Packet*, void*);
+        int getPortNum(int);
         RaftMonitor(std::string, int, std::string iface="lo");
         RaftMonitor();
 	virtual ~RaftMonitor();
