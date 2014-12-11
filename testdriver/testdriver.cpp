@@ -280,21 +280,17 @@ int main(const int argc, const char *argv[])
     for (int iter = 0; iter < testArgs.iterations; iter++)
     {
       // Set parameters depending on the test.
-      // For BLOCK, pick a random node to block.
+      // For BLOCK or KILL, pick a 'marked' node to
+      // tamper with.
       int partition = 0;
       float frac = 0;
-      int blockNode = clusterConfig->getRandomNodeId();
+      int markedNode = clusterConfig->getRandomNodeId();
       string blockSource = "";
       if (testArgs.type == TestType::BLOCK)
       {
 	partition = 1;
 	frac = testArgs.block.frac;
-	blockSource = clusterConfig->getHost(blockNode);
-      }
-      // For KILL, pick a random node to kill. (TODO: or more).
-      else if (testArgs.type == TestType::KILL)
-      {
-	// TODO: take down a node
+	blockSource = clusterConfig->getHost(markedNode);
       }
 
       if (prm->startTest(testName, partition, frac,
@@ -320,14 +316,20 @@ int main(const int argc, const char *argv[])
 	}
       }
 
-      // Clients will keep blasting packets.
+      // Clients blast packets the whole time.
       sleep(testArgs.time);
 
+      // Kill test! Let the clients spawn first.
       if (testArgs.type == TestType::KILL)
       {
-	// TODO: bring back the node
+	// Now kill a node, wait, and bring it back.
+	cout << "testdriver: killing node " << markedNode << endl;
+	clusterConfig->killNode(markedNode);
+	sleep(testArgs.time);
 
-	sleep(1); // allow some time to do election, etc
+	cout << "testdriver: relaunching node " << markedNode << endl;
+	clusterConfig->launchNode(markedNode);
+	sleep(testArgs.time); // allow some time to do election, etc
       }
 
       // The test is done; stop the RM.
@@ -379,9 +381,6 @@ int main(const int argc, const char *argv[])
   delete prm->sniff;
 
   cout << "testdriver: exiting" << endl;
-
-  // TODO: something is getting corrupted when I
-  // only run with 2 clients?
 
   return 0;
 }
