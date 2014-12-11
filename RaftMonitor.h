@@ -5,7 +5,12 @@
 using namespace Crafter;
 
 class RaftMonitor {
+    private:
+        static RaftMonitor rm;
+
     public:
+	static RaftMonitor* getRaftMonitor();
+
         void start_block(const std::string&, float);
         void clear_block(const std::string&, float);
         int startTest(std::string, int, float, std::string);
@@ -33,4 +38,3 @@ class RaftMonitor {
 };
 
 int startRaft(std::string, int, std::string iface = "lo");
-RaftMonitor rm;

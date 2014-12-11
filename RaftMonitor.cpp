@@ -22,6 +22,13 @@ ofstream out_file;
 
 int out_port = 61023;
 
+RaftMonitor RaftMonitor::rm;
+
+RaftMonitor* RaftMonitor::getRaftMonitor()
+{
+  return &rm;
+}
+
 template <typename T>
 std::string to_string(T value)
 {
@@ -217,8 +224,10 @@ void RaftMonitor::clear_block(const string& src_ip, float fraction) {
  
 int startRaft(string impl, int numhosts, string iface) {
 
-        rm = RaftMonitor(impl, numhosts, iface);
-        Sniffer sniff("tcp", rm.interface, rm.callback);
+        RaftMonitor* prm = RaftMonitor::getRaftMonitor();
+	*prm = RaftMonitor(impl, numhosts, iface);
+        Sniffer sniff("tcp", prm->interface,
+		      prm->callback);
         //sniffer loop
         //sniff.Spawn(-1); //spawns sniffer in a new thread
         sniff.Capture(-1);
@@ -232,8 +241,3 @@ int startRaft(string impl, int numhosts, string iface) {
         return 0;
 
 }
-
-int main() {
-    startRaft("ongaro", 3);
-}
-
