@@ -211,8 +211,15 @@ std::string EtcdRaftClient::readFile(const std::string& path) {
 
 bool EtcdRaftClient::connectToCluster(const std::string& hosts) {
   /* Do nothing. */
+  return true; // Except that.
 }
 
+bool EtcdRaftClient::createClient(RaftClusterConfig *config)
+{
+  clusterConfig = static_cast<EtcdClusterConfig*>(config);
+  return true;
+}
 
-
-
+void EtcdRaftClient::destroyClient()
+{
+}
