@@ -150,7 +150,9 @@ std::string extractFirstValue(const std::string& output) {
 }
 
 bool EtcdRaftClient::writeFile(const std::string& path, const std::string& contents) {
-  auto pipe = popen((std::string("curl -L ") + getRequestURL(path, cur_leader) + std::string(" -XPUT -d value=") + contents).c_str(), "r");
+  std::string cmd = std::string("curl -L ") + getRequestURL(path, cur_leader) + std::string(" -XPUT -d value=") + contents;
+  std::cout << "writing: " << cmd << std::endl;
+  auto pipe = popen(cmd.c_str(), "r");
   char line[512];
   std::string res;
   bool atypeGood = false;
@@ -181,8 +183,10 @@ bool EtcdRaftClient::writeFile(const std::string& path, const std::string& conte
 }
 
 std::string EtcdRaftClient::readFile(const std::string& path) {
-  auto pipe = popen((std::string("curl -L ") + getRequestURL(path, cur_leader)).c_str(), "r");
-   char line[512];
+  std::string cmd = std::string("curl -L ") + getRequestURL(path, cur_leader);
+  std::cout << "reading: " << cmd << std::endl;
+  auto pipe = popen(cmd.c_str(), "r");
+  char line[512];
   std::string res;
   bool atypeGood = false;
   while (fgets(line, 512, pipe)) {
