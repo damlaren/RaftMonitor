@@ -4,6 +4,7 @@
  */
 
 #include "../clients/logcabin/lg-client.h"
+#include "../clients/etcd/etcd-client.h"
 #include "../RaftMonitor.h"
 #include <assert.h>
 #include <iostream>
@@ -15,7 +16,8 @@ using namespace std;
 enum class RaftImplementation
 {
   UNKNOWN,
-  LOGCABIN
+  LOGCABIN,
+  ETCD  
 };
 RaftImplementation raftImpl = RaftImplementation::UNKNOWN;
 
@@ -95,7 +97,7 @@ void help()
 {
   cout << "From the project root directory: " << endl
        << "sudo ./testdriver/testdriver <impl> <nNodes> <nClients> <testname> <iterations> <time> [test args] ..." << endl
-       << "\timpl: Raft implementation to use. Values={logcabin}." << endl
+       << "\timpl: Raft implementation to use. Values={logcabin,etcd}." << endl
        << "\tnNodes: Number of Raft nodes." << endl
        << "\tnClients: Number of clients to start." << endl
        << "\ttestname: Names of test to run. Values={basic,block,kill}." << endl
@@ -116,6 +118,10 @@ void selectImplementation(const std::string& implStr)
   if (implStr == "logcabin")
   {
     raftImpl = RaftImplementation::LOGCABIN;
+  }
+  else if (implStr == "etcd")
+  {
+    raftImpl = RaftImplementation::ETCD;
   }
 
   if (raftImpl == RaftImplementation::UNKNOWN)
@@ -199,6 +205,8 @@ RaftClusterConfig* createClusterConfig()
   {
   case RaftImplementation::LOGCABIN:
     return new LogCabinRaftClusterConfig();
+  case RaftImplementation::ETCD:
+    return new EtcdClusterConfig();
   default:
     help();
   }
@@ -215,6 +223,9 @@ void createClients(int nClients)
     {
     case RaftImplementation::LOGCABIN:
       newClient = new LogCabinRaftClient(id);
+      break;
+    case RaftImplementation::ETCD:
+      newClient = new EtcdRaftClient(id);
       break;
     default:
       help();

@@ -14,13 +14,13 @@ class EtcdClusterConfig : public RaftClusterConfig {
 
   // --- functions ---
 
-  void launchCluster(int numNodes, int port);
+  virtual void launchCluster(int numNodes, int port);
 
-  void stopCluster(int numNodes);
+  virtual void stopCluster();
   
   std::string getAddress();
   
-  EtcdClusterConfig(std::string etcdpath);
+  EtcdClusterConfig();
 
   std::string getPeerPort(int nodeNumber, int port);
   std::string getPublicPort(int nodeNumber, int port);
@@ -38,13 +38,13 @@ class EtcdClusterConfig : public RaftClusterConfig {
 
 class EtcdRaftClient : public RaftClient {
  public:
+  EtcdRaftClient(int id);
   bool createClient(RaftClusterConfig *config);
   void destroyClient();
   bool connectToCluster(const std::string& hosts);
   bool writeFile(const std::string& path,
 		 const std::string& contents);
   std::string readFile(const std::string& path);
-  EtcdRaftClient(EtcdClusterConfig* conf, int id);
   EtcdClusterConfig* clusterConfig;
   std::string cur_leader;
 };
