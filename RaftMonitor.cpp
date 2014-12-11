@@ -77,6 +77,20 @@ int getLastIP(string ip) {
     return atoi(res);
 }
 
+int getPortNum(int port) {
+    int pos = -1;
+    for (int i = 0; i < rm.ports.size(); i++) {
+        if (rm.ports[i] == port) {
+            pos = rm.ports[i];
+        }
+    }
+    if (pos == -1) {
+        rm.ports.push_back(port);
+        pos = rm.ports.size()-1;
+    }
+    return pos;
+}
+
 int RaftMonitor::getIndex(string ip) {
     int pos = -1;
     for (int i = 0; i < num_hosts; i++) {
@@ -162,17 +176,23 @@ void RaftMonitor::callback(Packet* sniff_packet, void* user) {
                 action = "Session Reply";
     }
  
+    //update counts
+    //for if IPs ever worked as intended...
+    //int src_num = getLastIP(ip->GetSourceIP());
+    //int dest_num = getLastIP(ip->GetDestinationIP());
+    int src_num = getPortNum(tcp->GetSrcPort());
+    int dest_num = getPortNum(tcp->GetDstPort());
+    rm.counts[(rm.num_hosts*(src_num-1))+(dest_num-1)]++;
+    
+    if (action.compare("Append/Heartbeat") != 0) {
+ 
     std::cout << ip->GetSourceIP() << ":" << tcp->GetSrcPort() << ": "<< action << " -> "
               << ip->GetDestinationIP() << ":" << tcp->GetDstPort()  << std::endl;
-    
-    //update counts
-    int src_num = getLastIP(ip->GetSourceIP());
-    int dest_num = getLastIP(ip->GetDestinationIP());
-    rm.counts[(rm.num_hosts*(src_num-1))+(dest_num-1)]++;
     
     if (rm.run_test) {
         out_file << ip->GetSourceIP() << ":" << tcp->GetSrcPort() << ": "<< action << " -> "
               << ip->GetDestinationIP() << ":" << tcp->GetDstPort()  << std::endl;
+    }
     }
     
 }
@@ -228,7 +248,8 @@ int RaftMonitor::stopTest(string testname, int partition, float fraction, string
     //write out all counts
     for (int i = 0; i < num_hosts; i++) {
         for (int j = 0; j < num_hosts; j++) {
-            out_file << "Packets " + ips[i] + "->" + ips[j] + ":";
+          //out_file << "Packets " + ips[i] + "->" + ips[j] + ":";
+            out_file << "Packets " + ports[i] + "->" + ports[j] + ":";
             out_file << to_string(counts[(num_hosts*i+j)]);
             out_file << endl;
         }

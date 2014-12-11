@@ -27,6 +27,7 @@ class RaftMonitor {
         std::string logfile;
         int num_hosts;
         std::vector<int> counts; //counts of packets to and from hosts
+        std::vector<int> ports;
         std::vector<std::string> ips; //vector of node ips
         int num_elections;
         bool run_test; //are we currently running a test?
