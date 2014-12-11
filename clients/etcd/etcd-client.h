@@ -20,15 +20,24 @@ class EtcdClusterConfig : public RaftClusterConfig {
   
   std::string getPeerPort(int nodeNumber, int port);
   std::string getPublicPort(int nodeNumber, int port);
+
+  virtual std::string getHost(int nodeId);
+
+  virtual std::string getHostPort(int nodeId);
+
+  virtual bool launchNode(int id);
+
+  virtual bool killNode(int id);
 };
 
 class EtcdRaftClient : public RaftClient {
  public:
-  bool createClient();
+  bool createClient(RaftClusterConfig *config);
   bool destroyClient();
-  bool connectToCluster();
-  bool writeFile();
-  std::string readFile();
+  bool connectToCluster(const std::string& hosts);
+  bool writeFile(const std::string& path,
+		 const std::string& contents);
+  std::string readFile(const std::string& path);
   EtcdRaftClient(EtcdClusterConfig* conf, int id);
   EtcdClusterConfig* clusterConfig;
   std::string cur_leader;
