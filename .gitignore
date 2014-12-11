@@ -4,6 +4,9 @@ libtins/build/*
 # Ignore logcabin run data
 logcabin/smoketeststorage/*
 
+#ignore etcd run data
+etcd-v0.4.6-linux-amd64/machines/*
+
 #ignore object files
 *.o
 

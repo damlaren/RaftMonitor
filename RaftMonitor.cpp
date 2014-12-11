@@ -7,16 +7,16 @@
 #include <algorithm>
 #include <ctime>
 #include <sys/socket.h>
+
 #include "packetutils/Common.h"
 #include "packetutils/ongaro.h"
+#include "packetutils/etcd.h"
 #include "RaftMonitor.h"
 
 using namespace std;
 using namespace Crafter;
 
-int p[3] = {61024,61025,61026};
-std::vector<int> ports (&p[0], &p[0]+2);
-std::string st[3] = {"192.168.2.1","192.168.2.2","192.168.2.3"};
+std::vector<int> ports;
 
 ofstream out_file;
 
@@ -48,6 +48,7 @@ RaftMonitor::RaftMonitor(string impl, int numhosts, string iface) {
         ips.push_back("192.168.2." + to_string(i+1));
         for (int j = 0; j < numhosts; j++) {
             counts.push_back(0);
+            counts.push_back(0);
         }
     }
 }
@@ -77,27 +78,18 @@ int getLastIP(string ip) {
     return atoi(res);
 }
 
-int getPortNum(int port) {
+int RaftMonitor::getPortNum(int port) {
     int pos = -1;
     for (int i = 0; i < rm.ports.size(); i++) {
         if (rm.ports[i] == port) {
-            pos = rm.ports[i];
+            pos = i;
         }
     }
     if (pos == -1) {
         rm.ports.push_back(port);
         pos = rm.ports.size()-1;
     }
-    return pos;
-}
-
-int RaftMonitor::getIndex(string ip) {
-    int pos = -1;
-    for (int i = 0; i < num_hosts; i++) {
-        if (st[i].compare(ip) == 0) {
-            pos = i;
-        }
-    }
+    
     return pos;
 }
 
@@ -133,11 +125,16 @@ void RaftMonitor::callback(Packet* sniff_packet, void* user) {
     
     //get the packet type
     int type;
-    if (bytes.size() > 18) {
-        type = ongaroRAFT::packetType(bytes);
+    if (rm.implementation.compare("ongaro") == 0) {
+        if (bytes.size() > 18) {
+            type = ongaroRAFT::packetType(bytes);
+        }
+        else { //this is not a RAFT RPC packet
+                type = -1;
+        }
     }
-    else { //this is not a RAFT RPC packet
-        type = -1;
+    else if (rm.implementation.compare("etcd") == 0) {
+        type = etcdRAFT::packetType(bytes);
     }
 
     switch (type) { 
@@ -180,11 +177,11 @@ void RaftMonitor::callback(Packet* sniff_packet, void* user) {
     //for if IPs ever worked as intended...
     //int src_num = getLastIP(ip->GetSourceIP());
     //int dest_num = getLastIP(ip->GetDestinationIP());
-    int src_num = getPortNum(tcp->GetSrcPort());
-    int dest_num = getPortNum(tcp->GetDstPort());
+    int src_num = rm.getPortNum(tcp->GetSrcPort());
+    int dest_num = rm.getPortNum(tcp->GetDstPort());
     rm.counts[(rm.num_hosts*(src_num-1))+(dest_num-1)]++;
     
-    if (action.compare("Append/Heartbeat") != 0) {
+    if (action.compare("Append/Heartbeat") != 0 && action.compare("Reply") != 0) {
  
     std::cout << ip->GetSourceIP() << ":" << tcp->GetSrcPort() << ": "<< action << " -> "
               << ip->GetDestinationIP() << ":" << tcp->GetDstPort()  << std::endl;
@@ -249,7 +246,7 @@ int RaftMonitor::stopTest(string testname, int partition, float fraction, string
     for (int i = 0; i < num_hosts; i++) {
         for (int j = 0; j < num_hosts; j++) {
           //out_file << "Packets " + ips[i] + "->" + ips[j] + ":";
-            out_file << "Packets " + ports[i] + "->" + ports[j] + ":";
+            out_file << "Packets " + to_string(ports[i]) + "->" + to_string(ports[j]) + ":";
             out_file << to_string(counts[(num_hosts*i+j)]);
             out_file << endl;
         }
