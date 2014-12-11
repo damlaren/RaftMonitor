@@ -79,14 +79,15 @@ int getLastIP(string ip) {
 
 int getPortNum(int port) {
     int pos = -1;
-    for (int i = 0; i < rm.ports.size(); i++) {
-        if (rm.ports[i] == port) {
-            pos = rm.ports[i];
+    RaftMonitor* prm = RaftMonitor::getRaftMonitor();
+    for (int i = 0; i < prm->ports.size(); i++) {
+        if (prm->ports[i] == port) {
+            pos = prm->ports[i];
         }
     }
     if (pos == -1) {
-        rm.ports.push_back(port);
-        pos = rm.ports.size()-1;
+        prm->ports.push_back(port);
+        pos = prm->ports.size()-1;
     }
     return pos;
 }
@@ -249,7 +250,7 @@ int RaftMonitor::stopTest(string testname, int partition, float fraction, string
     for (int i = 0; i < num_hosts; i++) {
         for (int j = 0; j < num_hosts; j++) {
           //out_file << "Packets " + ips[i] + "->" + ips[j] + ":";
-            out_file << "Packets " + ports[i] + "->" + ports[j] + ":";
+	    out_file << "Packets " << ports[i] << "->" << ports[j] << ":";
             out_file << to_string(counts[(num_hosts*i+j)]);
             out_file << endl;
         }

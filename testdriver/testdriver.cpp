@@ -222,11 +222,10 @@ int main(const int argc, const char *argv[])
   int nClients = stoi(argv[3]);
 
   // Start the RaftMonitor.
-  // TODO: this makes assumptions about host IP addrs.
-  // And to assume makes something of you and me.
   rmArgs.impl = impl;
   rmArgs.numhosts = nNodes;
   rmArgs.iface = "lo";
+  cout << "testdriver: spawning RM" << endl;
   if (pthread_create(&rmThread, nullptr, spawnRaft,
 		     &rmArgs) != 0)
   {
@@ -238,6 +237,7 @@ int main(const int argc, const char *argv[])
   // TODO: This isn't perfect-- sniffer may not start
   // capturing yet. Not sure if that's a problem.
   while (!prm->alive){ sleep(1); }
+  cout << "testdriver: RM is online" << endl;
 
   // Identify and run all tests.
   // Reinitialize the cluster AND the file system
