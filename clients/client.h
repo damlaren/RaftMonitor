@@ -94,6 +94,12 @@ public:
 
   // Get address:port of host given node index
   virtual std::string getHostPort(int nodeId) = 0;
+
+  // Launch node with given ID.
+  virtual bool launchNode(int id) = 0;
+
+  // Kill node with given ID
+  virtual bool killNode(int id) = 0;
 };
 
 /*

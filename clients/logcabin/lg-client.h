@@ -10,9 +10,11 @@ public:
   // Map node ID (1, 2, ...) to process pid.
   std::map<int, pid_t> id2pid;
 
+  // Location of configuration file.
+  std::string confFile;
+
   // Write configuration file (logcabin.conf) for nodes.
-  bool writeConfFile(const std::string& confFile,
-		     const std::string& storageDir);
+  bool writeConfFile(const std::string& storageDir);
 
   virtual void launchCluster(int numNodes, int port);
 
@@ -22,11 +24,9 @@ public:
 
   virtual std::string getHostPort(int nodeId);
 
-  // Launch node with given ID using configuration file (<X>.conf)
-  bool launchNode(const char* confFile, int id);
+  virtual bool launchNode(int id);
 
-  // Kill node with given ID
-  bool killNode(int id);
+  virtual bool killNode(int id);
 };
 
 namespace LogCabin {

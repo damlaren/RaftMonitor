@@ -291,6 +291,11 @@ int main(const int argc, const char *argv[])
 	frac = testArgs.block.frac;
 	blockSource = clusterConfig->getHost(blockNode);
       }
+      // For KILL, pick a random node to kill. (TODO: or more).
+      else if (testArgs.type == TestType::KILL)
+      {
+	// TODO: take down a node
+      }
 
       if (prm->startTest(testName, partition, frac,
 			 blockSource) == -1)
@@ -317,6 +322,13 @@ int main(const int argc, const char *argv[])
 
       // Clients will keep blasting packets.
       sleep(testArgs.time);
+
+      if (testArgs.type == TestType::KILL)
+      {
+	// TODO: bring back the node
+
+	sleep(1); // allow some time to do election, etc
+      }
 
       // The test is done; stop the RM.
       // TODO: partition parms, depending on the test.
