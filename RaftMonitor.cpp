@@ -54,6 +54,22 @@ RaftMonitor::~RaftMonitor() {
     
 }
 
+/*
+ * Given a string with an IP address,
+ * get the number of the last field
+ */
+int getLastIP(string ip) {
+    char * str = strdup(ip.c_str());
+    char * pch;
+    pch = strtok(str,".");
+    char* res;
+    while (pch != NULL) {
+        res = pch;
+        pch = strtok (NULL, ".");
+    }
+    return atoi(res);
+}
+
 int RaftMonitor::getIndex(string ip) {
     int pos = -1;
     for (int i = 0; i < num_hosts; i++) {
@@ -103,7 +119,7 @@ void RaftMonitor::callback(Packet* sniff_packet, void* user) {
         type = -1;
     }
 
-    switch (type) { //opcodes are defined in Client.proto and Raft.proto
+    switch (type) { 
         case GET_RPC_VERSIONS:
                 action = "Get Supported RPC Versions From";
                 break;
@@ -124,6 +140,7 @@ void RaftMonitor::callback(Packet* sniff_packet, void* user) {
                 break;
         case REQUEST_VOTE:
                 action = "Request Vote From";
+                rm.num_elections++;
                 break;
         case APPEND_HEARTBEAT:
                 action = "Append/Heartbeat";
@@ -141,6 +158,11 @@ void RaftMonitor::callback(Packet* sniff_packet, void* user) {
     std::cout << ip->GetSourceIP() << ":" << tcp->GetSrcPort() << ": "<< action << " -> "
               << ip->GetDestinationIP() << ":" << tcp->GetDstPort()  << std::endl;
     
+    //update counts
+    int src_num = getLastIP(ip->GetSourceIP());
+    int dest_num = getLastIP(ip->GetDestinationIP());
+    rm.counts[(rm.num_hosts*(src_num-1))+(dest_num-1)]++;
+    
     if (rm.run_test) {
         out_file << ip->GetSourceIP() << ":" << tcp->GetSrcPort() << ": "<< action << " -> "
               << ip->GetDestinationIP() << ":" << tcp->GetDstPort()  << std::endl;
@@ -153,7 +175,7 @@ string RaftMonitor::getTime() {
         struct tm * timeinfo;
         char buffer[80];
 
-         time (&rawtime);
+        time (&rawtime);
         timeinfo = localtime(&rawtime);
 
         strftime(buffer,80,"%d-%m-%Y %I:%M:%S",timeinfo);
@@ -172,6 +194,7 @@ int RaftMonitor::startTest(string testname, int partition, float fraction, strin
     out_file.open(logfile.c_str(),  ios::out | ios::app);
     if (out_file.is_open()) {     
         run_test = true;
+        num_elections = 0;
         if (partition != 0) {
                 start_block(source, fraction);
         }
@@ -196,11 +219,21 @@ int RaftMonitor::stopTest(string testname, int partition, float fraction, string
     }
     run_test = false;
     //write out all counts
+    for (int i = 0; i < num_hosts; i++) {
+        for (int j = 0; j < num_hosts; j++) {
+            out_file << "Packets " + ips[i] + "->" + ips[j] + ":";
+            out_file << to_string(counts[(num_hosts*i+j)]);
+            out_file << endl;
+        }
+    }
+    out_file << "Elections: " << to_string(num_elections) << endl;
     //get ending time, write, and close
     string str = getTime();
     out_file << "Ending test " + testname + " at time " + str;
     out_file << "+----------------------------------------------+\n";
     out_file.close();
+    //reset the packet counts
+    fill(counts.begin(),counts.end(),0); 
     return 0;
 }
 

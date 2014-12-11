@@ -1,12 +1,13 @@
 /*
  * This is the packet interpreter for the RPC calls of LogCabin,
  * Ongaro's RAFT implementation.
+ * opcodes are defined in Client.proto and Raft.proto
+ * service numbers are defined in Common.h
  */
 #include "crafter.h"
 #include "ongaro.h"
 #include "Common.h"
     
-//int ongaroRAFT::packetType(std::vector<uint8_t> pkt) {
 int ongaroRAFT::packetType(std::vector<unsigned char> pkt) {
     int version = (int)pkt[12]; //RAFT communication version, only appears in requests
     if (version == 1) { //this is a request, not a reply
@@ -14,7 +15,7 @@ int ongaroRAFT::packetType(std::vector<unsigned char> pkt) {
         int service = (int)pkt[14];
         int opCode = (int)pkt[17];
         if (service == 1) {
-            switch (opCode) { //opcodes are defined in Client.proto and Raft.proto
+            switch (opCode) { 
  		case 0:
                     return GET_RPC_VERSIONS;
                 case 1:
