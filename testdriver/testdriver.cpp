@@ -153,6 +153,12 @@ int main(const int argc, const char *argv[])
     string testName = argv[i];
     cout << "testdriver: running test " << testName << endl;
 
+    // TODO: partition parms, depending on the test.
+    if (prm->startTest(testName, 0, 0, "TODO") == -1)
+    {
+      cout << "error: rm->startTest failed" << endl;
+    }
+
     // Create cluster configuration.
     clusterConfig = createClusterConfig();
     assert(clusterConfig != nullptr);
@@ -161,17 +167,6 @@ int main(const int argc, const char *argv[])
     clusterConfig->launchCluster(NUM_HOSTS, 61023);
     cout << "testdriver: started cluster" << endl;
     sleep(1);
-
-    // Configure packet loss on a Raft node.
-    // It'll automatically unconfigure itself on
-    // destruction.
-    // Dropping packets from 2 nodes causes the program
-    // to hang with the logcabin implementation, which
-    // is good!
-    PacketDropConfig packetDropper("192.168.2.1", 1.0);
-    //packetDropper.startDropping();
-    //PacketDropConfig packetDropper2("192.168.2.3", 1.0);
-    //packetDropper2.startDropping();
 
     // Create at least one client.
     createClients(nClients);
@@ -205,14 +200,22 @@ int main(const int argc, const char *argv[])
       }
     }
 
-    // wait until all clients are finished
+    // Wait until all clients are finished.
     for (RaftClient* client : clients)
     {
       pthread_join(client->thread, nullptr);
     }
 
-    // Destroy clients
     sleep(1);
+
+    // The test is done; stop the RM.
+    // TODO: partition parms, depending on the test.
+    if (prm->stopTest(testName, 0, 0, "TODO") == -1)
+    {
+      cout << "error: rm->startTest failed" << endl;
+    }
+
+    // Destroy clients
     cout << "testdriver: destroying clients" << endl;
     for (RaftClient* client : clients)
     {
