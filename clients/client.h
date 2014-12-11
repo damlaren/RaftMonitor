@@ -65,7 +65,7 @@ public:
   int lastNodeId() const;
 
   // Return id of a random Raft node.
-  int getRandomHostId() const;
+  int getRandomNodeId() const;
 
   // Create a subprocess and return its pid
   // (or -1 on failure).

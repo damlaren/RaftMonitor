@@ -68,7 +68,7 @@ int RaftClusterConfig::lastNodeId() const
   return numNodes;
 }
 
-int RaftClusterConfig::getRandomHostId() const
+int RaftClusterConfig::getRandomNodeId() const
 {
   return (rand() % numNodes) + 1;
 }

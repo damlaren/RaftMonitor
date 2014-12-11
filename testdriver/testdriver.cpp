@@ -274,8 +274,21 @@ int main(const int argc, const char *argv[])
     // Repeat the test for some number of iterations.
     for (int iter = 0; iter < testArgs.iterations; iter++)
     {
-      // TODO: partition parms, depending on the test.
-      if (prm->startTest(testName, 0, 0, "TODO") == -1)
+      // Set parameters depending on the test.
+      // For BLOCK, pick a random node to block.
+      int partition = 0;
+      float frac = 0;
+      int blockNode = clusterConfig->getRandomNodeId();
+      string blockSource = "";
+      if (testArgs.type == TestType::BLOCK)
+      {
+	partition = 1;
+	frac = testArgs.block.frac;
+	blockSource = clusterConfig->getHost(blockNode);
+      }
+
+      if (prm->startTest(testName, partition, frac,
+			 blockSource) == -1)
       {
 	cout << "error: rm->startTest failed" << endl;
       }
@@ -302,7 +315,8 @@ int main(const int argc, const char *argv[])
 
       // The test is done; stop the RM.
       // TODO: partition parms, depending on the test.
-      if (prm->stopTest(testName, 0, 0, "TODO") == -1)
+      if (prm->stopTest(testName, partition, frac,
+			blockSource) == -1)
       {
 	cout << "error: rm->startTest failed" << endl;
       }
