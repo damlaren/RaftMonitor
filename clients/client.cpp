@@ -78,7 +78,6 @@ pid_t RaftClusterConfig::createProcess(const char* path, char* const args[])
     int status = execv(path, args);
     if (status == -1)
     {
-      //TODO signal failure to parent
       perror("createProcess failed");
       exit(1);
     }
@@ -108,7 +107,9 @@ RaftClient::RaftClient(int id) :
 
 void RaftClient::runTestOperations(int nIterations, int nClients)
 {
-  for (int i = 0; i < nIterations; i++)
+  //for (int i = 0; i < nIterations; i++)
+  int i = 0;
+  while (alive)
   {
     std::string testfile = std::string("/testfile") + std::to_string(clientId + i * nClients);
 
@@ -130,6 +131,7 @@ void RaftClient::runTestOperations(int nIterations, int nClients)
     {
       std::cout << "Read succeeded! " << testfile << std::endl;
     }
+    i++;
   }
 }
 

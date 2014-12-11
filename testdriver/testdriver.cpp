@@ -238,8 +238,6 @@ int main(const int argc, const char *argv[])
   // Identify and run all tests.
   // Reinitialize the cluster AND the file system
   // between each and every test.
-  // TODO: tests could 'build' on each other,
-  // but that can come in a later system.
   int argi = 4;
   while (argi < argc)
   {
