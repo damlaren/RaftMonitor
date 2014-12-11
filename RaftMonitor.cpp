@@ -126,7 +126,7 @@ void RaftMonitor::callback(Packet* sniff_packet, void* user) {
     
     //get the packet type
     int type;
-    if (rm.implementation.compare("ongaro") == 0) {
+    if (rm.implementation.compare("logcabin") == 0) {
         if (bytes.size() > 18) {
             type = ongaroRAFT::packetType(bytes);
         }
@@ -184,7 +184,8 @@ void RaftMonitor::callback(Packet* sniff_packet, void* user) {
     //assert(index >= 0 && index < rm.counts.size());
     rm.counts[index]++;
     
-    if (action.compare("Append/Heartbeat") != 0 && action.compare("Reply") != 0) {
+    if (action.compare("Append/Heartbeat") != 0 && action.compare("Reply") != 0
+            && action.compare("Session Reply") != 0) {
  
     std::cout << ip->GetSourceIP() << ":" << tcp->GetSrcPort() << ": "<< action << " -> "
               << ip->GetDestinationIP() << ":" << tcp->GetDstPort()  << std::endl;
