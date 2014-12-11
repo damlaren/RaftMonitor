@@ -180,8 +180,8 @@ void RaftMonitor::callback(Packet* sniff_packet, void* user) {
     //int dest_num = getLastIP(ip->GetDestinationIP());
     int src_num = rm.getPortNum(tcp->GetSrcPort());
     int dest_num = rm.getPortNum(tcp->GetDstPort());
-    int index = (rm.num_hosts*(src_num-1))+(dest_num-1);
-    assert(index >= 0 && index < rm.counts.size());
+    int index = (rm.num_hosts*(src_num))+(dest_num);
+    //assert(index >= 0 && index < rm.counts.size());
     rm.counts[index]++;
     
     if (action.compare("Append/Heartbeat") != 0 && action.compare("Reply") != 0) {
