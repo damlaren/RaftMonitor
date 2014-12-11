@@ -246,15 +246,15 @@ int RaftMonitor::stopTest(string testname, int partition, float fraction, string
 
 
 void RaftMonitor::start_block(const string& src_ip, float fraction) {
-    system(string("iptables -A OUTPUT -m statistic --mode random --source" + src_ip +
+    system(string("iptables -A OUTPUT -m statistic --mode random --source " + src_ip +
             " --probability " + to_string(fraction) + " -j DROP").c_str());
 }
 
 void RaftMonitor::clear_block(const string& src_ip, float fraction) {
-    system(string("iptables -D OUTPUT -m statistic --mode random --source" + src_ip +
+    system(string("iptables -D OUTPUT -m statistic --mode random --source " + src_ip +
             " --probability " + to_string(fraction) + " -j DROP").c_str());
 }
- 
+
 int startRaft(string impl, int numhosts, string iface) {
         RaftMonitor* prm = RaftMonitor::getRaftMonitor();
 	*prm = RaftMonitor(impl, numhosts, iface);
