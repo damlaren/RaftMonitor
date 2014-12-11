@@ -83,7 +83,7 @@ pid_t RaftClusterConfig::createProcess(const char* path, char* const args[])
     int status = execv(path, args);
     if (status == -1)
     {
-      std::cout << "createProcess failed" << std::endl;
+      std::cout << "createProcess failed: " << path << std::endl;
       exit(1);
     }
   }

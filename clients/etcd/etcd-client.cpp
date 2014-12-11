@@ -50,7 +50,7 @@ std::string EtcdClusterConfig::getPeerString(int numNodes, int thisNode, int por
 }
 
 bool EtcdClusterConfig::launchNode(int nodeNum) {
-  const std::string program = RaftEnv::rootDir + "etcd-v0.4.6-linux-amd64/etcd";
+  const std::string program = RaftEnv::rootDir + "/etcd-v0.4.6-linux-amd64/etcd";
   char* progCopy = copyStr(program.c_str());
   char* peerAddr = copyStr((getAddress() + getPeerPort(nodeNum, clusterPort)).c_str());
   char* pubAddr = copyStr((getAddress() + getPublicPort(nodeNum, clusterPort)).c_str());
@@ -77,7 +77,7 @@ bool EtcdClusterConfig::launchNode(int nodeNum) {
 }
 
 void EtcdClusterConfig::launchCluster(int nNodes, int port) {
-  const std::string program = RaftEnv::rootDir + "etcd-v0.4.6-linux-amd64/etcd";
+  const std::string program = RaftEnv::rootDir + "/etcd-v0.4.6-linux-amd64/etcd";
   id2pid.clear();
 
   clusterPort = port; 
