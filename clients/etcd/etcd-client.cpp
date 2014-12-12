@@ -30,7 +30,7 @@ std::string EtcdClusterConfig::getHost(int nodeId)
 
 std::string EtcdClusterConfig::getHostPort(int nodeId)
 {
-  return getHost(nodeId) + std::string(": ") +
+  return getHost(nodeId) + std::string(":") +
     std::to_string(clusterPort);
 }
 
