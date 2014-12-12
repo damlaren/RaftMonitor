@@ -40,7 +40,7 @@ std::string EtcdClusterConfig::getPeerString(int numNodes, int thisNode, int por
   for (int i = 1; i <= numNodes; i++) {
     if (i != thisNode) {
       if (!first) {
-	peerStr += ";";
+	peerStr += ",";
       } else {
 	first = false;
       }
@@ -242,7 +242,7 @@ bool EtcdRaftClient::createClient(RaftClusterConfig *config)
   //TODO: right value?
   cur_leader = clusterConfig->getAddress() +
     std::string(":") +
-    clusterConfig->getPublicPort(1, clusterConfig->clusterPort);
+    clusterConfig->getPeerPort(1, clusterConfig->clusterPort);
   return true;
 }
 
