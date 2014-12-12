@@ -100,10 +100,10 @@ void help()
        << "\timpl: Raft implementation to use. Values={logcabin,etcd}." << endl
        << "\tnNodes: Number of Raft nodes." << endl
        << "\tnClients: Number of clients to start." << endl
-       << "\ttestname: Names of test to run. Values={basic,block,kill}." << endl
-       << "\titerations: # of iterations of test to run." << endl
-       << "\ttime: how long to run a test (seconds)" << endl
-       << "\ttest args: Any test-specific args, required as follows:" << endl
+       << "\ttestname: Name of test to run. Values={basic,block,kill}." << endl
+       << "\titerations: Number of iterations of test to run." << endl
+       << "\ttime: How long to run each phase of a test (seconds)." << endl
+       << "\ttest args: Any test-specific arguments, as follows:" << endl
        << "\t\tblock: <mode> <frac>" << endl
        << "\t\t\tmode: What node to block. Values={random,leader}." << endl
        << "\t\t\tfrac: What fraction of packets to drop from nodes." << endl
