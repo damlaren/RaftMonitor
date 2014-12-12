@@ -13,12 +13,6 @@
 using LogCabin::Client::Cluster;
 using LogCabin::Client::Tree;
 
-void executeCommand(const std::string& cmdStr)
-{
-  std::cout << "executing: " << cmdStr << std::endl;
-  system(cmdStr.c_str());
-}
-
 std::string LogCabinRaftClusterConfig::getHost(int nodeNumber)
 {
   return std::string("192.168.2.") + std::to_string(nodeNumber);

@@ -89,6 +89,7 @@ void EtcdClusterConfig::launchCluster(int nNodes, int port) {
   numNodes = nNodes;
 
   dataPathRoot = RaftEnv::rootDir + std::string("/teststorage");
+  executeCommand((std::string("rm -rf ") + dataPathRoot + "/machine*").c_str());
 
   char* progCopy = copyStr(program.c_str());
   char* peerAddr = copyStr((getAddress() + std::string(":") + getPeerPort(1, port)).c_str());

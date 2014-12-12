@@ -10,6 +10,7 @@
 // Returns a char* copy of argument.
 // Allocates new memory which must be delete[]d.
 char* copyStr(const char* src);
+void executeCommand(const std::string& cmdStr);
 
 /*
  * Configuration for packet loss corresponding to an

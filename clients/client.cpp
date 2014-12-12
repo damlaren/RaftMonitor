@@ -17,6 +17,12 @@ char* copyStr(const char* src)
   return buf;
 }
 
+void executeCommand(const std::string& cmdStr)
+{
+  std::cout << "executing: " << cmdStr << std::endl;
+  system(cmdStr.c_str());
+}
+
 PacketDropConfig::PacketDropConfig(const std::string& s, float f)
 {
   dropping = false;
