@@ -160,14 +160,14 @@ std::string extractFirstValue(const std::string& output) {
   size_t cloc = output.find(":", loc);
   size_t q1loc = output.find("\"", cloc);
   size_t q2loc = output.find("\"", q1loc+1);
-  char valbuf[512];
-  output.copy(valbuf, q2loc - q1loc, q1loc);
+  char valbuf[512] = {'0'};
+  output.copy(valbuf, (q2loc - q1loc)-1, q1loc+1);
   std::string val = std::string(valbuf);
   return val;
 }
 
 bool EtcdRaftClient::writeFile(const std::string& path, const std::string& contents) {
-  std::string cmd = std::string("curl -L http://") + getRequestURL(path, cur_leader) + std::string(" -XPUT -d value=\"") + contents + "\"";
+  std::string cmd = std::string("curl -L http://") + getRequestURL(path, cur_leader) + std::string(" -XPUT -d value=") + contents;
   std::cout << "writing: " << cmd << std::endl;
   auto pipe = popen(cmd.c_str(), "r");
   char line[512];
@@ -190,6 +190,7 @@ bool EtcdRaftClient::writeFile(const std::string& path, const std::string& conte
     }    
   }
   pclose(pipe);
+  std::cout << "agood: " << atypeGood << std::endl;
   if (atypeGood) {
     std::string val = extractFirstValue(res);
     std::cout << "Val: " << val << std::endl;
