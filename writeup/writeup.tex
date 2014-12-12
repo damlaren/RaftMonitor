@@ -12,6 +12,7 @@
 \usepackage{subfigure}
 \usepackage{qtree}
 \usepackage{float}
+\usepackage{listings}
 \epstopdfsetup{outdir=./}
 \newcommand{\theHalgorithm}{\arabic{algorithm}}
 \usepackage[accepted]{icml2014}
@@ -55,13 +56,17 @@ With this goal in mind, we have built a testing framework that provides common i
 \section{System Overview}
 One of the biggest challenges of our system is that it needs to accommodate the wide variety seen in the different Raft implementations. Although their functionality is very similar, these implementations vary widely in structure, language, and networking choices.
 
-The checker is composed of various modules which are held together by a test driver program written in C++. Base classes representing Raft clusters and clients are adapted for different Raft implementations to support reuse of functionality and enable the same tests to be executed across different platforms. The test driver proceeds through several stages.
+The checker is composed of various modules which are held together by a test driver program written in C++. There are three main pieces of the framework: the RAFT implementation interface, the packet monitor, and the testing framework. For the first part, base classes representing Raft clusters and clients are adapted for different Raft implementations to support reuse of functionality and enable the same tests to be executed across different platforms. In the second part, the monitor watches all network traffic and reports statistics. Then, using the third part, the end user can run a variety of tests on the RAFT cluster.
+
+\section{RAFT Interface}
 
 \subsection{Implementation Setup}
 
 \subsubsection{Network Setup}
 
 Simulating a cluster makes use of generated, virtual network interfaces to allow RAFT cluster nodes to appear to one another as though on independent devices. Much of this setup is independent of the specific RAFT implementation; it is executed via shell script. Since there is no common script for this between implementations, we wrote separate setup and teardown scripts to save time. These set up the network interfaces and configure the necessary Raft parameters.
+
+Since most of our work was done simply on a single machine, the RAFT nodes communicate between specified ports rather from different IPs (as would be expected in a production RAFT system).
 
 \subsubsection{Cluster Setup}
 
@@ -90,26 +95,48 @@ The Client API requires that RaftClients implement the following methods:
 \item \texttt{readFile(string path)}: Read file contents at path from the cluster and return as a string.
 \end{itemize}
 
-\subsection{RaftMonitor}
+\section{RaftMonitor}
 
-The RaftMonitor module monitors and responds to messages passed internally among the RAFT cluster's nodes by acting as a proxy or middleman to all of the cluster's internal communications. Currently, iptables redirects are used to point all traffic to the monitor's interface. For stability, we are in the process of transitioning into a more proxy-like behavior, where the nodes are set up to communicate directly through RaftMonitor. This should be completely transparent to the RAFT cluster, since the default behavior of the monitor is just to log packets and pass them on. It rewrites and forwards packets, changing their destinations to the appropriate node based on the address and/or port the monitor received the packet on. Thus when non-invasive testing is being performed, the cluster should operate in an entirely normal manner unaffected by the monitor's presence.
+The RaftMonitor module monitors and responds to messages passed internally among the RAFT cluster's nodes by listening on a common interface. In the case of a local cluster, it listens on the loopback interface (lo). This should be completely transparent to the RAFT cluster, since the default behavior of the monitor is just to log packets without interference. Thus when non-invasive testing is being performed, the cluster should operate in an entirely normal manner unaffected by the monitor's presence. The RaftMonitor can also inject packets into the RAFT communications as part of a test.
 
 \subsection{Simulating Partitions}
 
 In distributed systems, one of the most common problems is network partitions, where some subset of nodes are cut off from the rest. Since we are operating on a small scale (one machine as opposed to a production-size network), it is necessary to simulate partitions rather than actually causing them through switch or router manipulation.
 \\ \indent There are two methods we examined for simulating partitions. The first, and arguably the simplest, is to set up a local iptables firewall. By adding and removing rules, we can drop or allow packets going between specific nodes. The downside of this method is that we cannot see the dropped packets, so that insight into the behavior of the partitioned nodes is lost.
-\\ \indent The second method, which is the one we have chosen to use, is to make RaftMonitor a sort of proxy firewall. Since all the system packets go through this module, it can decide which packets to forward and which ones to drop, while still keeping track of what each node is trying to do.
+\\ \indent The second method is to make RaftMonitor a sort of proxy firewall. Since all the system packets go through this module, it can decide which packets to forward and which ones to drop, while still keeping track of what each node is trying to do.
+\\ \indent In the end we chose to go with the iptables method. The reason for this is that building a proxy compatible with all the RAFT implementations proved prohibitively complicated, as it would need to support many protocols (TCP, UDP, and HTTP at the very least). 
 
 \subsection{Issues Considered}
 
-In order for RaftMonitor to be transparent, is important that any processing the monitor performs on the packet not create a large increase the time required for the packet to reach the RAFT node it is intended for. If the timing is too far off, the monitor may interfere with RAFT's heartbeat messages and thus affect the cluster's operation. However, this does seem a manageable constraint: since the checking program simulates a cluster within a single machine, round-trip times for packet transmission are low (on the order of $0.05$-$0.2$ milliseconds). Recommended settings for RAFT election timeout are in the low hundreds of milliseconds \cite{raftPaper}. Simple logging, modifying, and resending of packets, then, is unlikely to cause an unexpected timeout under this sort of mode of operation. However, more expensive actions such as killing one of the RAFT node processes could be concerning given this time constraint; actions that are too expensive are placed in a separate thread. For example, the action to kill a node will consist of creating a separate thread tasked with killing the node's RAFT process, and the monitor will begin dropping all packets to and from that node in the meantime.
+In order for RaftMonitor to be transparent, is important that any processing the monitor performs on the packet not create a large increase the time required for the packet to reach the RAFT node it is intended for. If the timing is too far off, the monitor may interfere with RAFT's heartbeat messages and thus affect the cluster's operation. However, this does seem a manageable constraint: since the checking program simulates a cluster within a single machine, round-trip times for packet transmission are low (on the order of $0.05$-$0.2$ milliseconds). Recommended settings for RAFT election timeout are in the low hundreds of milliseconds \cite{raftPaper}. Simple logging, modifying, and sending of packets, then, is unlikely to cause an unexpected timeout under this sort of mode of operation. However, more expensive actions such as killing one of the RAFT node processes could be concerning given this time constraint; actions that are too expensive are placed in a separate thread. For example, the action to kill a node will consist of creating a separate thread tasked with killing the node's RAFT process, and the monitor will begin dropping all packets to and from that node in the meantime.
 
 \subsection{Packet Interpretation}
-RaftMonitor keeps track of what commands pass between nodes. It does this by parsing out operation codes directly from the packets themselves. This allows it to run independently of the implementation language or function names. Unfortunately, it does still require implementation-specific adapters. These adapters are based off how each implementation constructs its packets. While they require some research, they are not lengthy (usually only around 50 lines of code each) and seem to perform quite well.
+RaftMonitor keeps track of what commands pass between nodes. It does this by parsing out operation codes directly from the packets themselves. This allows it to run independently of the implementation language or function names. Unfortunately, it does still require implementation-specific adapters. These adapters are based off how each implementation constructs its packets.
+\\ \indent Some parsers require byte-level parsing of operation codes, while others are  simply HTTP string interpretation. While these require some research, they are not lengthy (usually only around 50 lines of code each) and seem to perform quite well.
 
 \subsection{Behavior Comparison}
-The RaftMonitor module outputs the behavior information based on the packets that it sees. This is not simply a packet logging mechanism - it is closer to an event logger. For instance, the monitor does not log every single heartbeat and reply. Instead, it watches for when a node does not respond to a heartbeat (indicating a possible failed node event), or the heartbeat comes from a different node than previously seen (indicating a possible leader change event). 
-\\ \indent These events can be logged to the console or to a file. Right now, they must be manually inspected to see differences between implementation executions, but we are working on automating that to some extent in the future.
+The RaftMonitor module outputs the behavior information to a log file based on the packets that it sees. This is not simply a packet logging mechanism - it is closer to an event logger. For instance, the monitor does not log every single heartbeat and reply. Instead, it watches for when a node does not respond to a heartbeat (indicating a possible failed node event), or if a write event comes from a different node than previously seen (indicating a possible leader change event). These events are logged both to the console and to a file.
+\\ \indent When a test is run, the test driver tells the RaftMonitor when the test starts and ends. This allows the monitor to collect statistics just for the test interval. These specfic numbers are written to a test log at the end of the test. These log files must be manually inspected to see differences between implementation executions.
+
+\section{Test Driver}
+The test driver ties the three sections of the framework into a coherent program. It offers a simple command line interface:
+\lstset{
+    frame=single,
+    breaklines=true,
+    postbreak=\raisebox{0ex}[0ex][0ex]{\ensuremath{\color{red}\hookrightarrow\space}}
+}
+\begin{lstlisting}
+sudo ./testdriver/testdriver <impl>    <nNodes> <nClients> <testname>  <iterations> <time> [test args]
+\end{lstlisting}
+The test driver follows a simple algorithm:
+\begin{enumerate}
+  \item Spin up a RAFT cluster using the implementation API
+  \item Start up the RaftMonitor
+  \item Call the RaftMonitor to signal the beginning of the test. RaftMonitor will set up any partitions necessary.
+  \item Use the implementation API to make any necessary read or write calls
+  \item Call the RaftMonitor to signal the end of the test
+\end{enumerate}
+
 \section{Tests}
 Obviously there are many, many test cases that could be implemented. We have picked what we feel to be a representative sample of useful ones.
 \subsection{Log-Based Tests}
@@ -131,9 +158,9 @@ These are currently written for the assumption that the system only has three no
 \end{enumerate}
 
 \section{Future Work}
-Since this is a testing framework, tests are central. Adding more tests is always possible. We could expand into bigger networks, given more time and computing resources, to make it a better tool for people using large implementations.
+Since this is a testing framework, tests are central. Adding more tests is always possible. We could expand into bigger networks, given more time and computing resources, to make it a better tool for people using large implementations. We could also make more complex tests, like mixing partitions with dead nodes.
 
-At the moment, the framework's adapters are only completely written for the LogCabin implementation. They are partially complete for two other implementations (copycat and CKite). Finishing these adapters would be a priority. Since there are over 50 different implementations, more adapters will always been needed, so adding more in the future will improve our functionality and ease of use.
+Since there are so many implementations of RAFT, simply writing adapters is a task on its own. At the moment, the framework has fully written adapter for LogCabin and etcd. Since there are over 50 different implementations, more adapters will always been needed, so adding more in the future will improve our functionality and ease of use.
 
 As mentioned previously, looking into automatic comparison of test results is another useful feature. Because some Raft changes (like who becomes leader) are somewhat non-deterministic, it may be difficult to have a simple algorithm to pull out the differences. However, such automation would still be of value, since the files would still be there for manual comparison if necessary.
 
