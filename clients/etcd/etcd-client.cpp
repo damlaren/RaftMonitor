@@ -20,7 +20,7 @@ std::string EtcdClusterConfig::getPublicPort(int nodeNumber, int port) {
 }
 
 std::string EtcdClusterConfig::getAddress() {
-  return "192.168.2.1"; // TODO?
+  return "127.0.0.1"; // TODO?
 }
 
 std::string EtcdClusterConfig::getHost(int nodeId)
@@ -58,7 +58,8 @@ bool EtcdClusterConfig::launchNode(int nodeNum) {
   char* dataDir = copyStr((dataPathRoot + std::string("/machine") + std::to_string(nodeNum)).c_str());
   char* peerCopy = copyStr(getPeerString(numNodes, nodeNum, clusterPort).c_str());
   
-  char* const args[] = { progCopy, "-peer-addr", peerAddr, "-addr", pubAddr, "-peers", peerCopy, "data-dir", dataDir, nullptr };
+  char* const args[] = { progCopy, "-peer-addr", peerAddr, "-addr", pubAddr, "-peers", 
+  peerCopy, "-data-dir", dataDir, "-name", const_cast<char*>(("machine" + std::to_string(nodeNum)).c_str()), nullptr };
   pid_t pid = createProcess(program.c_str(), args);
 
   delete[] progCopy;
