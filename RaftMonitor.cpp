@@ -179,7 +179,7 @@ void RaftMonitor::callback(Packet* sniff_packet, void* user) {
                 action = "Session Reply";
     }
 
-    // Reads come from the leader (or are supposed to).
+    // Reads go to the leader (or are supposed to).
     // This is a quick and dirty, but not perfect,
     // way of identifying a leader.
     if (type == READ_ONLY_TREE ||
@@ -196,22 +196,6 @@ void RaftMonitor::callback(Packet* sniff_packet, void* user) {
     }
  
     //update counts
-    //for if IPs ever worked as intended...
-    //int src_num = getLastIP(ip->GetSourceIP());
-    //int dest_num = getLastIP(ip->GetDestinationIP());
-    //int src_num = rm.getPortNum(tcp->GetSrcPort());
-    //int dest_num = rm.getPortNum(tcp->GetDstPort());
-    //int index = (rm.num_hosts*(src_num))+(dest_num);
-    //if(!(index >= 0 && index < rm.counts.size())) {
-      //std::cout << "index = " << index << std::endl
-      //	<< "src_num=" << src_num << std::endl
-      //	<< "dest_num=" << dest_num << std::endl
-      //	<< "|rm|=" << rm.counts.size() << std::endl;
-    //}
-    //else
-    //{
-      //rm.counts[index]++;
-    //}
     rm.counts[std::make_pair(tcp->GetSrcPort(),tcp->GetDstPort())]+=1;
     
     if (action.compare("Append/Heartbeat") != 0 && action.compare("Reply") != 0
@@ -277,15 +261,8 @@ int RaftMonitor::stopTest(string testname, int partition, float fraction, string
         clear_block(source, fraction);
     }
     run_test = false;
+
     //write out all counts
-    /*for (int i = 0; i < num_hosts; i++) {
-        for (int j = 0; j < num_hosts; j++) {
-          //out_file << "Packets " + ips[i] + "->" + ips[j] + ":";
-            out_file << "Packets " + to_string(ports[i]) + "->" + to_string(ports[j]) + ":";
-            out_file << to_string(counts[(num_hosts*i+j)]);
-            out_file << endl;
-        }
-    }*/
     for(map<pair<int,int>, int>::const_iterator it = counts.begin();
     it != counts.end(); ++it) {
         out_file << "Packets " + to_string(it->first.first) + "->" + to_string(it->first.second) + ":";
