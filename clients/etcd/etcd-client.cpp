@@ -5,7 +5,7 @@
 #include <iostream>
 
 std::string getRequestURL(std::string path, std::string leaderUrl) {
-  return std::string(leaderUrl + "/v2" + path);
+  return std::string(leaderUrl + "/v2/keys" + path);
 }
 
 EtcdClusterConfig::EtcdClusterConfig() {
@@ -20,7 +20,7 @@ std::string EtcdClusterConfig::getPublicPort(int nodeNumber, int port) {
 }
 
 std::string EtcdClusterConfig::getAddress() {
-  return "127.0.0.1"; // TODO?
+  return "192.168.2.1"; // TODO?
 }
 
 std::string EtcdClusterConfig::getHost(int nodeId)
@@ -242,7 +242,7 @@ bool EtcdRaftClient::createClient(RaftClusterConfig *config)
   //TODO: right value?
   cur_leader = clusterConfig->getAddress() +
     std::string(":") +
-    clusterConfig->getPeerPort(1, clusterConfig->clusterPort);
+    clusterConfig->getPublicPort(1, clusterConfig->clusterPort);
   return true;
 }
 
