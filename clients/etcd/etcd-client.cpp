@@ -5,7 +5,7 @@
 #include <iostream>
 
 std::string getRequestURL(std::string path, std::string leaderUrl) {
-  return std::string(leaderUrl + "/v2" + path);
+  return std::string(leaderUrl + "/v2/keys" + path);
 }
 
 EtcdClusterConfig::EtcdClusterConfig() {
@@ -166,7 +166,7 @@ std::string extractFirstValue(const std::string& output) {
 }
 
 bool EtcdRaftClient::writeFile(const std::string& path, const std::string& contents) {
-  std::string cmd = std::string("curl -L ") + getRequestURL(path, cur_leader) + std::string(" -XPUT -d value=") + contents;
+  std::string cmd = std::string("curl -L http://") + getRequestURL(path, cur_leader) + std::string(" -XPUT -d value=\"") + contents + "\"";
   std::cout << "writing: " << cmd << std::endl;
   auto pipe = popen(cmd.c_str(), "r");
   char line[512];
@@ -180,9 +180,9 @@ bool EtcdRaftClient::writeFile(const std::string& path, const std::string& conte
 	size_t loc = ln.find(":");
 	char atype[32];
 	std::string ats;
-	ln.copy(atype, 32, loc+2);
+        ln.copy(atype, 5, loc+1);
 	ats = std::string(atype);
-	if (ats == std::string("\"set\"")) {
+	if (ats.find(std::string("\"set\"")) != std::string::npos) {
 	  atypeGood = true;
 	}
       }
@@ -191,6 +191,7 @@ bool EtcdRaftClient::writeFile(const std::string& path, const std::string& conte
   pclose(pipe);
   if (atypeGood) {
     std::string val = extractFirstValue(res);
+    std::cout << "Val: " << val << std::endl;
     if (val == contents) {
       return true;
     }
@@ -199,7 +200,7 @@ bool EtcdRaftClient::writeFile(const std::string& path, const std::string& conte
 }
 
 std::string EtcdRaftClient::readFile(const std::string& path) {
-  std::string cmd = std::string("curl -L ") + getRequestURL(path, cur_leader);
+  std::string cmd = std::string("curl -L http://") + getRequestURL(path, cur_leader);
   std::cout << "reading: " << cmd << std::endl;
   auto pipe = popen(cmd.c_str(), "r");
   char line[512];
@@ -213,9 +214,9 @@ std::string EtcdRaftClient::readFile(const std::string& path) {
 	size_t loc = ln.find(":");
 	char atype[32];
 	std::string ats;
-	ln.copy(atype, 32, loc+2);
+	ln.copy(atype, 32, loc+1);
 	ats = std::string(atype);
-	if (ats == std::string("\"get\"")) {
+	if (ats.find(std::string("\"get\"")) != std::string::npos) {
 	  atypeGood = true;
 	}
       }
@@ -242,7 +243,7 @@ bool EtcdRaftClient::createClient(RaftClusterConfig *config)
   //TODO: right value?
   cur_leader = clusterConfig->getAddress() +
     std::string(":") +
-    clusterConfig->getPeerPort(1, clusterConfig->clusterPort);
+    clusterConfig->getPublicPort(1, clusterConfig->clusterPort);
   return true;
 }
 
