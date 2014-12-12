@@ -1,5 +1,6 @@
 #include "../env.h"
 #include "etcd-client.h"
+#include <assert.h>
 #include <cstdio>
 #include <iostream>
 
@@ -135,8 +136,6 @@ void EtcdClusterConfig::stopCluster() {
 EtcdRaftClient::EtcdRaftClient(int id) :
   RaftClient(id)
 {
-  // TODO? cur_leader is empty
-  //cur_leader = get
 }
 
 /* Extract the first 'value' shown in the given output. */
@@ -223,6 +222,10 @@ bool EtcdRaftClient::connectToCluster(const std::string& hosts) {
 bool EtcdRaftClient::createClient(RaftClusterConfig *config)
 {
   clusterConfig = static_cast<EtcdClusterConfig*>(config);
+  assert(clusterConfig);
+
+  //TODO: right value?
+  cur_leader = clusterConfig->getHostPort(1);
   return true;
 }
 
