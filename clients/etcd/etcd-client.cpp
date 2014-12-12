@@ -20,7 +20,7 @@ std::string EtcdClusterConfig::getPublicPort(int nodeNumber, int port) {
 }
 
 std::string EtcdClusterConfig::getAddress() {
-  return "192.168.2.1"; // TODO?
+  return "127.0.0.1"; // TODO?
 }
 
 std::string EtcdClusterConfig::getHost(int nodeId)
