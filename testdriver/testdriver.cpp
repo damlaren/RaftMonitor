@@ -273,8 +273,6 @@ int main(const int argc, const char *argv[])
   }
 
   // Wait for RM to come online.
-  // TODO: This isn't perfect-- sniffer may not start
-  // capturing yet. Not sure if that's a problem.
   while (!prm->alive){ sleep(1); }
   cout << "testdriver: RM is online" << endl;
 
@@ -303,7 +301,6 @@ int main(const int argc, const char *argv[])
     cout << "testdriver: created clients" << endl;
 
     // Connect clients to cluster.
-    // TODO: cluster hostname is hardcoded
     for (RaftClient* client : clients)
     {
       string host = string("logcabin:") +
@@ -334,9 +331,6 @@ int main(const int argc, const char *argv[])
 	  cout << "testdriver: going to block leader node " << markedNode << endl;
 	}
 	blockSource = clusterConfig->getHost(markedNode);
-	//TODO: doesn't quite work for blocking.
-	//Need to blast out some packets first
-	//to get the leader updated...
       }
 
       if (prm->startTest(testName, partition, frac,
@@ -384,7 +378,6 @@ int main(const int argc, const char *argv[])
       }
 
       // The test is done; stop the RM.
-      // TODO: partition parms, depending on the test.
       if (prm->stopTest(testName, partition, frac,
 			blockSource) == -1)
       {

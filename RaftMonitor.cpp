@@ -51,11 +51,11 @@ RaftMonitor::RaftMonitor(string impl, int numhosts, string iface) {
             counts.push_back(0);
         }**/
     }
-    currentLeader = 1; // TODO: assumed
+    currentLeader = 1;
 }
 
 RaftMonitor::RaftMonitor() {
-  currentLeader = 1; // TODO: assumed
+  currentLeader = 1;
 }
 
 

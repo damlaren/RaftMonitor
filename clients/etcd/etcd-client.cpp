@@ -20,7 +20,7 @@ std::string EtcdClusterConfig::getPublicPort(int nodeNumber, int port) {
 }
 
 std::string EtcdClusterConfig::getAddress() {
-  return "192.168.2.1"; // TODO?
+  return "192.168.2.1";
 }
 
 std::string EtcdClusterConfig::getHost(int nodeId)
@@ -242,7 +242,6 @@ bool EtcdRaftClient::createClient(RaftClusterConfig *config)
   clusterConfig = static_cast<EtcdClusterConfig*>(config);
   assert(clusterConfig);
 
-  //TODO: right value?
   cur_leader = clusterConfig->getAddress() +
     std::string(":") +
     clusterConfig->getPublicPort(1, clusterConfig->clusterPort);

@@ -131,7 +131,6 @@ void RaftClient::runTestOperations(int nIterations, int nClients)
       std::cout << "Write succeeded! " << testfile << std::endl;
     }
 
-    // TODO: can check later if read succeeded
     if (readFile(testfile) != value)
     {
       std::cerr << "Read failed: " << testfile << std::endl;

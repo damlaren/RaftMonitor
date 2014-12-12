@@ -143,7 +143,6 @@ class RaftClient
   
   // Connect to a RAFT cluster using this client's
   // hosts vector and indicate success.
-  // TODO: remove hosts string, get from cluster config
   virtual bool connectToCluster(const std::string& hosts) = 0;
 
   // At a bare minimum, a test client should be able
