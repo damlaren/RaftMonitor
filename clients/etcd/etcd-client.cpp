@@ -52,13 +52,16 @@ std::string EtcdClusterConfig::getPeerString(int numNodes, int thisNode, int por
 
 bool EtcdClusterConfig::launchNode(int nodeNum) {
   const std::string program = RaftEnv::rootDir + "/etcd-v0.4.6-linux-amd64/etcd";
+  const std::string machineName = std::string("machine") + std::to_string(nodeNum);
+
   char* progCopy = copyStr(program.c_str());
   char* peerAddr = copyStr((getAddress() + std::string(":") + getPeerPort(nodeNum, clusterPort)).c_str());
   char* pubAddr = copyStr((getAddress() + std::string(":") + getPublicPort(nodeNum, clusterPort)).c_str());
-  char* dataDir = copyStr((dataPathRoot + std::string("/machine") + std::to_string(nodeNum)).c_str());
+  char* dataDir = copyStr((dataPathRoot + std::string("/") + machineName).c_str());
   char* peerCopy = copyStr(getPeerString(numNodes, nodeNum, clusterPort).c_str());
+  char* machCopy = copyStr(machineName.c_str());
   
-  char* const args[] = { progCopy, "-peer-addr", peerAddr, "-addr", pubAddr, "-peers", peerCopy, "data-dir", dataDir, nullptr };
+  char* const args[] = { progCopy, "-peer-addr", peerAddr, "-addr", pubAddr, "-peers", peerCopy, "data-dir", dataDir, "-name", machCopy, nullptr };
   pid_t pid = createProcess(program.c_str(), args);
 
   delete[] progCopy;
@@ -66,6 +69,7 @@ bool EtcdClusterConfig::launchNode(int nodeNum) {
   delete[] pubAddr;
   delete[] dataDir;
   delete[] peerCopy;
+  delete[] machCopy;
 
   if (pid == -1) {
     std::cerr << "Failed to launch subprocess" << std::endl;
@@ -91,7 +95,18 @@ void EtcdClusterConfig::launchCluster(int nNodes, int port) {
   char* pubAddr = copyStr((getAddress() + std::string(":") + getPublicPort(1, port)).c_str());
   char* dataDir = copyStr((dataPathRoot + std::string("/machine1")).c_str());
 
-  char* const args[] = { progCopy, "-peer-addr", peerAddr, "-addr", pubAddr, "-data-dir", dataDir, nullptr };
+  char* const args[] = { progCopy, "-peer-addr", peerAddr, "-addr", pubAddr, "-data-dir", dataDir,
+			 "-name", "machine1", nullptr };
+
+  std::cout << "launching etcd node:";
+  char* arg = args[0];
+  int i = 0;
+  while (arg)
+  {
+    std::cout << " " << arg;
+    arg = args[++i];
+  }
+  std::cout << std::endl;
 
   // Start node 1
   pid_t pid = createProcess(program.c_str(), args);
@@ -225,7 +240,9 @@ bool EtcdRaftClient::createClient(RaftClusterConfig *config)
   assert(clusterConfig);
 
   //TODO: right value?
-  cur_leader = clusterConfig->getHostPort(1);
+  cur_leader = clusterConfig->getAddress() +
+    std::string(":") +
+    clusterConfig->getPublicPort(1, clusterConfig->clusterPort);
   return true;
 }
 
