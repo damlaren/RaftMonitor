@@ -1,9 +1,19 @@
-\begin{thebibliography}{1}
+\begin{thebibliography}{3}
 \providecommand{\natexlab}[1]{#1}
 \providecommand{\url}[1]{\texttt{#1}}
 \expandafter\ifx\csname urlstyle\endcsname\relax
   \providecommand{\doi}[1]{doi: #1}\else
   \providecommand{\doi}{doi: \begingroup \urlstyle{rm}\Url}\fi
+
+\bibitem[Mizerany \& Qin()Mizerany and Qin]{etcD}
+Mizerany, Blake;~Li, Xiang and Qin, Yicheng.
+\newblock etcd/raft.
+\newblock \url{https://github.com/coreos/etcd}.
+
+\bibitem[Ongaro()]{logCabin}
+Ongaro, Diego.
+\newblock Logcabin.
+\newblock \url{https://github.com/logcabin/logcabin}.
 
 \bibitem[Ongaro \& Ousterhout(2013)Ongaro and Ousterhout]{raftPaper}
 Ongaro, Diego and Ousterhout, John.
