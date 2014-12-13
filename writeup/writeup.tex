@@ -98,11 +98,13 @@ The Client API requires that RaftClients implement the following methods:
 \item \texttt{readFile(string path)}: Read file contents at path from the cluster and return as a string.
 \end{itemize}
 
-The API also provides a function to launch a new Client in its own thread and run it until an external signal requests its termination.
+\subsection{Client API Implementations}
+
+The current supported implementations are logcabin (written in C++) and etcd (Go).
 
 \section{RaftMonitor}
 
-The RaftMonitor module monitors and responds to messages passed internally among the Raft cluster's nodes by listening on a common interface. In the case of a local cluster, it listens on the loopback interface (lo). This should be completely transparent to the Raft cluster, since the default behavior of the monitor is just to log packets without interference. Thus when non-invasive testing is being performed, the cluster should operate in an entirely normal manner unaffected by the monitor's presence. The RaftMonitor can also inject packets into the Raft communications as part of a test.
+The RaftMonitor module monitors and responds to messages passed internally among the Raft cluster's nodes by listening on a common interface. In the case of a local cluster, it listens on the loopback interface (lo). This should be completely transparent to the Raft cluster, since the default behavior of the monitor is just to log packets without interference. Thus when non-invasive testing is being performed, the cluster should operate in an entirely normal manner unaffected by the monitor's presence.
 
 \subsection{Simulating Partitions}
 
@@ -131,15 +133,32 @@ The test driver ties the three sections of the framework into a coherent program
     postbreak=\raisebox{0ex}[0ex][0ex]{\ensuremath{\color{red}\hookrightarrow\space}}
 }
 \begin{lstlisting}
-sudo ./testdriver/testdriver <impl>    <nNodes> <nClients> <testname>  <iterations> <time> [test args]
+sudo ./testdriver/testdriver <impl> <nNodes> <nClients> <testname>  <iterations> <time> [test args]
 \end{lstlisting}
-The test driver follows a simple algorithm:
+
+The test driver starts a Raft cluster and spawns clients to write to a key-value store for a specified length of time. The test is repeated for multiple iterations if desired. Three test types are implemented:
+
 \begin{enumerate}
-  \item Spin up a Raft cluster using the implementation API
-  \item Start up the RaftMonitor
-  \item Call the RaftMonitor to signal the beginning of the test. RaftMonitor will set up any partitions necessary.
-  \item Use the implementation API to make any necessary read or write calls
-  \item Call the RaftMonitor to signal the end of the test
+  \item Basic: A sanity check which does not tamper with any nodes.
+  \item Block: Use iptables to drop packets sent from a specific node.
+  \item Kill: Terminate a particular node, and relaunch it after some time has passed.
+\end{enumerate}
+
+The blocking and killing tests can be configured to target either the leader or a randomly selected node.
+
+The test driver operates in the following phases:
+
+\begin{enumerate}
+  \item Start the RaftMonitor in its own thread.
+  \item Start a Raft cluster using the requested implementation and number of nodes. A brand-new cluster is created every time the test driver runs, with no data carried over from prior tests.
+  \item Create the clients, each of which runs in its own thread. Connect each client to the Raft cluster.
+  \item For the requested number of iterations:
+    \begin{enumerate}
+      \item Call the RaftMonitor to signal the beginning of the test.
+      \item Begin executing clients which asynchronously blast the cluster with read and write requests. Tamper with a random or leader node by partitioning or killing it, as requested.
+      \item Call the RaftMonitor to signal the end of the test
+    \end{enumerate}
+  \item Tear down the clients, the cluster, and RaftMonitor and exit the program.
 \end{enumerate}
 
 \section{Tests}
