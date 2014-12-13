@@ -104,13 +104,13 @@ The current supported implementations are logcabin (written in C++) and etcd (Go
 
 \section{RaftMonitor}
 
-The RaftMonitor module monitors and responds to messages passed internally among the RAFT cluster's nodes by listening on a common interface. In the case of a local cluster, it listens on the loopback interface (lo). This should be completely transparent to the RAFT cluster, since the monitor is simply a sniffer that logs packets without interfering with their delivery. 
+The RaftMonitor module monitors and responds to messages passed internally among the RAFT cluster's nodes by listening on a common interface. In the case of a local cluster, it listens on the loopback interface (lo), as when running locally this is the interface used for all communications between the nodes. This should be completely transparent to the RAFT cluster, since the monitor is simply a sniffer that logs packets without interfering with their delivery. 
 
 \subsection{Simulating Partitions}
 
 In distributed systems, one of the most common problems is network partitions, where some subset of nodes are cut off from the rest. Since we are operating on a small scale (one machine as opposed to a production-size network), it is necessary to simulate partitions rather than actually causing them through switch or router manipulation.
 \\ \indent There are two methods we examined for simulating partitions. The first, and arguably the simplest, is to set up a local iptables firewall. By adding and removing rules, we can drop or allow packets going between specific nodes. The downside of this method is that we cannot see the dropped packets, so that insight into the behavior of the partitioned nodes is lost.
-\\ \indent The second method was to make RaftMonitor a sort of proxy firewall. Since all the system packets would go through this module, it could decide which packets to forward and which ones to drop, while still keeping track of what each node is trying to do.
+\\ \indent The second method was to make RaftMonitor a sort of proxy firewall. Since all the system packets would go through this module, it could decide which packets to forward and which ones to drop, while still keeping track of what each node is trying to do. This could cause some transmission delays, but some planning suggested that with careful design any such impact could be kept negligible.
 \\ \indent While the concept of the proxy was theoretically attractive in terms of its potential functionality, in the end we selected the iptables-based method. The reason for this is that building a proxy compatible with all the RAFT implementations proved prohibitively complicated, as it would need to support many protocols (TCP, UDP, and HTTP at the very least). 
 
 \subsection{Packet Interpretation}
@@ -136,8 +136,8 @@ The test driver starts a Raft cluster and spawns clients to write to a key-value
 
 \begin{enumerate}
   \item Basic: A sanity check which does not tamper with any nodes.
-  \item Block: Use iptables to drop packets sent from a specific node.
-  \item Kill: Terminate a particular node, and relaunch it after some time has passed.
+  \item Block: Use iptables to drop packets sent from a specific node. Arguments: 'leader' or 'random', indicating how to select a node to affect; a floating-point value indicating what fraction of packets to drop.
+  \item Kill: Terminate a particular node, and relaunch it after some time has passed. Arguments: 'leader' or 'random', indicating how to select a node to affect.
 \end{enumerate}
 
 The blocking and killing tests can be configured to target either the leader or a randomly selected node.
@@ -169,7 +169,7 @@ Finally, there is the potential extension of producing the proxy-style network p
 
 \section{Conclusion}
 
-The system combines a client API, packet monitor, and test driver into one program. The client API overcomes the problem of running with different Raft implementations. The packet monitor provides knowledge of the state of the system and enables more specific testing. The system lays the foundation for a checking system and can be enhanced with additional work.
+The system combines a client API, packet monitor, and test driver into one program. The client API addresses the problem of running uniform tests on different Raft implementations. The packet monitor provides knowledge of the state of the system and enables more specific testing. The system lays the foundation for a checking system and can be enhanced with additional work.
 
 \subsection{Source Code}
 
