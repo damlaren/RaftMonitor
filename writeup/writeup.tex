@@ -33,7 +33,7 @@
 \icmlauthor{Patrick Harvey}{p1harvey@stanford.edu}
 \icmladdress{Computer Science Department, Stanford University}
 
-\icmlkeywords{cs244b, Raft, distributed systems}
+\icmlkeywords{CS244B, Raft, distributed systems}
 
 \vskip 0.3in
 ]
@@ -78,11 +78,14 @@ Different implementations of Raft may have a different interface for receiving a
 
 The API is defined as RaftClient and RaftClusterConfig base classes in C++ with several pure virtual methods, which must be extended to provide a client for a particular Raft implementation. This client can then be passed to the Raft checker's tests and manipulated via the API in a manner externally identical to any other client. The RaftClusterConfig implementation implements implementation-specific logic to set up a Raft cluster, and the RaftClient implements logic to handle a client capable of communicating with that cluster. Raft implementations that provide a much cleaner interface for clients in some language other than C++ can be supported by creating a C++ client implementation that calls out to execute functionality in scripts or programs of the language in question.
 
-The RaftClusterConfig API provides helper functions to create or kill subprocesses (to take down nodes in the Raft cluster). It requires subclasses to implement the following methods for different Raft implementations:
+The RaftClusterConfig API assumes each Raft node is associated with an integer id. It provides helper functions to start or stop processes, and requires subclasses to implement the following methods for different Raft implementations:
 
 \begin{itemize}
-\item \texttt{launchCluster(int numNodes, int port)}: Start a new Raft cluster with the requested number of nodes, listening on the specified port.
-\item \texttt{stopCluster(int numNodes)}: Shut down Raft cluster with the provided number of nodes.
+\item \texttt{launchCluster(int numNodes, int port)}: Start a new Raft cluster with the requested number of nodes. The port can used to compute the port on which Raft implementations listen, and Raft implementations vary in their conventions.
+\item \texttt{stopCluster()}: Shut down Raft cluster with the provided number of nodes provided to launchCluster.
+\item \texttt{getHostPort(int nodeId)}: Returns URL and port of a specific node.
+\item \texttt{launchNode(int nodeId)}: Launch a node associated with the given ID.
+\item \texttt{killNode(int nodeId)}: Stop the Raft node associated with this ID.
 \end{itemize}
 
 The Client API requires that RaftClients implement the following methods:
@@ -94,6 +97,8 @@ The Client API requires that RaftClients implement the following methods:
 \item \texttt{writeFile(string path, string contents)}: Write a file with content value on cluster at specified path.
 \item \texttt{readFile(string path)}: Read file contents at path from the cluster and return as a string.
 \end{itemize}
+
+The API also provides a function to launch a new Client in its own thread and run it until an external signal requests its termination.
 
 \section{RaftMonitor}
 
@@ -108,7 +113,7 @@ In distributed systems, one of the most common problems is network partitions, w
 
 \subsection{Issues Considered}
 
-In order for RaftMonitor to be transparent, is important that any processing the monitor performs on the packet not create a large increase the time required for the packet to reach the Raft node it is intended for. If the timing is too far off, the monitor may interfere with Raft's heartbeat messages and thus affect the cluster's operation. However, this does seem a manageable constraint: since the checking program simulates a cluster within a single machine, round-trip times for packet transmission are low (on the order of $0.05$-$0.2$ milliseconds). Recommended settings for Raft election timeout are in the low hundreds of milliseconds \cite{raftPaper}. Simple logging, modifying, and sending of packets, then, is unlikely to cause an unexpected timeout under this sort of mode of operation. However, more expensive actions such as killing one of the Raft node processes could be concerning given this time constraint; actions that are too expensive are placed in a separate thread. For example, the action to kill a node will consist of creating a separate thread tasked with killing the node's Raft process, and the monitor will begin dropping all packets to and from that node in the meantime.
+In order for RaftMonitor to be transparent, is important that any processing the monitor performs on the packet not create a large increase the time required for the packet to reach the Raft node it is intended for. If the timing is too far off, the monitor may interfere with Raft's heartbeat messages and thus affect the cluster's operation. However, this does seem a manageable constraint: since the checking program simulates a cluster within a single machine, round-trip times for packet transmission are low (on the order of $0.05$-$0.2$ milliseconds). Recommended settings for Raft election timeout are in the low hundreds of milliseconds \cite{raftPaper}. Simple logging, modifying, and sending of packets, then, is unlikely to cause an unexpected timeout under this sort of mode of operation. However, more expensive actions such as killing one of the Raft node processes could be concerning given this time constraint; actions that are too expensive are placed in a separate thread.
 
 \subsection{Packet Interpretation}
 RaftMonitor keeps track of what commands pass between nodes. It does this by parsing out operation codes directly from the packets themselves. This allows it to run independently of the implementation language or function names. Unfortunately, it does still require implementation-specific adapters. These adapters are based off how each implementation constructs its packets.
@@ -158,13 +163,20 @@ These are currently written for the assumption that the system only has three no
 \end{enumerate}
 
 \section{Future Work}
+
 Since this is a testing framework, tests are central. Adding more tests is always possible. We could expand into bigger networks, given more time and computing resources, to make it a better tool for people using large implementations. We could also make more complex tests, like mixing partitions with dead nodes.
 
 Since there are so many implementations of Raft, simply writing adapters is a task on its own. At the moment, the framework has fully written adapter for LogCabin and etcd. Since there are over 50 different implementations, more adapters will always been needed, so adding more in the future will improve our functionality and ease of use.
 
 As mentioned previously, looking into automatic comparison of test results is another useful feature. Because some Raft changes (like who becomes leader) are somewhat non-deterministic, it may be difficult to have a simple algorithm to pull out the differences. However, such automation would still be of value, since the files would still be there for manual comparison if necessary.
 
+\section{Conclusion}
 
+TODO Raft Monitor is a fruitful experiment with lots of potential given more time investment. Synergy between packet sniffing / possible proxy and testing. \break
+
+\subsection{Source Code}
+
+The project source code is available at https://github.com/damlaren/cs244b\_final\_project.
 
 \bibliographystyle{icml2014}
 \bibliography{citations}

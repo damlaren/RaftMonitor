@@ -5,8 +5,8 @@
   \providecommand{\doi}[1]{doi: #1}\else
   \providecommand{\doi}{doi: \begingroup \urlstyle{rm}\Url}\fi
 
-\bibitem[Ongaro \& Ousterhout(2013)Ongaro and Ousterhout]{raftPaper}
-Ongaro, Diego and Ousterhout, John.
+\bibitem[Ontaro \& Ousterhout(2013)Ontaro and Ousterhout]{raftPaper}
+Ontaro, Diego and Ousterhout, John.
 \newblock In search of an understandable consensus algorithm (extended
   version).
 \newblock 2013.
