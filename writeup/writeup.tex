@@ -157,26 +157,6 @@ The test driver operates in the following phases:
   \item Tear down the clients, the cluster, and RaftMonitor and exit the program.
 \end{enumerate}
 
-\section{Tests}
-Obviously there are many, many test cases that could be implemented. We have picked what we feel to be a representative sample of useful ones.
-\subsection{Log-Based Tests}
-\begin{enumerate}
-  \item A basic sanity check, where the client submits a set of operations to the master that are expected to succeed.
-  \item Multiple client submitting write operations at the same time.
-\end{enumerate}
-\subsection{Partition Tests}
-These are currently written for the assumption that the system only has three nodes, since this is the case with our setup scripts on a single machine. Once a system is set up using our implementation interfaces, the tests can be run without any further modification. 
-\begin{enumerate}
-  \item A non-master node becoming partitioned from the rest and, after a fairly long interval, rejoining the cluster.
-  \item The master node being partitioned from the other nodes and rejoining the cluster later.
-\end{enumerate}
-\subsection{Node Failure Tests}
-\begin{enumerate}
-  \item The current leader node fails by crashing.
-  \item A non-leader node fails by crashing, then restarts.
-  \item The current leader node fails by crashing, then restarts. 
-\end{enumerate}
-
 \section{Future Work}
 
 Since this is a testing framework, tests are central. Adding more tests is always possible. We could expand into bigger networks, given more time and computing resources, to make it a better tool for people using large implementations. We could also make more complex tests, like mixing partitions with dead nodes.
