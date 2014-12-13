@@ -162,6 +162,9 @@ As mentioned previously, looking into automatic comparison of test results is an
 
 Finally, there is the potential extension of producing the proxy-style network partition simulation, in which the RaftMonitor acts as a proxy and can make detailed pass/drop decisions in response to packets. This would enable more precise invasive testing, particularly in that this could potentially be used to enforce a packet-accurate time-of-drop when comparing implementations. For example, a test could consist of sending a particular request and then killing a node immediately after it receives the first packet pertaining to that request. If RaftMonitor is acting as a proxy, then this test can be accurately enforced: the packet is passed, then a thread is spun off to kill the node; meanwhile, the monitor blocks all packets going to and from the node until it is killed (to better represent a precise time-of-failure to the rest of the simulated network).
 
+\section{Code Repository}
+https://github.com/damlaren/cs244b\_final\_project
+
 \bibliographystyle{icml2014}
 \bibliography{citations}
 
