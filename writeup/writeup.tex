@@ -33,7 +33,7 @@
 \icmlauthor{Patrick Harvey}{p1harvey@stanford.edu}
 \icmladdress{Computer Science Department, Stanford University}
 
-\icmlkeywords{cs244b, Raft, distributed systems}
+\icmlkeywords{CS244B, Raft, distributed systems}
 
 \vskip 0.3in
 ]
@@ -49,7 +49,7 @@ A system is presented for analyzing the operation of implementations of the Raft
 
 Raft is a consensus algorithm that keeps replicated logs of transactions to a database or key-value store \cite{raftPaper}. Despite its relatively recent release, it has gained a large following. There are currently over 50 different implementations of Raft listed on their website.
  
-As with any system, each implementation is slightly different, and this introduces possibilities for protocol errors and inconsistent corner case performance. When evaluating (or even just observing) these systems, it would be beneficial to be able to quickly compare how different implementations handle the same error conditions. Since some of the implementations are incomplete, this can highlight the ways in which they behave differently because of that. Such comparisons would also be beneficial for anyone writing a new Raft implementation and wishing to check its behavior against that of some of the more established implementations (like LogCabin). 
+As with any system, each implementation is slightly different, and this introduces possibilities for protocol errors and inconsistent corner case performance. When evaluating (or even just observing) these systems, it would be beneficial to be able to quickly compare how different implementations handle the same error conditions. Since some of the implementations are incomplete, this can highlight the ways in which they behave differently because of that. Such comparisons would also be beneficial for anyone writing a new Raft implementation and wishing to check its behavior against that of some of the more established implementations (like LogCabin \cite{logCabin}). 
 
 With this goal in mind, we have built a testing framework that provides common interfaces and runs some of the cases that people might be interested in testing. To do so, this system simulates a cluster on which Raft is deployed, but logs all internal communication between the Raft nodes while also executing client applications that make requests of the Raft cluster. This setup allows both external results-centric testing of the Raft implementation from the client point of view, and invasive testing including reading and analyzing the internal messages sent among the Raft nodes, node failures, network partitions, and lost messages.
 
@@ -64,7 +64,7 @@ The checker is composed of various modules which are held together by a test dri
 
 \subsubsection{Network Setup}
 
-Simulating a cluster makes use of generated, virtual network interfaces to allow Raft cluster nodes to appear to be on independent devices. Much of this setup is independent of the specific Raft implementation; it is executed via shell script. Since there is no common script for this between implementations, we wrote separate setup and teardown scripts to save time. These set up the network interfaces and configure the necessary Raft parameters.
+Simulating a cluster makes use of generated, virtual network interfaces to allow Raft cluster nodes to appear to one another as though on independent devices. Much of this setup is independent of the specific Raft implementation; it is executed via shell script. Since there is no common script for this between implementations, we wrote separate setup and teardown scripts to save time. These set up the network interfaces and configure the necessary Raft parameters.
 
 Since most of our work was done simply on a single machine, the Raft nodes communicate between specified ports rather from different IPs (as would be expected in a production Raft system).
 
@@ -78,11 +78,14 @@ Different implementations of Raft may have a different interface for receiving a
 
 The API is defined as RaftClient and RaftClusterConfig base classes in C++ with several pure virtual methods, which must be extended to provide a client for a particular Raft implementation. This client can then be passed to the Raft checker's tests and manipulated via the API in a manner externally identical to any other client. The RaftClusterConfig implementation implements implementation-specific logic to set up a Raft cluster, and the RaftClient implements logic to handle a client capable of communicating with that cluster. Raft implementations that provide a much cleaner interface for clients in some language other than C++ can be supported by creating a C++ client implementation that calls out to execute functionality in scripts or programs of the language in question.
 
-The RaftClusterConfig API provides helper functions to create or kill subprocesses (to take down nodes in the Raft cluster). It requires subclasses to implement the following methods for different Raft implementations:
+The RaftClusterConfig API assumes each Raft node is associated with an integer id. It provides helper functions to start or stop processes, and requires subclasses to implement the following methods for different Raft implementations:
 
 \begin{itemize}
-\item \texttt{launchCluster(int numNodes, int port)}: Start a new Raft cluster with the requested number of nodes, listening on the specified port.
-\item \texttt{stopCluster(int numNodes)}: Shut down Raft cluster with the provided number of nodes.
+\item \texttt{launchCluster(int numNodes, int port)}: Start a new Raft cluster with the requested number of nodes. The port can used to compute the port on which Raft implementations listen, and Raft implementations vary in their conventions.
+\item \texttt{stopCluster()}: Shut down Raft cluster with the provided number of nodes provided to launchCluster.
+\item \texttt{getHostPort(int nodeId)}: Returns URL and port of a specific node.
+\item \texttt{launchNode(int nodeId)}: Launch a node associated with the given ID.
+\item \texttt{killNode(int nodeId)}: Stop the Raft node associated with this ID.
 \end{itemize}
 
 The Client API requires that RaftClients implement the following methods:
@@ -95,15 +98,38 @@ The Client API requires that RaftClients implement the following methods:
 \item \texttt{readFile(string path)}: Read file contents at path from the cluster and return as a string.
 \end{itemize}
 
+Finally, the manner in which to interpret packets must be implemented for the specific RAFT implementation, extending /packetUtils/Parser.h with an implementation of packetType, which must take the raw bytes of a packet as a C++ vector and return a class of packet that identifies this packet's purpose from the following common packets used in RAFT protocol implementations:
+
+\begin{itemize}
+
+\item \texttt{GET\_RPC\_VERSIONS}
+
+\item \texttt{OPEN\_SESSION}
+\item \texttt{GET\_CONFIG}
+\item \texttt{SET\_CONFIG}
+\item \texttt{READ\_ONLY}
+\item \texttt{READ\_WRITE}
+\item \texttt{REQUEST\_VOTE}
+\item \texttt{APPEND\_HEARTBEAT}
+\item \texttt{APPEND\_SNAPSHOT}
+\item \texttt{REPLY}
+\item \texttt{INVALID}
+
+\end{itemize}
+
+\subsection{Client API Implementations}
+
+The current supported implementations are logcabin (written in C++) \cite{logCabin} and etcd (Go)\cite{etcD}.
+
 \section{RaftMonitor}
 
-The RaftMonitor module monitors and responds to messages passed internally among the RAFT cluster's nodes by listening on a common interface. In the case of a local cluster, it listens on the loopback interface (lo). This should be completely transparent to the RAFT cluster, since the monitor is simply a sniffer that logs packets without interfering with their delivery. 
+The RaftMonitor module monitors and responds to messages passed internally among the RAFT cluster's nodes by listening on a common interface. In the case of a local cluster, it listens on the loopback interface (lo), as when running locally this is the interface used for all communications between the nodes. This should be completely transparent to the RAFT cluster, since the monitor is simply a sniffer that logs packets without interfering with their delivery. 
 
 \subsection{Simulating Partitions}
 
 In distributed systems, one of the most common problems is network partitions, where some subset of nodes are cut off from the rest. Since we are operating on a small scale (one machine as opposed to a production-size network), it is necessary to simulate partitions rather than actually causing them through switch or router manipulation.
 \\ \indent There are two methods we examined for simulating partitions. The first, and arguably the simplest, is to set up a local iptables firewall. By adding and removing rules, we can drop or allow packets going between specific nodes. The downside of this method is that we cannot see the dropped packets, so that insight into the behavior of the partitioned nodes is lost.
-\\ \indent The second method was to make RaftMonitor a sort of proxy firewall. Since all the system packets would go through this module, it could decide which packets to forward and which ones to drop, while still keeping track of what each node is trying to do.
+\\ \indent The second method was to make RaftMonitor a sort of proxy firewall. Since all the system packets would go through this module, it could decide which packets to forward and which ones to drop, while still keeping track of what each node is trying to do. This could cause some transmission delays, but some planning suggested that with careful design any such impact could be kept negligible.
 \\ \indent While the concept of the proxy was theoretically attractive in terms of its potential functionality, in the end we selected the iptables-based method. The reason for this is that building a proxy compatible with all the RAFT implementations proved prohibitively complicated, as it would need to support many protocols (TCP, UDP, and HTTP at the very least). 
 
 \subsection{Packet Interpretation}
@@ -112,7 +138,7 @@ RaftMonitor keeps track of what commands pass between nodes. It does this by par
 
 \subsection{Behavior Comparison}
 The RaftMonitor module outputs the behavior information to a log file based on the packets that it sees. This is not simply a packet logging mechanism - it is closer to an event logger. For instance, the monitor does not log every single heartbeat and reply. Instead, it watches for when a node does not respond to a heartbeat (indicating a possible failed node event), or if a write event comes from a different node than previously seen (indicating a possible leader change event). These events are logged both to the console and to a file.
-\\ \indent When a test is run, the test driver tells the RaftMonitor when the test starts and ends. This allows the monitor to collect statistics just for the test interval. These specific numbers are written to a test log at the end of the test. These log files must be manually inspected to see differences between implementation executions.
+\\ \indent When a test is run, the test driver tells the RaftMonitor when the test starts and ends. This allows the monitor to collect statistics just for the test interval. These specfic numbers are written to a test log at the end of the test. These log files must be manually inspected to see differences between implementation executions.
 
 \section{Test Driver}
 The test driver ties the three sections of the framework into a coherent program. It offers a simple command line interface:
@@ -122,48 +148,51 @@ The test driver ties the three sections of the framework into a coherent program
     postbreak=\raisebox{0ex}[0ex][0ex]{\ensuremath{\color{red}\hookrightarrow\space}}
 }
 \begin{lstlisting}
-sudo ./testdriver/testdriver <impl>    <nNodes> <nClients> <testname>  <iterations> <time> [test args]
+sudo ./testdriver/testdriver <impl> <nNodes> <nClients> <testname>  <iterations> <time> [test args]
 \end{lstlisting}
-The test driver follows a simple algorithm:
+
+The test driver starts a Raft cluster and spawns clients to write to a key-value store for a specified length of time. The test is repeated for multiple iterations if desired. Three test types are implemented:
+
 \begin{enumerate}
-  \item Spin up a Raft cluster using the implementation API
-  \item Start up the RaftMonitor
-  \item Call the RaftMonitor to signal the beginning of the test. RaftMonitor will set up any partitions necessary.
-  \item Use the implementation API to make any necessary read or write calls
-  \item Call the RaftMonitor to signal the end of the test
+  \item Basic: A sanity check which does not tamper with any nodes.
+  \item Block: Use iptables to drop packets sent from a specific node. Arguments: 'leader' or 'random', indicating how to select a node to affect; a floating-point value indicating what fraction of packets to drop.
+  \item Kill: Terminate a particular node, and relaunch it after some time has passed. Arguments: 'leader' or 'random', indicating how to select a node to affect.
 \end{enumerate}
 
-\section{Tests}
-Obviously there are many, many test cases that could be implemented. We have picked what we feel to be a representative sample of useful ones.
-\subsection{Log-Based Tests}
+The blocking and killing tests can be configured to target either the leader or a randomly selected node.
+
+The test driver operates in the following phases:
+
 \begin{enumerate}
-  \item A basic sanity check, where the client submits a set of operations to the master that are expected to succeed.
-  \item Multiple client submitting write operations at the same time.
-\end{enumerate}
-\subsection{Partition Tests}
-These are currently written for the assumption that the system only has three nodes, since this is the case with our setup scripts on a single machine. Once a system is set up using our implementation interfaces, the tests can be run without any further modification. 
-\begin{enumerate}
-  \item A non-master node becoming partitioned from the rest and, after a fairly long interval, rejoining the cluster.
-  \item The master node being partitioned from the other nodes and rejoining the cluster later.
-\end{enumerate}
-\subsection{Node Failure Tests}
-\begin{enumerate}
-  \item The current leader node fails by crashing.
-  \item A non-leader node fails by crashing, then restarts.
-  \item The current leader node fails by crashing, then restarts. 
+  \item Start the RaftMonitor in its own thread.
+  \item Start a Raft cluster using the requested implementation and number of nodes. A brand-new cluster is created every time the test driver runs, with no data carried over from prior tests.
+  \item Create the clients, each of which runs in its own thread. Connect each client to the Raft cluster.
+  \item For the requested number of iterations:
+    \begin{enumerate}
+      \item Call the RaftMonitor to signal the beginning of the test.
+      \item Begin executing clients which asynchronously blast the cluster with read and write requests. Tamper with a random or leader node by partitioning or killing it, as requested.
+      \item Call the RaftMonitor to signal the end of the test
+    \end{enumerate}
+  \item Tear down the clients, the cluster, and RaftMonitor and exit the program.
 \end{enumerate}
 
 \section{Future Work}
+
 Since this is a testing framework, tests are central. Adding more tests is always possible. We could expand into bigger networks, given more time and computing resources, to make it a better tool for people using large implementations. We could also make more complex tests, like mixing partitions with dead nodes.
 
-Since there are so many implementations of Raft, simply writing adapters is a task on its own. At the moment, the framework has fully written adapter for LogCabin and etcd. Since there are over 50 different implementations, more adapters will always been needed, so adding more in the future will improve our functionality and ease of use.
+Since there are so many implementations of Raft, simply writing adapters is a task on its own. At the moment, the framework has fully written adapter for LogCabin \cite{logCabin} and etcd \cite{etcD}. Since there are over 50 different implementations, more adapters will always been needed, so adding more in the future will improve our functionality and ease of use.
 
 As mentioned previously, looking into automatic comparison of test results is another useful feature. Because some Raft changes (like who becomes leader) are somewhat non-deterministic, it may be difficult to have a simple algorithm to pull out the differences. However, such automation would still be of value, since the files would still be there for manual comparison if necessary.
 
 Finally, there is the potential extension of producing the proxy-style network partition simulation, in which the RaftMonitor acts as a proxy and can make detailed pass/drop decisions in response to packets. This would enable more precise invasive testing, particularly in that this could potentially be used to enforce a packet-accurate time-of-drop when comparing implementations. For example, a test could consist of sending a particular request and then killing a node immediately after it receives the first packet pertaining to that request. If RaftMonitor is acting as a proxy, then this test can be accurately enforced: the packet is passed, then a thread is spun off to kill the node; meanwhile, the monitor blocks all packets going to and from the node until it is killed (to better represent a precise time-of-failure to the rest of the simulated network).
 
-\section{Code Repository}
-https://github.com/damlaren/cs244b\_final\_project
+\section{Conclusion}
+
+The system combines a client API, packet monitor, and test driver into one program. The client API addresses the problem of running uniform tests on different Raft implementations. The packet monitor provides knowledge of the state of the system and enables more specific testing. The system lays the foundation for a checking system and can be enhanced with additional work.
+
+\subsection{Source Code}
+
+The project source code is available at https://github.com/damlaren/cs244b\_final\_project.
 
 \bibliographystyle{icml2014}
 \bibliography{citations}
