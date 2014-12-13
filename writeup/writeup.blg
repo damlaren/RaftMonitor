@@ -3,46 +3,48 @@ Capacity: max_strings=35307, hash_size=35307, hash_prime=30011
 The top-level auxiliary file: writeup.aux
 The style file: icml2014.bst
 Database file #1: citations.bib
+Warning--empty year in etcD
+Warning--empty year in logCabin
 Warning--empty journal in raftPaper
-You've used 1 entry,
+You've used 3 entries,
             2773 wiz_defined-function locations,
-            598 strings with 4962 characters,
-and the built_in function-call counts, 395 in all, are:
-= -- 31
-> -- 21
-< -- 1
-+ -- 7
-- -- 6
-* -- 26
-:= -- 67
-add.period$ -- 3
-call.type$ -- 1
-change.case$ -- 5
-chr.to.int$ -- 1
-cite$ -- 3
-duplicate$ -- 19
-empty$ -- 31
-format.name$ -- 9
-if$ -- 76
+            608 strings with 5137 characters,
+and the built_in function-call counts, 1046 in all, are:
+= -- 87
+> -- 52
+< -- 3
++ -- 18
+- -- 15
+* -- 61
+:= -- 164
+add.period$ -- 9
+call.type$ -- 3
+change.case$ -- 14
+chr.to.int$ -- 3
+cite$ -- 9
+duplicate$ -- 49
+empty$ -- 95
+format.name$ -- 22
+if$ -- 216
 int.to.chr$ -- 1
 int.to.str$ -- 1
 missing$ -- 1
-newline$ -- 13
-num.names$ -- 4
-pop$ -- 11
+newline$ -- 23
+num.names$ -- 12
+pop$ -- 39
 preamble$ -- 1
-purify$ -- 4
+purify$ -- 11
 quote$ -- 0
-skip$ -- 17
+skip$ -- 44
 stack$ -- 0
-substring$ -- 2
-swap$ -- 0
+substring$ -- 6
+swap$ -- 2
 text.length$ -- 0
 text.prefix$ -- 0
 top$ -- 0
-type$ -- 11
-warning$ -- 1
-while$ -- 3
+type$ -- 33
+warning$ -- 3
+while$ -- 9
 width$ -- 0
-write$ -- 18
-(There was 1 warning)
+write$ -- 40
+(There were 3 warnings)
