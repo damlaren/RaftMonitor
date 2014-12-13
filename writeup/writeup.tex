@@ -98,9 +98,28 @@ The Client API requires that RaftClients implement the following methods:
 \item \texttt{readFile(string path)}: Read file contents at path from the cluster and return as a string.
 \end{itemize}
 
+Finally, the manner in which to interpret packets must be implemented for the specific RAFT implementation, extending /packetUtils/Parser.h with an implementation of packetType, which must take the raw bytes of a packet as a C++ vector and return a class of packet that identifies this packet's purpose from the following common packets used in RAFT protocol implementations:
+
+\begin{itemize}
+
+\item \texttt{GET\_RPC\_VERSIONS}
+
+\item \texttt{OPEN\_SESSION}
+\item \texttt{GET\_CONFIG}
+\item \texttt{SET\_CONFIG}
+\item \texttt{READ\_ONLY}
+\item \texttt{READ\_WRITE}
+\item \texttt{REQUEST\_VOTE}
+\item \texttt{APPEND\_HEARTBEAT}
+\item \texttt{APPEND\_SNAPSHOT}
+\item \texttt{REPLY}
+\item \texttt{INVALID}
+
+\end{itemize}
+
 \subsection{Client API Implementations}
 
-The current supported implementations are logcabin (written in C++) and etcd (Go).
+The current supported implementations are logcabin (written in C++) \cite{logCabin} and etcd (Go)\cite{etcD}.
 
 \section{RaftMonitor}
 
